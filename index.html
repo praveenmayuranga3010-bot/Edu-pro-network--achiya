@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edu Pro Network - Achıya</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&family=Gemunu+Libre:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pink: #ff007f;
+            --blue: #00d4ff;
+            --yellow: #f8ff00;
+            --red: #ff0000;
+            --dark: #050505;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--dark);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            background: radial-gradient(circle at center, #1a1a2e 0%, #050505 100%);
+        }
+
+        /* Thorana Style Neon Animation */
+        header {
+            padding: 30px;
+            text-align: center;
+            border-bottom: 3px solid var(--pink);
+            box-shadow: 0 0 20px var(--pink), 0 0 40px var(--blue);
+            animation: borderGlow 2s infinite alternate;
+        }
+
+        @keyframes borderGlow {
+            from { border-color: var(--pink); box-shadow: 0 0 20px var(--pink); }
+            to { border-color: var(--blue); box-shadow: 0 0 20px var(--blue); }
+        }
+
+        .logo {
+            font-size: 3rem;
+            font-weight: bold;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, var(--pink), var(--blue), var(--yellow), var(--red));
+            background-size: 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: flow 5s linear infinite;
+        }
+
+        @keyframes flow {
+            0% { background-position: 0%; }
+            100% { background-position: 100%; }
+        }
+
+        /* Countdown Container */
+        .countdown-box {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 40px auto;
+            flex-wrap: wrap;
+        }
+
+        .timer-unit {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid var(--pink);
+            min-width: 110px;
+            text-align: center;
+            box-shadow: inset 0 0 10px var(--pink);
+        }
+
+        .timer-unit span {
+            display: block;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--blue);
+            text-shadow: 0 0 10px var(--blue);
+        }
+
+        .label { font-size: 0.8rem; color: var(--yellow); text-transform: uppercase; }
+
+        /* Motivation Quotes Section */
+        #motivation-display {
+            height: 80px;
+            font-size: 1.5rem;
+            color: #fff;
+            text-shadow: 0 0 5px #fff;
+            margin: 20px;
+            font-family: 'Gemunu Libre', sans-serif;
+            font-style: italic;
+        }
+
+        /* Buttons & Features */
+        .container { max-width: 1000px; margin: auto; padding: 20px; text-align: center; }
+
+        .btn-target {
+            background: linear-gradient(45deg, var(--red), var(--yellow));
+            color: black;
+            padding: 20px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 20px var(--yellow);
+            transition: 0.3s;
+            margin: 20px;
+        }
+
+        .btn-target:hover { transform: scale(1.1); box-shadow: 0 0 40px var(--red); }
+
+        /* Daily Question Box */
+        .quiz-box {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px dashed var(--blue);
+            padding: 30px;
+            border-radius: 20px;
+            margin: 40px 0;
+        }
+
+        /* Downloads Section */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: #111;
+            padding: 20px;
+            border-radius: 15px;
+            border-top: 5px solid var(--pink);
+            transition: 0.3s;
+        }
+
+        .card:hover { transform: translateY(-10px); background: #1a1a1a; }
+
+        /* Help Desk Floating Button */
+        .help-desk {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--pink);
+            padding: 15px 25px;
+            border-radius: 50px;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 0 20px var(--pink);
+            cursor: pointer;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: #222; padding: 40px; border-radius: 20px;
+            border: 2px solid var(--blue); z-index: 1000;
+            width: 80%; max-width: 600px;
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">Edu Pro Network - Achıya</div>
+    <div id="motivation-display">"Loading Motivation..."</div>
+</header>
+
+<div class="container">
+    <h2 style="color: var(--yellow);">O/L Final Battle Starts In:</h2>
+    
+    <div class="countdown-box">
+        <div class="timer-unit"><span id="days">00</span><div class="label">Days</div></div>
+        <div class="timer-unit"><span id="hours">00</span><div class="label">Hours</div></div>
+        <div class="timer-unit"><span id="minutes">00</span><div class="label">Minutes</div></div>
+        <div class="timer-unit"><span id="seconds">00</span><div class="label">Seconds</div></div>
+        <div class="timer-unit" style="border-color: var(--blue);"><span id="millis">000</span><div class="label">Millis</div></div>
+    </div>
+
+    <button class="btn-target" onclick="showTips()">🚀 Target 9A Strategy</button>
+
+    <div class="quiz-box">
+        <h3 style="color: var(--pink);">Daily O/L Challenge (Science/Maths)</h3>
+        <p id="daily-question">ප්‍රභාසංස්ලේෂණයේදී පිටවන වායුව කුමක්ද?</p>
+        <button onclick="alert('Answer: Oxygen (O2)')" style="padding: 10px 20px; cursor:pointer;">Show Answer</button>
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <h3>Past Papers</h3>
+            <p>2015 - 2024 okkoma methana thiyenawa.</p>
+            <button class="label" style="background:none; border: 1px solid var(--blue); color:var(--blue); padding:5px; cursor:pointer;">Download PDF</button>
+        </div>
+        <div class="card">
+            <h3>Model Papers</h3>
+            <p>Achiya's Special Predictions for 2026.</p>
+            <button class="label" style="background:none; border: 1px solid var(--blue); color:var(--blue); padding:5px; cursor:pointer;">Download PDF</button>
+        </div>
+        <div class="card">
+            <h3>Short Notes</h3>
+            <p>Padam mathaka thiyaganna lesi krama.</p>
+            <button class="label" style="background:none; border: 1px solid var(--blue); color:var(--blue); padding:5px; cursor:pointer;">Download PDF</button>
+        </div>
+    </div>
+</div>
+
+<div id="tipsModal" class="modal">
+    <h2 style="color: var(--yellow);">World Best Study Tips for 9As</h2>
+    <ul style="text-align: left; line-height: 1.8;">
+        <li>⭐ <b>Feynman Technique:</b> Padama igena gena podi ekekuta kiyala dena widiyata thamantama kiyala denna.</li>
+        <li>⭐ <b>Active Recall:</b> Potha wahan prashna ahanna.</li>
+        <li>⭐ <b>Eat the Frog:</b> Amaruma wisaya udema karanna.</li>
+        <li>⭐ <b>Past Paper Training:</b> Time thiyala papers karanna.</li>
+    </ul>
+    <button onclick="closeTips()" style="background: var(--red); color:white; border:none; padding:10px 20px; border-radius:10px; cursor:pointer;">Close</button>
+</div>
+
+<div class="help-desk" onclick="alert('Help Desk: Chat with Achıya on WhatsApp: 07x-xxxxxxx')">
+    Help Desk Online 💬
+</div>
+
+<script>
+    // Set the date we're counting down to
+    const countDownDate = new Date("Feb 17, 2026 08:30:00").getTime();
+
+    // Update the count down every 50 milliseconds for smooth millisecond transition
+    const x = setInterval(function() {
+        const now = new Date().getTime();
+        const distance = countDownDate - now;
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        const millis = Math.floor(distance % 1000);
+
+        document.getElementById("days").innerHTML = days;
+        document.getElementById("hours").innerHTML = hours;
+        document.getElementById("minutes").innerHTML = minutes;
+        document.getElementById("seconds").innerHTML = seconds;
+        document.getElementById("millis").innerHTML = millis;
+
+        if (distance < 0) {
+            clearInterval(x);
+            document.body.innerHTML = "<h1>EXAM STARTED!</h1>";
+        }
+    }, 50);
+
+    // Animated Motivation Quotes
+    const quotes = [
+        "අද කරන කැපවීම හෙට දිනුම ලබා දෙයි! 💪",
+        "විභාගය කියන්නේ තවත් එක දවසක් විතරයි, බය වෙන්න එපා!",
+        "9A කියන්නේ හීනයක් නෙවෙයි, ඔයාගේ මහන්සියේ ප්‍රතිඵලය!",
+        "වැටෙන හැම වතාවකම නැගිටින්න, ජයග්‍රහණය නියතයි! 🔥",
+        "සටන අත්හරින්න එපා, අන්තිම තත්පරය වෙනකම් වැඩ කරන්න!"
+    ];
+
+    let quoteIndex = 0;
+    function changeQuote() {
+        const qDisplay = document.getElementById("motivation-display");
+        qDisplay.style.opacity = 0;
+        setTimeout(() => {
+            qDisplay.innerHTML = quotes[quoteIndex];
+            qDisplay.style.opacity = 1;
+            quoteIndex = (quoteIndex + 1) % quotes.length;
+        }, 500);
+    }
+    setInterval(changeQuote, 4000);
+    changeQuote();
+
+    // Modal Functions
+    function showTips() { document.getElementById("tipsModal").style.display = "block"; }
+    function closeTips() { document.getElementById("tipsModal").style.display = "none"; }
+</script>
+
+</body>
+  </html>
