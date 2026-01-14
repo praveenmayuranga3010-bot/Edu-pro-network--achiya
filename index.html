@@ -3,106 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edu Pro Network - O/L Master</title>
+    <title>Edu Pro Network - O/L Master Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&family=Gemunu+Libre:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         :root {
-            --pink: #ff007f; --blue: #00d4ff; --yellow: #f8ff00; --red: #ff0000; --green: #00ff88; --dark: #050505;
+            --pink: #ff007f; --blue: #00d4ff; --yellow: #f8ff00; --red: #ff0000; --green: #00ff88; --orange: #ff8800; --purple: #bc13fe; --dark: #050505;
         }
 
         body {
             margin: 0; background-color: var(--dark); color: white; font-family: 'Poppins', 'Gemunu Libre', sans-serif;
-            transition: background 0.3s ease;
+            overflow-x: hidden;
+            /* තොරණක ආලෝකය වැනි පසුබිම් රටාව */
+            background-image: radial-gradient(circle at 20% 30%, rgba(255, 0, 127, 0.05) 0%, transparent 20%),
+                              radial-gradient(circle at 80% 70%, rgba(0, 212, 255, 0.05) 0%, transparent 20%);
         }
 
-        /* Neon Error Effect */
-        body.error-bg { background-color: #440000; animation: shake 0.2s ease-in-out 2; }
-        @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(5px); } 75% { transform: translateX(-5px); } 100% { transform: translateX(0); } }
+        /* Thorana Border Animation */
+        @keyframes thoranaGlow {
+            0% { box-shadow: 0 0 10px var(--pink), 0 0 20px var(--blue); border-color: var(--pink); }
+            33% { box-shadow: 0 0 10px var(--yellow), 0 0 20px var(--green); border-color: var(--yellow); }
+            66% { box-shadow: 0 0 10px var(--orange), 0 0 20px var(--purple); border-color: var(--orange); }
+            100% { box-shadow: 0 0 10px var(--blue), 0 0 20px var(--pink); border-color: var(--blue); }
+        }
 
         header {
-            padding: 30px; text-align: center; border-bottom: 3px solid var(--pink);
-            box-shadow: 0 0 20px var(--pink); animation: borderGlow 2s infinite alternate;
+            padding: 30px; text-align: center; border-bottom: 5px dashed var(--pink);
+            animation: thoranaGlow 3s infinite linear;
         }
-
-        @keyframes borderGlow { from { border-color: var(--pink); } to { border-color: var(--blue); } }
 
         .logo {
-            font-size: 2.8rem; font-weight: bold; letter-spacing: 5px; text-transform: uppercase;
-            background: linear-gradient(90deg, var(--pink), var(--blue), var(--yellow));
+            font-size: 3rem; font-weight: bold; letter-spacing: 8px; text-transform: uppercase;
+            background: linear-gradient(90deg, var(--pink), var(--blue), var(--yellow), var(--green), var(--pink));
+            background-size: 200%;
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: moveGradient 4s linear infinite;
         }
+
+        @keyframes moveGradient { 0% { background-position: 0%; } 100% { background-position: 200%; } }
+
+        /* Countdown Style - Thorana Pattern */
+        .countdown-box { display: flex; justify-content: center; gap: 15px; margin: 30px; }
+        .timer-unit { 
+            background: rgba(0,0,0,0.8); padding: 15px; border: 3px solid var(--pink); 
+            border-radius: 15px; min-width: 75px; text-align: center;
+            animation: thoranaGlow 1.5s infinite alternate;
+        }
+        .timer-unit span { font-size: 2rem; font-weight: bold; display: block; }
 
         /* Quiz UI */
         .quiz-card {
-            background: rgba(255, 255, 255, 0.05); border: 2px solid var(--blue);
+            background: rgba(255, 255, 255, 0.03); border: 2px solid var(--blue);
             padding: 30px; border-radius: 25px; margin: 40px auto; max-width: 700px;
-            text-align: center; position: relative;
+            text-align: center; position: relative; backdrop-filter: blur(5px);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
         }
 
-        .options-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px;
-        }
-
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px; }
         .opt-btn {
-            background: transparent; border: 2px solid var(--blue); color: white;
-            padding: 15px; border-radius: 12px; cursor: pointer; font-size: 1rem;
-            transition: 0.3s;
+            background: rgba(255,255,255,0.05); border: 2px solid var(--blue); color: white;
+            padding: 15px; border-radius: 12px; cursor: pointer; font-size: 1rem; transition: 0.3s;
         }
+        .opt-btn:hover { background: var(--blue); color: black; font-weight: bold; }
+        .correct-opt { background: var(--green) !important; color: black !important; border-color: white !important; box-shadow: 0 0 20px var(--green); }
 
-        .opt-btn:hover { background: rgba(0, 212, 255, 0.2); box-shadow: 0 0 15px var(--blue); }
-
-        .correct-opt { border-color: var(--green) !important; box-shadow: 0 0 20px var(--green); color: var(--green); font-weight: bold; }
-
-        /* Timer for Question */
-        .q-timer { font-size: 1.5rem; color: var(--yellow); margin-bottom: 10px; font-weight: bold; }
-
-        /* Notes Section */
         .notes-section { max-width: 900px; margin: 50px auto; padding: 20px; }
         .note-box {
             background: rgba(255, 255, 255, 0.05); border-left: 5px solid var(--yellow);
-            padding: 20px; border-radius: 0 15px 15px 0; margin-bottom: 25px;
-            transition: 0.3s;
+            padding: 20px; border-radius: 0 15px 15px 0; margin-bottom: 20px;
         }
-        .note-box:hover { transform: scale(1.02); background: rgba(255, 255, 255, 0.1); }
-        .note-box h3 { color: var(--pink); margin: 0 0 10px 0; }
-
-        .countdown-box { display: flex; justify-content: center; gap: 10px; margin: 20px; }
-        .timer-unit { background: #111; padding: 10px; border: 1px solid var(--pink); border-radius: 10px; min-width: 60px; }
+        
+        body.error-bg { animation: shake 0.2s ease-in-out 2; background-color: #300; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(10px); } 75% { transform: translateX(-10px); } }
     </style>
 </head>
 <body>
 
 <header>
     <div class="logo">Edu Pro Network</div>
-    <div id="motivation-text" style="color: var(--yellow); margin-top: 10px;">විභාගය අතළඟයි - සූදානම් වෙමු!</div>
+    <div id="motivation-text" style="color: var(--yellow); margin-top: 10px; font-weight: bold; text-shadow: 0 0 10px var(--yellow);">✨ සාර්ථකත්වයේ මාවත - O/L Master ✨</div>
 </header>
 
 <div class="container">
     <div class="countdown-box">
-        <div class="timer-unit"><span id="days">00</span><br><small>Days</small></div>
-        <div class="timer-unit"><span id="hours">00</span><br><small>Hrs</small></div>
-        <div class="timer-unit"><span id="minutes">00</span><br><small>Min</small></div>
-        <div class="timer-unit"><span id="seconds">00</span><br><small>Sec</small></div>
+        <div class="timer-unit" style="border-color: var(--pink);"><span id="days">00</span><small>දින</small></div>
+        <div class="timer-unit" style="border-color: var(--blue);"><span id="hours">00</span><small>පැය</small></div>
+        <div class="timer-unit" style="border-color: var(--yellow);"><span id="minutes">00</span><small>විනාඩි</small></div>
+        <div class="timer-unit" style="border-color: var(--green);"><span id="seconds">00</span><small>තත්පර</small></div>
     </div>
 
     <div class="quiz-card">
-        <div class="q-timer">⏳ <span id="q-clock">20</span>s</div>
-        <h3 id="q-count" style="color: var(--pink);">Question 1/15</h3>
-        <p id="question-text" style="font-size: 1.4rem;">ප්‍රශ්නය මෙතන දිස්වේවි...</p>
-        <div class="options-grid" id="options-container">
-            </div>
-        <p id="feedback" style="margin-top: 20px; height: 20px;"></p>
+        <div style="font-size: 1.5rem; color: var(--yellow); margin-bottom: 10px;">⏳ <span id="q-clock">20</span>s</div>
+        <h3 id="q-count" style="color: var(--pink);">Question 1/26</h3>
+        <p id="question-text" style="font-size: 1.3rem; min-height: 60px; line-height: 1.6;">ප්‍රශ්නය පූරණය වේ...</p>
+        <div class="options-grid" id="options-container"></div>
+        <p id="feedback" style="margin-top: 20px; font-weight: bold; min-height: 24px;"></p>
     </div>
 
     <div class="notes-section">
-        <h2 style="color: var(--blue); text-align: center;">📚 O/L High-Yield Short Notes</h2>
+        <h2 style="color: var(--blue); text-align: center; text-transform: uppercase; letter-spacing: 3px;">📚 විෂය කරුණු කෙටි සටහන්</h2>
         <div id="notes-display"></div>
     </div>
 </div>
 
 <script>
-    // 1. Exam Countdown Logic
+    // 1. Exam Countdown (Target: Feb 17, 2026)
     const examDate = new Date("Feb 17, 2026 08:30:00").getTime();
     setInterval(() => {
         const now = new Date().getTime();
@@ -113,14 +118,35 @@
         document.getElementById("seconds").innerText = Math.floor((d % (1000 * 60)) / 1000);
     }, 1000);
 
-    // 2. Quiz Data
+    // 2. Quiz Data (Original 6 + New 20 = 26 Questions)
     const quizData = [
         { q: "පරමාණුක ක්‍රමාංකය 11 වන මූලද්‍රව්‍ය කුමක්ද?", opts: ["මැග්නීසියම්", "සෝඩියම්", "ඇලුමිනියම්", "පොටෑසියම්"], a: 1 },
         { q: "වෘත්තයක වර්ගඵලය සෙවීමේ සූත්‍රය කුමක්ද?", opts: ["2πr", "πr²", "2πr²", "πd"], a: 1 },
         { q: "සෛලයක ශක්ති ඒකකය හඳුන්වන්නේ කුමක් ලෙසද?", opts: ["DNA", "RNA", "ATP", "NADPH"], a: 2 },
         { q: "ශ්‍රී ලංකාවේ ප්‍රථම විධායක ජනාධිපති කවුද?", opts: ["ඩී.එස්. සේනානායක", "එස්.ඩබ්.ආර්.ඩී. බණ්ඩාරනායක", "ජේ.ආර්. ජයවර්ධන", "ආර්. ප්‍රේමදාස"], a: 2 },
         { q: "ගුරුත්වාකර්ෂණ ත්වරණයේ (g) අගය ආසන්න වශයෙන්:", opts: ["5 ms⁻²", "10 ms⁻²", "15 ms⁻²", "20 ms⁻²"], a: 1 },
-        { q: "මිනිස් සිරුරේ ඇති දිගම අස්ථිය කුමක්ද?", opts: ["මඩයස්ථිය", "උරුස්ථිය (Femur)", "අන්වස්ථිය", "කශේරුකාව"], a: 1 }
+        { q: "මිනිස් සිරුරේ ඇති දිගම අස්ථිය කුමක්ද?", opts: ["මඩයස්ථිය", "උරුස්ථිය (Femur)", "අන්වස්ථිය", "කශේරුකාව"], a: 1 },
+        // --- New 20 Questions ---
+        { q: "ආලෝකය ගමන් කරන වේගය කොපමණද?", opts: ["3x10⁸ ms⁻¹", "3x10⁶ ms⁻¹", "2x10⁸ ms⁻¹", "3x10⁵ ms⁻¹"], a: 0 },
+        { q: "ජලයෙහි රසායනික සූත්‍රය කුමක්ද?", opts: ["HO₂", "H₂O", "H₂O₂", "OH"], a: 1 },
+        { q: "මිනිස් රුධිරයේ ඇති ශ්වසන වර්ණකය කුමක්ද?", opts: ["ක්ලෝරොෆිල්", "හිමොග්ලොබින්", "මෙලනින්", "හිමොසයනින්"], a: 1 },
+        { q: "ප්‍රභාසංස්ලේෂණයේදී අතුරු ඵලයක් ලෙස පිටවන වායුව:", opts: ["නයිට්‍රජන්", "කාබන්ඩයොක්සයිඩ්", "ඔක්සිජන්", "හයිඩ්‍රජන්"], a: 2 },
+        { q: "ත්‍රිකෝණයක අභ්‍යන්තර කෝණවල එකතුව:", opts: ["90°", "180°", "270°", "360°"], a: 1 },
+        { q: "පෘථිවියට ආසන්නතම තරුව කුමක්ද?", opts: ["සිරියස්", "සඳ", "සූර්යයා", "අඟහරු"], a: 2 },
+        { q: "බලයේ ඒකකය කුමක්ද?", opts: ["පැස්කල්", "ජූල්", "වොට්", "නිව්ටන්"], a: 3 },
+        { q: "ලෝකයේ කුඩාම මහාද්වීපය කුමක්ද?", opts: ["ආසියාව", "යුරෝපය", "ඕස්ට්‍රේලියාව", "අප්‍රිකාව"], a: 2 },
+        { q: "ශ්‍රී ලංකාවේ මුහුදු මට්ටමේ සිට උසම ස්ථානය:", opts: ["ශ්‍රී පාදය", "පිදුරුතලාගල", "නමුණුකුල", "කන්කසන්තුරේ"], a: 1 },
+        { q: "සෝඩියම් ක්ලෝරයිඩ් (NaCl) යනු කුමක්ද?", opts: ["සීනි", "විනාකිරි", "ලුණු", "බේකින් සෝඩා"], a: 2 },
+        { q: "පරිගණකයක මොළය ලෙස හඳුන්වන්නේ කුමක්ද?", opts: ["RAM", "Hard Disk", "CPU", "Monitor"], a: 2 },
+        { q: "අම්ලයක pH අගය සාමාන්‍යයෙන් පවතින්නේ:", opts: ["7 ට වැඩි", "7 ට අඩු", "7 ට සමාන", "14 ට වැඩි"], a: 1 },
+        { q: "ඉංග්‍රීසි ආණ්ඩුව ලංකාවට නිදහස ලබා දුන් වර්ෂය:", opts: ["1947", "1948", "1956", "1972"], a: 1 },
+        { q: "ශාක සෛලයක පමණක් දැකිය හැකි ඉන්ද්‍රයිකාව කුමක්ද?", opts: ["න්‍යෂ්ටිය", "මයිටොකොන්ඩ්‍රියාව", "සෛල බිත්තිය", "රයිබොසෝම"], a: 2 },
+        { q: "සාමාන්‍ය වායුගෝලීය පීඩනය කොපමණද?", opts: ["760 mmHg", "100 mmHg", "500 mmHg", "1000 mmHg"], a: 0 },
+        { q: "පයිතගරස් ප්‍රමේයය අදාළ වන්නේ කිනම් ත්‍රිකෝණ සඳහාද?", opts: ["සමපාද", "සමදිබාහු", "මහා කෝණී", "සෘජුකෝණී"], a: 3 },
+        { q: "ලෝකයේ ඇති විශාලම සාගරය කුමක්ද?", opts: ["ඉන්දීය", "අත්ලාන්තික්", "ශාන්තිකර", "ආක්ටික්"], a: 2 },
+        { q: "වෝල්ටීයතාව මැනීමට භාවිතා කරන උපකරණය:", opts: ["ඇමීටරය", "වෝල්ට්මීටරය", "ඕම්මීටරය", "බැරෝමීටරය"], a: 1 },
+        { q: "ප්‍රතිරෝධයේ ඒකකය කුමක්ද?", opts: ["ඇම්පියර්", "වෝල්ට්", "ඕම් (Ω)", "කූලෝම්"], a: 2 },
+        { q: "සූර්ය පද්ධතියේ ඇති විශාලම ග්‍රහලෝකය:", opts: ["සෙනසුරු", "බ්‍රහස්පති", "නෙප්චූන්", "පෘථිවිය"], a: 1 }
     ];
 
     let currentQ = 0;
@@ -136,7 +162,7 @@
             document.getElementById("q-clock").innerText = timeLeft;
             if (timeLeft <= 0) {
                 clearInterval(timerInterval);
-                checkAnswer(-1); // Time out
+                checkAnswer(-1);
             }
         }, 1000);
     }
@@ -164,58 +190,39 @@
         const btns = document.querySelectorAll(".opt-btn");
 
         if (selected === correct) {
-            // Success Effect
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#ff007f', '#00d4ff', '#f8ff00'] });
             btns[selected].classList.add("correct-opt");
-            document.getElementById("feedback").innerHTML = "<span style='color:var(--green)'>නියමයි! පිළිතුර නිවැරදියි. 🌟</span>";
-            
-            setTimeout(() => {
-                currentQ++;
-                if (currentQ < quizData.length) {
-                    loadQuestion();
-                    document.getElementById("feedback").innerText = "";
-                } else {
-                    document.querySelector(".quiz-card").innerHTML = "<h2>සියලු ප්‍රශ්න අවසන්! ඔබ විශිෂ්ටයි! 🏆</h2>";
-                }
-            }, 2000);
+            document.getElementById("feedback").innerHTML = "<span style='color:var(--green)'>නියමයි! පිළිතුර නිවැරදියි. 🏆</span>";
         } else {
-            // Failure Effect
             document.body.classList.add("error-bg");
+            if (selected !== -1) btns[selected].style.backgroundColor = "var(--red)";
             btns[correct].classList.add("correct-opt");
-            document.getElementById("feedback").innerHTML = "<span style='color:var(--red)'>පිළිතුර වැරදියි! නිවැරදි පිළිතුර ඉහළින් පෙන්වයි.</span>";
-            
-            setTimeout(() => {
-                document.body.classList.remove("error-bg");
-                currentQ++;
-                if (currentQ < quizData.length) loadQuestion();
-                document.getElementById("feedback").innerText = "";
-            }, 3000);
+            document.getElementById("feedback").innerHTML = "<span style='color:var(--red)'>වැරදියි! නිවැරදි පිළිතුර කොළ පාටින්...</span>";
         }
+
+        setTimeout(() => {
+            document.body.classList.remove("error-bg");
+            currentQ++;
+            if (currentQ < quizData.length) {
+                loadQuestion();
+                document.getElementById("feedback").innerText = "";
+            } else {
+                document.querySelector(".quiz-card").innerHTML = "<h2>සුභ පැතුම්! ඔබ සියලු ප්‍රශ්න නිම කළා! 🎓✨</h2>";
+            }
+        }, 2500);
     }
 
-    // 3. 10 Additional Short Notes
+    // Short Notes
     const notesData = [
-        { t: "විද්‍යුත් සෘණතාව", c: "සහසංයුජ බන්ධනයක ඇති ඉලෙක්ට්‍රෝන යුගල තමා දෙසට ආකර්ෂණය කර ගැනීමේ හැකියාවයි. ආවර්තිතා වගුවේ දකුණට යන විට මෙය වැඩි වේ." },
-        { t: "නිව්ටන්ගේ 2 වන නියමය", c: "F = ma. වස්තුවක් මත ක්‍රියා කරන අසමතුලිත බලය, එහි ස්කන්ධයේත් ත්වරණයේත් ගුණිතයට සමාන වේ." },
-        { t: "මූල්‍ය ප්‍රකාශන (ගිණුම්කරණය)", c: "ලාභ අලාභ ගිණුම මගින් මූල්‍ය කාර්යසාධනයත්, ශේෂ පත්‍රය මගින් මූල්‍ය තත්ත්වයත් පෙන්වයි." },
-        { t: "සමෝච්ච රේඛා (භූගෝල විද්‍යාව)", c: "සම මුහුදු මට්ටමේ සිට සමාන උසකින් පිහිටි ස්ථාන යා කරමින් අඳින රේඛා වේ. මේවා එකිනෙකට කැපෙන්නේ නැත." },
-        { t: "ප්‍රකාශ විද්‍යුත් ආචරණය", c: "ලෝහ මතුපිටකට ආලෝකය පතිත වූ විට ඉලෙක්ට්‍රෝන පිටවීම මෙලෙස හඳුන්වයි. අයින්ස්ටයින් මෙයට නොබෙල් ත්‍යාගය දිනාගත්තේය." },
-        { t: "වර්ගජ සමීකරණ (ගණිතය)", c: "ax² + bx + c = 0 ආකාරයේ සමීකරණ වේ. මූල සෙවීමේ සූත්‍රය: x = [-b ± √(b² - 4ac)] / 2a." },
-        { t: "ලෝක යුද්ධ (ඉතිහාසය)", c: "1 වන ලෝක යුද්ධය (1914-1918) සහ 2 වන ලෝක යුද්ධය (1939-1945). ලීගය සහ එක්සත් ජාතීන්ගේ සංවිධානය මෙහි ප්‍රතිඵල වේ." },
-        { t: "එන්සයිම (විද්‍යාව)", c: "ජීවී සෛල තුළ සිදුවන රසායනික ප්‍රතික්‍රියා වේගවත් කරන ජෛව උත්ප්‍රේරක වේ. මේවා ප්‍රෝටීන වලින් සෑදී ඇත." },
-        { t: "ත්‍රිකෝණමිතිය", c: "Sin θ = සම්මුඛ / කර්ණය, Cos θ = බද්ධ / කර්ණය, Tan θ = සම්මුඛ / බද්ධ ලෙස අර්ථ දැක්වේ." },
-        { t: "පරිගණක මතකය", c: "RAM යනු තාවකාලික (Volatile) මතකයයි. ROM යනු ස්ථිර (Non-volatile) මතකයයි." }
+        { t: "විද්‍යුත් සෘණතාව", c: "සහසංයුජ බන්ධනයක ඇති ඉලෙක්ට්‍රෝන යුගල තමා දෙසට ආකර්ෂණය කර ගැනීමේ හැකියාවයි." },
+        { t: "ඕම්ගේ නියමය", c: "V = IR. සන්නායකයක් තුළින් ගලන ධාරාව, එහි දෙකෙළවර විභව අන්තරයට සමානුපාතික වේ." },
+        { t: "සාධක සෙවීම", c: "x² - y² = (x-y)(x+y) ලෙස ලිවිය හැකිය." }
     ];
 
     function loadNotes() {
         const div = document.getElementById("notes-display");
         notesData.forEach(note => {
-            div.innerHTML += `
-                <div class="note-box">
-                    <h3>${note.t}</h3>
-                    <p>${note.c}</p>
-                </div>
-            `;
+            div.innerHTML += `<div class="note-box"><h3>${note.t}</h3><p>${note.c}</p></div>`;
         });
     }
 
@@ -224,4 +231,4 @@
 </script>
 
 </body>
- </html>
+</html>
