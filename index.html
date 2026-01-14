@@ -20,19 +20,13 @@
                               radial-gradient(circle at 80% 70%, rgba(0, 212, 255, 0.05) 0%, transparent 20%);
         }
 
-        /* Thorana & Neon Animations */
+        /* Thorana Border Animation */
         @keyframes thoranaGlow {
             0% { border-color: var(--pink); box-shadow: 0 0 10px var(--pink); }
             25% { border-color: var(--blue); box-shadow: 0 0 15px var(--blue); }
             50% { border-color: var(--yellow); box-shadow: 0 0 10px var(--yellow); }
             75% { border-color: var(--green); box-shadow: 0 0 15px var(--green); }
             100% { border-color: var(--pink); box-shadow: 0 0 10px var(--pink); }
-        }
-
-        @keyframes neonGreenGlow {
-            0% { color: #fff; text-shadow: 0 0 5px #fff, 0 0 10px var(--neon-green), 0 0 20px var(--neon-green); }
-            50% { color: var(--neon-green); text-shadow: 0 0 10px #fff, 0 0 20px var(--neon-green), 0 0 40px var(--neon-green); }
-            100% { color: #fff; text-shadow: 0 0 5px #fff, 0 0 10px var(--neon-green), 0 0 20px var(--neon-green); }
         }
 
         header {
@@ -50,6 +44,14 @@
         @keyframes moveGradient { 0% { background-position: 0%; } 100% { background-position: 200%; } }
 
         .container { width: 100%; max-width: 800px; margin: 0 auto; padding: 15px; }
+
+        /* Dashboard Style */
+        .dashboard {
+            background: rgba(255, 255, 255, 0.05); border: 2px solid var(--neon-green);
+            padding: 15px; border-radius: 15px; margin-bottom: 20px; text-align: center;
+            backdrop-filter: blur(10px); animation: thoranaGlow 4s infinite alternate;
+        }
+        .leader-name { color: var(--neon-green); font-size: 1.4rem; font-weight: bold; text-shadow: 0 0 10px var(--neon-green); }
 
         .countdown-box { display: flex; justify-content: center; gap: 8px; margin: 20px 0; flex-wrap: wrap; }
         .timer-unit { 
@@ -77,40 +79,38 @@
         .opt-btn:hover { background: var(--blue); color: black; box-shadow: 0 0 15px var(--blue); }
         .correct-opt { background: var(--green) !important; color: black !important; font-weight: bold; border-color: white !important; }
 
-        .notes-section { margin-top: 40px; }
         .note-box {
             background: rgba(255, 255, 255, 0.05); border-left: 5px solid var(--yellow);
             padding: 15px; border-radius: 0 15px 15px 0; margin-bottom: 15px;
             animation: noteGlow 4s infinite;
         }
-        @keyframes noteGlow {
-            0%, 100% { border-left-color: var(--yellow); box-shadow: -5px 0 10px rgba(248, 255, 0, 0.2); }
-            33% { border-left-color: var(--pink); box-shadow: -5px 0 10px rgba(255, 0, 127, 0.2); }
-            66% { border-left-color: var(--blue); box-shadow: -5px 0 10px rgba(0, 212, 255, 0.2); }
-        }
+        @keyframes noteGlow { 0%, 100% { border-left-color: var(--yellow); } 50% { border-left-color: var(--pink); } }
 
-        /* Footer Section */
         footer {
-            margin-top: 50px; padding: 30px 10px; text-align: center; border-top: 2px solid rgba(57, 255, 20, 0.3);
-            background: rgba(0,0,0,0.5);
+            margin-top: 50px; padding: 30px 10px; text-align: center; border-top: 2px solid var(--neon-green);
+            background: rgba(0,0,0,0.8);
         }
-        .creator-info { font-weight: bold; font-size: 1.2rem; animation: neonGreenGlow 2s infinite; margin-bottom: 10px; }
-        .help-desk { font-size: 1rem; color: #fff; margin-top: 5px; }
-        .whatsapp-link { color: var(--neon-green); text-decoration: none; font-weight: bold; font-size: 1.1rem; transition: 0.3s; }
-        .whatsapp-link:hover { text-shadow: 0 0 15px var(--neon-green); }
+        .creator-info { font-weight: bold; font-size: 1.2rem; animation: neonGreenGlow 2s infinite; }
+        @keyframes neonGreenGlow { 0%, 100% { color: #fff; text-shadow: 0 0 10px var(--neon-green); } 50% { color: var(--neon-green); } }
 
         body.error-bg { animation: shake 0.2s ease-in-out 2; background-color: #300; }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(5px); } 75% { transform: translateX(-5px); } }
     </style>
 </head>
-<body>
+<body onload="initApp()">
 
 <header>
     <div class="logo">Edu Pro Network</div>
-    <div id="motivation-text" style="color: var(--yellow); margin-top: 5px; font-size: 0.9rem;">🎯 O/L සිහිනය සැබෑ කරමු!</div>
+    <div style="color: var(--yellow); margin-top: 5px;">🎯 O/L සිහිනය සැබෑ කරමු!</div>
 </header>
 
 <div class="container">
+    <div class="dashboard">
+        <div>🏆 වත්මන් දක්ෂයා (Top Scorer)</div>
+        <div class="leader-name" id="top-user">ප්‍රතිඵල බලාපොරොත්තුවෙන්...</div>
+        <div id="user-stats" style="font-size: 0.9rem; margin-top: 5px; color: var(--blue);">ඔබේ ලකුණු: 0</div>
+    </div>
+
     <div class="countdown-box">
         <div class="timer-unit"><span id="days">00</span><small>Days</small></div>
         <div class="timer-unit"><span id="hours">00</span><small>Hours</small></div>
@@ -118,38 +118,53 @@
         <div class="timer-unit"><span id="seconds">00</span><small>Sec</small></div>
     </div>
 
-    <div class="quiz-card">
+    <div class="quiz-card" id="quiz-container">
         <div style="font-size: 1.2rem; color: var(--yellow); margin-bottom: 5px;">⏳ <span id="q-clock">20</span>s</div>
         <h4 id="q-count" style="color: var(--pink); margin: 5px 0;">Question 1/26</h4>
-        <p id="question-text" style="font-size: 1.1rem; min-height: 50px;">ප්‍රශ්නය පූරණය වේ...</p>
+        <p id="question-text" style="font-size: 1.1rem; min-height: 50px;"></p>
         <div class="options-grid" id="options-container"></div>
-        <p id="feedback" style="margin-top: 15px; font-size: 0.9rem; font-weight: bold;"></p>
+        <p id="feedback" style="margin-top: 15px; font-weight: bold;"></p>
     </div>
 
     <div class="notes-section">
-        <h2 style="color: var(--blue); text-align: center; font-size: 1.3rem;">🌟 විශේෂ කෙටි සටහන්</h2>
+        <h2 style="color: var(--blue); text-align: center; font-size: 1.3rem; margin-top: 40px;">📚 විභාගයට වැදගත් කෙටි සටහන් (Syllabus Based)</h2>
         <div id="notes-display"></div>
     </div>
 </div>
 
 <footer>
     <div class="creator-info">*Created by: Achintha Nirmana*</div>
-    <div class="help-desk">
-        Help Desk (WhatsApp): <br>
-        <a href="https://wa.me/94729329290" class="whatsapp-link">072 932 9290</a>
-    </div>
+    <div style="margin-top: 10px;">Help Desk (WhatsApp):<br>
+    <a href="https://wa.me/94729329290" style="color: var(--neon-green); text-decoration: none; font-weight: bold;">072 932 9290</a></div>
 </footer>
 
 <script>
-    const examDate = new Date("Feb 17, 2026 08:30:00").getTime();
-    setInterval(() => {
-        const now = new Date().getTime();
-        const d = examDate - now;
-        document.getElementById("days").innerText = Math.floor(d / (1000 * 60 * 60 * 24));
-        document.getElementById("hours").innerText = String(Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-        document.getElementById("minutes").innerText = String(Math.floor((d % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-        document.getElementById("seconds").innerText = String(Math.floor((d % (1000 * 60)) / 1000)).padStart(2, '0');
-    }, 1000);
+    let userName = "";
+    let score = 0;
+    let highPoints = 0;
+
+    function initApp() {
+        userName = localStorage.getItem("ol_name") || prompt("කරුණාකර ඔබේ නම ඇතුළත් කරන්න:") || "ශිෂ්‍යයා";
+        localStorage.setItem("ol_name", userName);
+        highPoints = parseInt(localStorage.getItem("ol_high")) || 0;
+        let topName = localStorage.getItem("ol_top_name") || "ප්‍රශ්නාවලිය අරඹන්න";
+        document.getElementById("top-user").innerText = topName;
+        loadNotes();
+        loadQuestion();
+        startExamCountdown();
+    }
+
+    function startExamCountdown() {
+        const examDate = new Date("Feb 17, 2026 08:30:00").getTime();
+        setInterval(() => {
+            const now = new Date().getTime();
+            const d = examDate - now;
+            document.getElementById("days").innerText = Math.floor(d / (1000 * 60 * 60 * 24));
+            document.getElementById("hours").innerText = String(Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+            document.getElementById("minutes").innerText = String(Math.floor((d % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+            document.getElementById("seconds").innerText = String(Math.floor((d % (1000 * 60)) / 1000)).padStart(2, '0');
+        }, 1000);
+    }
 
     const quizData = [
         { q: "පරමාණුක ක්‍රමාංකය 11 වන මූලද්‍රව්‍ය කුමක්ද?", opts: ["මැග්නීසියම්", "සෝඩියම්", "ඇලුමිනියම්", "පොටෑසියම්"], a: 1 },
@@ -182,79 +197,92 @@
 
     let currentQ = 0;
     let timeLeft = 20;
-    let timerInterval;
-
-    function startTimer() {
-        timeLeft = 20;
-        document.getElementById("q-clock").innerText = timeLeft;
-        clearInterval(timerInterval);
-        timerInterval = setInterval(() => {
-            timeLeft--;
-            document.getElementById("q-clock").innerText = timeLeft;
-            if (timeLeft <= 0) { clearInterval(timerInterval); checkAnswer(-1); }
-        }, 1000);
-    }
+    let timer;
 
     function loadQuestion() {
+        if(currentQ >= quizData.length) {
+            document.getElementById("quiz-container").innerHTML = `<h3>ප්‍රශ්නාවලිය අවසන්! ඔබේ ලකුණු: ${score}</h3>`;
+            updateLeaderboard();
+            return;
+        }
         const data = quizData[currentQ];
         document.getElementById("q-count").innerText = `Question ${currentQ + 1}/${quizData.length}`;
         document.getElementById("question-text").innerText = data.q;
         const container = document.getElementById("options-container");
         container.innerHTML = "";
-        data.opts.forEach((opt, index) => {
+        data.opts.forEach((opt, i) => {
             const btn = document.createElement("button");
             btn.className = "opt-btn";
             btn.innerText = opt;
-            btn.onclick = () => checkAnswer(index);
+            btn.onclick = () => checkAnswer(i);
             container.appendChild(btn);
         });
-        startTimer();
+        resetTimer();
     }
 
-    function checkAnswer(selected) {
-        clearInterval(timerInterval);
+    function resetTimer() {
+        timeLeft = 20;
+        document.getElementById("q-clock").innerText = timeLeft;
+        clearInterval(timer);
+        timer = setInterval(() => {
+            timeLeft--;
+            document.getElementById("q-clock").innerText = timeLeft;
+            if(timeLeft <= 0) checkAnswer(-1);
+        }, 1000);
+    }
+
+    function checkAnswer(idx) {
+        clearInterval(timer);
         const correct = quizData[currentQ].a;
         const btns = document.querySelectorAll(".opt-btn");
-        if (selected === correct) {
-            confetti({ particleCount: 100, spread: 50, origin: { y: 0.7 } });
-            btns[selected].classList.add("correct-opt");
-            document.getElementById("feedback").innerHTML = "✅ නිවැරදියි!";
+        if(idx === correct) {
+            score++;
+            document.getElementById("user-stats").innerText = `ඔබේ ලකුණු: ${score}`;
+            confetti({ particleCount: 50, spread: 60 });
+            btns[idx].classList.add("correct-opt");
+            document.getElementById("feedback").innerText = "✅ නිවැරදියි!";
         } else {
             document.body.classList.add("error-bg");
-            if (selected !== -1) btns[selected].style.backgroundColor = "var(--red)";
+            if(idx !== -1) btns[idx].style.backgroundColor = "var(--red)";
             btns[correct].classList.add("correct-opt");
-            document.getElementById("feedback").innerHTML = "❌ වැරදියි!";
+            document.getElementById("feedback").innerText = "❌ වැරදියි!";
         }
         setTimeout(() => {
             document.body.classList.remove("error-bg");
+            document.getElementById("feedback").innerText = "";
             currentQ++;
-            if (currentQ < quizData.length) { loadQuestion(); document.getElementById("feedback").innerText = ""; }
-            else { document.querySelector(".quiz-card").innerHTML = "<h3>විභාගයට සුබ පැතුම්! 🏆</h3>"; }
-        }, 2000);
+            loadQuestion();
+        }, 1500);
     }
 
-    const newNotes = [
-        { t: "අයිසොටෝප", c: "පරමාණුක ක්‍රමාංකය සමාන නමුත් ස්කන්ධ ක්‍රමාංකය වෙනස් එකම මූලද්‍රව්‍යයේ පරමාණු වේ." },
-        { t: "සමාවයවිකතාව", c: "අණුක සූත්‍රය සමාන නමුත් ව්‍යුහය වෙනස් සංයෝග මෙලෙස හඳුන්වයි." },
-        { t: "ගම්‍යතාව", c: "වස්තුවක ස්කන්ධය සහ ප්‍රවේගයේ ගුණිතයයි (p = mv). මෙහි ඒකකය kg ms⁻¹ වේ." },
-        { t: "වර්තනාංකය", c: "වාතයේ ආලෝකයේ වේගය සහ මාධ්‍යයක් තුළ ආලෝකයේ වේගය අතර අනුපාතයයි." },
-        { t: "ද්වීපද නාමකරණය", c: "ජීවියෙකුට ගණය සහ විශේෂය භාවිතයෙන් විද්‍යාත්මක නමක් ලබාදීමයි (උදා: Homo sapiens)." },
-        { t: "කාර්යය", c: "බලය සහ බලය යෙදූ දිශාවට සිදුවූ විස්ථාපනයේ ගුණිතයයි (W = Fs). ඒකකය ජූල් (J) වේ." },
-        { t: "විභව වෙනස", c: "පරිපථයක ලක්ෂ්‍ය දෙකක් අතර විද්‍යුත් පීඩනයේ වෙනසයි. වෝල්ට්මීටරයෙන් මනිනු ලබයි." },
-        { t: "අනුලෝම සමානුපාතය", c: "එක් රාශියක් වැඩිවන විට අනෙක් රාශියද එකම අනුපාතයකින් වැඩි වීමයි." },
-        { t: "ධමනි සහ ශිරා", c: "ධමනි මගින් හෘදයේ සිට රුධිරය ඉවතට ගෙන යන අතර ශිරා මගින් රුධිරය හෘදය වෙත ගෙන එයි." },
-        { t: "මූල්‍ය ප්‍රකාශන", c: "ව්‍යාපාරයක මූල්‍ය තත්ත්වය පරීක්ෂා කිරීමට වෙළඳ, ලාභ අලාභ සහ ශේෂ පත්‍ර පිළියෙල කරයි." }
+    function updateLeaderboard() {
+        if(score >= highPoints) {
+            localStorage.setItem("ol_high", score);
+            localStorage.setItem("ol_top_name", userName);
+            document.getElementById("top-user").innerText = userName + " (" + score + ")";
+            confetti({ particleCount: 200, spread: 90 });
+        }
+    }
+
+    const oLevelNotes = [
+        { t: "1. සෛලීය ශ්වසනය", c: "සෛල තුළ ග්ලූකෝස් ඔක්සිකරණය වී ශක්තිය (ATP) නිපදවීමයි. මෙහි අතුරු ඵල ලෙස CO₂ සහ ජලය පිටවේ." },
+        { t: "2. නිව්ටන්ගේ 2 වන නියමය", c: "වස්තුවක ගම්‍යතාව වෙනස්වීමේ සීග්‍රතාව ඒ මත යෙදෙන අසමතුලිත බලයට සමානුපාතික වේ (F = ma)." },
+        { t: "3. ලෝහ සක්‍රීයතා ශ්‍රේණිය", c: "K, Na, Ca, Mg, Al, Zn, Fe, Pb, (H), Cu, Hg, Ag, Au. මෙහි පොටෑසියම් (K) වැඩිම සක්‍රීයතාවක් පෙන්වයි." },
+        { t: "4. වෘත්ත චතුරස්‍ර", c: "වෘත්ත චතුරස්‍රයක සම්මුඛ කෝණවල එකතුව 180° කි. බාහිර කෝණය අභ්‍යන්තර ප්‍රතිමුඛ කෝණයට සමාන වේ." },
+        { t: "5. අයිසොටෝප (Isotopes)", c: "පරමාණුක ක්‍රමාංකය සමාන නමුත් ස්කන්ධ ක්‍රමාංකය වෙනස් එකම මූලද්‍රව්‍යයේ පරමාණු වේ (උදා: හයිඩ්‍රජන්)." },
+        { t: "6. ඕම්ගේ නියමය", c: "ස්ථාවර උෂ්ණත්වයකදී සන්නායකයක් තුළින් ගලන ධාරාව (I), එහි අග්‍ර අතර විභව වෙනසට (V) අනුලෝමව සමානුපාතික වේ." },
+        { t: "7. ප්‍රවේණිය", c: "මිනිස් සෛලයක වර්ණදේහ යුගල 23ක් (46ක්) පවතී. 23 වන යුගලය ලිංග වර්ණදේහ වේ (XY - පිරිමි, XX - ගැහැණු)." },
+        { t: "8. කළල බන්ධය (වැදෑමහ)", c: "මවගෙන් කලලයට පෝෂණය හා ඔක්සිජන් ලබාදීමටත්, බහිස්‍රාවී ද්‍රව්‍ය ඉවත් කිරීමටත් උපකාරී වේ." },
+        { t: "9. ලඝුගණක සූත්‍ර", c: "log(ab) = log a + log b සහ log(a/b) = log a - log b ලෙස ගණනය කරනු ලැබේ." },
+        { t: "10. ප්‍රතිශත (Percentages)", c: "වට්ටම්, කොමිස් සහ වැට් බදු (VAT) සැමවිටම ගණනය කරනු ලබන්නේ මුල් වටිනාකම මත පදනම්වය." }
     ];
 
     function loadNotes() {
         const div = document.getElementById("notes-display");
-        newNotes.forEach(note => {
-            div.innerHTML += `<div class="note-box"><h3>${note.t}</h3><p>${note.c}</p></div>`;
+        oLevelNotes.forEach(n => {
+            div.innerHTML += `<div class="note-box"><h3>${n.t}</h3><p>${n.c}</p></div>`;
         });
     }
-
-    loadNotes();
-    loadQuestion();
 </script>
 
 </body>
