@@ -1,122 +1,108 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="si">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edu Pro Network - Achıya</title>
+    <title>Edu Pro Network - O/L Master</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&family=Gemunu+Libre:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         :root {
-            --pink: #ff007f; --blue: #00d4ff; --yellow: #f8ff00; --red: #ff0000; --dark: #050505;
+            --pink: #ff007f; --blue: #00d4ff; --yellow: #f8ff00; --red: #ff0000; --green: #00ff88; --dark: #050505;
         }
 
-        /* Original Thorana & Neon Animation Pattern */
         body {
-            margin: 0; background-color: var(--dark); color: white; font-family: 'Poppins', sans-serif; overflow-x: hidden;
-            background: radial-gradient(circle at center, #1a1a2e 0%, #050505 100%);
+            margin: 0; background-color: var(--dark); color: white; font-family: 'Poppins', 'Gemunu Libre', sans-serif;
+            transition: background 0.3s ease;
         }
+
+        /* Neon Error Effect */
+        body.error-bg { background-color: #440000; animation: shake 0.2s ease-in-out 2; }
+        @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(5px); } 75% { transform: translateX(-5px); } 100% { transform: translateX(0); } }
 
         header {
             padding: 30px; text-align: center; border-bottom: 3px solid var(--pink);
-            box-shadow: 0 0 20px var(--pink), 0 0 40px var(--blue);
-            animation: borderGlow 2s infinite alternate;
+            box-shadow: 0 0 20px var(--pink); animation: borderGlow 2s infinite alternate;
         }
 
-        @keyframes borderGlow {
-            from { border-color: var(--pink); box-shadow: 0 0 20px var(--pink); }
-            to { border-color: var(--blue); box-shadow: 0 0 20px var(--blue); }
-        }
+        @keyframes borderGlow { from { border-color: var(--pink); } to { border-color: var(--blue); } }
 
         .logo {
             font-size: 2.8rem; font-weight: bold; letter-spacing: 5px; text-transform: uppercase;
-            background: linear-gradient(90deg, var(--pink), var(--blue), var(--yellow), var(--red));
-            background-size: 300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            animation: flow 5s linear infinite;
+            background: linear-gradient(90deg, var(--pink), var(--blue), var(--yellow));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        @keyframes flow { to { background-position: 300%; } }
-
-        /* Countdown */
-        .countdown-box { display: flex; justify-content: center; gap: 10px; margin: 30px auto; flex-wrap: wrap; }
-        .timer-unit {
-            background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 15px;
-            border: 2px solid var(--pink); min-width: 85px; text-align: center;
-        }
-        .timer-unit span { display: block; font-size: 2rem; font-weight: bold; color: var(--blue); text-shadow: 0 0 10px var(--blue); }
-
-        /* Quiz Logic UI */
+        /* Quiz UI */
         .quiz-card {
-            background: rgba(0, 212, 255, 0.1); border: 2px solid var(--blue);
-            padding: 30px; border-radius: 30px; margin: 40px auto; max-width: 700px;
-            box-shadow: 0 0 30px rgba(0, 212, 255, 0.2); text-align: center;
-        }
-        input[type="text"] {
-            width: 80%; padding: 12px; margin: 20px 0; border-radius: 10px; border: none; font-size: 1.1rem; text-align: center;
-        }
-        .submit-btn {
-            background: var(--pink); color: white; border: none; padding: 12px 30px;
-            border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 0 15px var(--pink);
+            background: rgba(255, 255, 255, 0.05); border: 2px solid var(--blue);
+            padding: 30px; border-radius: 25px; margin: 40px auto; max-width: 700px;
+            text-align: center; position: relative;
         }
 
-        /* Syllabus Short Notes */
-        .notes-section { max-width: 900px; margin: 50px auto; padding: 20px; text-align: left; }
+        .options-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px;
+        }
+
+        .opt-btn {
+            background: transparent; border: 2px solid var(--blue); color: white;
+            padding: 15px; border-radius: 12px; cursor: pointer; font-size: 1rem;
+            transition: 0.3s;
+        }
+
+        .opt-btn:hover { background: rgba(0, 212, 255, 0.2); box-shadow: 0 0 15px var(--blue); }
+
+        .correct-opt { border-color: var(--green) !important; box-shadow: 0 0 20px var(--green); color: var(--green); font-weight: bold; }
+
+        /* Timer for Question */
+        .q-timer { font-size: 1.5rem; color: var(--yellow); margin-bottom: 10px; font-weight: bold; }
+
+        /* Notes Section */
+        .notes-section { max-width: 900px; margin: 50px auto; padding: 20px; }
         .note-box {
             background: rgba(255, 255, 255, 0.05); border-left: 5px solid var(--yellow);
             padding: 20px; border-radius: 0 15px 15px 0; margin-bottom: 25px;
+            transition: 0.3s;
         }
-        .note-box h3 { color: var(--pink); margin-top: 0; }
-        .note-box p { color: #ccc; line-height: 1.7; }
+        .note-box:hover { transform: scale(1.02); background: rgba(255, 255, 255, 0.1); }
+        .note-box h3 { color: var(--pink); margin: 0 0 10px 0; }
 
-        .help-desk { position: fixed; bottom: 20px; right: 20px; background: var(--pink); padding: 15px; border-radius: 50%; cursor: pointer; box-shadow: 0 0 15px var(--pink); font-size: 20px; }
+        .countdown-box { display: flex; justify-content: center; gap: 10px; margin: 20px; }
+        .timer-unit { background: #111; padding: 10px; border: 1px solid var(--pink); border-radius: 10px; min-width: 60px; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo">Edu Pro Network - Achıya</div>
-    <div id="motivation-text" style="color: var(--yellow); margin-top: 10px; font-style: italic;"></div>
+    <div class="logo">Edu Pro Network</div>
+    <div id="motivation-text" style="color: var(--yellow); margin-top: 10px;">විභාගය අතළඟයි - සූදානම් වෙමු!</div>
 </header>
 
-<div class="container" style="padding: 20px; text-align: center;">
+<div class="container">
     <div class="countdown-box">
-        <div class="timer-unit"><span id="days">00</span><div style="font-size:10px">Days</div></div>
-        <div class="timer-unit"><span id="hours">00</span><div style="font-size:10px">Hours</div></div>
-        <div class="timer-unit"><span id="minutes">00</span><div style="font-size:10px">Min</div></div>
-        <div class="timer-unit"><span id="seconds">00</span><div style="font-size:10px">Sec</div></div>
-        <div class="timer-unit" style="border-color:var(--blue)"><span id="millis">000</span><div style="font-size:10px">Ms</div></div>
+        <div class="timer-unit"><span id="days">00</span><br><small>Days</small></div>
+        <div class="timer-unit"><span id="hours">00</span><br><small>Hrs</small></div>
+        <div class="timer-unit"><span id="minutes">00</span><br><small>Min</small></div>
+        <div class="timer-unit"><span id="seconds">00</span><br><small>Sec</small></div>
     </div>
 
     <div class="quiz-card">
-        <h2 style="color: var(--yellow);">🚀 Daily 50 Question Challenge</h2>
-        <p id="q-count" style="color: var(--pink); font-weight: bold;">Question 1/50</p>
-        <p id="question-text" style="font-size: 1.3rem; margin: 20px 0;">Loading...</p>
-        <input type="text" id="answer-input" placeholder="ඔබේ පිළිතුර මෙතන ටයිප් කරන්න...">
-        <br>
-        <button class="submit-btn" onclick="checkAnswer()">Submit Answer</button>
-        <p id="feedback" style="margin-top: 15px; font-weight: bold;"></p>
+        <div class="q-timer">⏳ <span id="q-clock">20</span>s</div>
+        <h3 id="q-count" style="color: var(--pink);">Question 1/15</h3>
+        <p id="question-text" style="font-size: 1.4rem;">ප්‍රශ්නය මෙතන දිස්වේවි...</p>
+        <div class="options-grid" id="options-container">
+            </div>
+        <p id="feedback" style="margin-top: 20px; height: 20px;"></p>
     </div>
 
     <div class="notes-section">
-        <h2 style="color: var(--blue); text-align: center; text-shadow: 0 0 10px var(--blue);">📚 Syllabus Based High-Yield Notes</h2>
-        <div class="note-box">
-            <h3>1. පරමාණුවේ ව්‍යුහය (විද්‍යාව)</h3>
-            <p>පරමාණුවක ප්‍රෝටෝන (ධන), නියුට්‍රෝන (උදාසීන) සහ ඉලෙක්ට්‍රෝන (සෘණ) අඩංගු වේ. න්‍යෂ්ටිය තුළ ප්‍රෝටෝන හා නියුට්‍රෝන පවතින අතර ඉලෙක්ට්‍රෝන ශක්ති මට්ටම් වල ගමන් කරයි. පරමාණුක ක්‍රමාංකය යනු ප්‍රෝටෝන ගණනයි.</p>
-        </div>
-        <div class="note-box">
-            <h3>2. සමාන්තර ශ්‍රේඪි (ගණිතය)</h3>
-            <p>පොදු අන්තරයක් (d) සහිත සංඛ්‍යා රටා සමාන්තර ශ්‍රේඪි වේ. n වැනි පදය සෙවීමේ සූත්‍රය: <b>Tn = a + (n-1)d</b>. මුල් පද n වල එකතුව: <b>Sn = n/2 [2a + (n-1)d]</b>. විභාගයේදී ව්‍යුහගත ප්‍රශ්න පත්‍රයට මෙයින් ලකුණු 10ක ප්‍රශ්නයක් නියතයි.</p>
-        </div>
-        <div class="note-box">
-            <h3>3. ලන්දේසි පාලනය (ඉතිහාසය)</h3>
-            <p>1658 දී ලන්දේසීන් පෘතුගීසීන් පලවා හැර මුහුදුබඩ ප්‍රදේශ අල්ලා ගත්හ. මොවුන් රෝම ලන්දේසි නීතිය හඳුන්වා දුන් අතර, වාණිජ භෝගයක් ලෙස කුරුඳු වගාව දියුණු කළහ.</p>
-        </div>
+        <h2 style="color: var(--blue); text-align: center;">📚 O/L High-Yield Short Notes</h2>
+        <div id="notes-display"></div>
     </div>
 </div>
 
-<div class="help-desk" onclick="alert('Edu Pro Support: 07x-xxxxxxx')">💬</div>
-
 <script>
-    // Countdown Logic
+    // 1. Exam Countdown Logic
     const examDate = new Date("Feb 17, 2026 08:30:00").getTime();
     setInterval(() => {
         const now = new Date().getTime();
@@ -125,62 +111,117 @@
         document.getElementById("hours").innerText = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         document.getElementById("minutes").innerText = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60));
         document.getElementById("seconds").innerText = Math.floor((d % (1000 * 60)) / 1000);
-        document.getElementById("millis").innerText = Math.floor(d % 1000);
-    }, 50);
+    }, 1000);
 
-    // 50 Questions Data (Sample 5 provided, add more to reach 50)
+    // 2. Quiz Data
     const quizData = [
-        {q: "ජලයේ රසායනික සූත්‍රය කුමක්ද?", a: "H2O"},
-        {q: "ආලෝකයේ වේගය (ms-1) කොපමණද?", a: "3x10^8"},
-        {q: "ශ්‍රී ලංකාවේ ප්‍රථම අග්‍රාමාත්‍යවරයා කවුද?", a: "ඩී එස් සේනානායක"},
-        {q: "න්‍යෂ්ටිය සොයාගත් විද්‍යාඥයා කවුද?", a: "රදර්ෆර්ඩ්"},
-        {q: "සෛලයක ශක්ති ඒකකය කුමක්ද?", a: "ATP"},
-        {q: "ලෝකයේ උසම කන්ද කුමක්ද?", a: "එවරස්ට්"},
-        {q: "බලයේ ඒකකය කුමක්ද?", a: "නිව්ටන්"},
-        {q: "ප්‍රභාසංස්ලේෂණයේ අතුරු ඵලය කුමක්ද?", a: "ඔක්සිජන්"},
-        // ... මෙතනට තව ප්‍රශ්න 50ක් දක්වා එක් කළ හැකියි
+        { q: "පරමාණුක ක්‍රමාංකය 11 වන මූලද්‍රව්‍ය කුමක්ද?", opts: ["මැග්නීසියම්", "සෝඩියම්", "ඇලුමිනියම්", "පොටෑසියම්"], a: 1 },
+        { q: "වෘත්තයක වර්ගඵලය සෙවීමේ සූත්‍රය කුමක්ද?", opts: ["2πr", "πr²", "2πr²", "πd"], a: 1 },
+        { q: "සෛලයක ශක්ති ඒකකය හඳුන්වන්නේ කුමක් ලෙසද?", opts: ["DNA", "RNA", "ATP", "NADPH"], a: 2 },
+        { q: "ශ්‍රී ලංකාවේ ප්‍රථම විධායක ජනාධිපති කවුද?", opts: ["ඩී.එස්. සේනානායක", "එස්.ඩබ්.ආර්.ඩී. බණ්ඩාරනායක", "ජේ.ආර්. ජයවර්ධන", "ආර්. ප්‍රේමදාස"], a: 2 },
+        { q: "ගුරුත්වාකර්ෂණ ත්වරණයේ (g) අගය ආසන්න වශයෙන්:", opts: ["5 ms⁻²", "10 ms⁻²", "15 ms⁻²", "20 ms⁻²"], a: 1 },
+        { q: "මිනිස් සිරුරේ ඇති දිගම අස්ථිය කුමක්ද?", opts: ["මඩයස්ථිය", "උරුස්ථිය (Femur)", "අන්වස්ථිය", "කශේරුකාව"], a: 1 }
     ];
 
-    let currentQIndex = 0;
+    let currentQ = 0;
+    let timeLeft = 20;
+    let timerInterval;
+
+    function startTimer() {
+        timeLeft = 20;
+        document.getElementById("q-clock").innerText = timeLeft;
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            document.getElementById("q-clock").innerText = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                checkAnswer(-1); // Time out
+            }
+        }, 1000);
+    }
 
     function loadQuestion() {
-        if (currentQIndex < quizData.length) {
-            document.getElementById("q-count").innerText = "Question " + (currentQIndex + 1) + "/50";
-            document.getElementById("question-text").innerText = quizData[currentQIndex].q;
-            document.getElementById("answer-input").value = "";
-            document.getElementById("feedback").innerText = "";
-        } else {
-            document.querySelector(".quiz-card").innerHTML = "<h2 style='color:var(--yellow)'>සියලුම ප්‍රශ්න අවසන්! ඔබ ජයග්‍රහණය කළා! 🏆</h2>";
-        }
+        const data = quizData[currentQ];
+        document.getElementById("q-count").innerText = `Question ${currentQ + 1}/${quizData.length}`;
+        document.getElementById("question-text").innerText = data.q;
+        const container = document.getElementById("options-container");
+        container.innerHTML = "";
+        
+        data.opts.forEach((opt, index) => {
+            const btn = document.createElement("button");
+            btn.className = "opt-btn";
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(index);
+            container.appendChild(btn);
+        });
+        startTimer();
     }
 
-    function checkAnswer() {
-        const userAns = document.getElementById("answer-input").value.trim().toLowerCase();
-        const correctAns = quizData[currentQIndex].a.toLowerCase();
+    function checkAnswer(selected) {
+        clearInterval(timerInterval);
+        const correct = quizData[currentQ].a;
+        const btns = document.querySelectorAll(".opt-btn");
 
-        if (userAns === correctAns) {
-            document.getElementById("feedback").style.color = "var(--blue)";
-            document.getElementById("feedback").innerText = "නිවැරදියි! ඊළඟ ප්‍රශ්නයට යමු...";
+        if (selected === correct) {
+            // Success Effect
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            btns[selected].classList.add("correct-opt");
+            document.getElementById("feedback").innerHTML = "<span style='color:var(--green)'>නියමයි! පිළිතුර නිවැරදියි. 🌟</span>";
+            
             setTimeout(() => {
-                currentQIndex++;
-                loadQuestion();
-            }, 1000);
+                currentQ++;
+                if (currentQ < quizData.length) {
+                    loadQuestion();
+                    document.getElementById("feedback").innerText = "";
+                } else {
+                    document.querySelector(".quiz-card").innerHTML = "<h2>සියලු ප්‍රශ්න අවසන්! ඔබ විශිෂ්ටයි! 🏆</h2>";
+                }
+            }, 2000);
         } else {
-            document.getElementById("feedback").style.color = "var(--red)";
-            document.getElementById("feedback").innerText = "වැරදියි, නැවත උත්සාහ කරන්න!";
+            // Failure Effect
+            document.body.classList.add("error-bg");
+            btns[correct].classList.add("correct-opt");
+            document.getElementById("feedback").innerHTML = "<span style='color:var(--red)'>පිළිතුර වැරදියි! නිවැරදි පිළිතුර ඉහළින් පෙන්වයි.</span>";
+            
+            setTimeout(() => {
+                document.body.classList.remove("error-bg");
+                currentQ++;
+                if (currentQ < quizData.length) loadQuestion();
+                document.getElementById("feedback").innerText = "";
+            }, 3000);
         }
     }
 
-    // Motivation Quotes
-    const quotes = ["කැපවීමෙන් වැඩ කරන්න, 9A සහතිකයි!", "අද මහන්සිය හෙට ජයග්‍රහණයයි!", "සටන අත්හරින්න එපා! 🔥"];
-    let qIdx = 0;
-    setInterval(() => {
-        document.getElementById("motivation-text").innerText = quotes[qIdx];
-        qIdx = (qIdx + 1) % quotes.length;
-    }, 4000);
+    // 3. 10 Additional Short Notes
+    const notesData = [
+        { t: "විද්‍යුත් සෘණතාව", c: "සහසංයුජ බන්ධනයක ඇති ඉලෙක්ට්‍රෝන යුගල තමා දෙසට ආකර්ෂණය කර ගැනීමේ හැකියාවයි. ආවර්තිතා වගුවේ දකුණට යන විට මෙය වැඩි වේ." },
+        { t: "නිව්ටන්ගේ 2 වන නියමය", c: "F = ma. වස්තුවක් මත ක්‍රියා කරන අසමතුලිත බලය, එහි ස්කන්ධයේත් ත්වරණයේත් ගුණිතයට සමාන වේ." },
+        { t: "මූල්‍ය ප්‍රකාශන (ගිණුම්කරණය)", c: "ලාභ අලාභ ගිණුම මගින් මූල්‍ය කාර්යසාධනයත්, ශේෂ පත්‍රය මගින් මූල්‍ය තත්ත්වයත් පෙන්වයි." },
+        { t: "සමෝච්ච රේඛා (භූගෝල විද්‍යාව)", c: "සම මුහුදු මට්ටමේ සිට සමාන උසකින් පිහිටි ස්ථාන යා කරමින් අඳින රේඛා වේ. මේවා එකිනෙකට කැපෙන්නේ නැත." },
+        { t: "ප්‍රකාශ විද්‍යුත් ආචරණය", c: "ලෝහ මතුපිටකට ආලෝකය පතිත වූ විට ඉලෙක්ට්‍රෝන පිටවීම මෙලෙස හඳුන්වයි. අයින්ස්ටයින් මෙයට නොබෙල් ත්‍යාගය දිනාගත්තේය." },
+        { t: "වර්ගජ සමීකරණ (ගණිතය)", c: "ax² + bx + c = 0 ආකාරයේ සමීකරණ වේ. මූල සෙවීමේ සූත්‍රය: x = [-b ± √(b² - 4ac)] / 2a." },
+        { t: "ලෝක යුද්ධ (ඉතිහාසය)", c: "1 වන ලෝක යුද්ධය (1914-1918) සහ 2 වන ලෝක යුද්ධය (1939-1945). ලීගය සහ එක්සත් ජාතීන්ගේ සංවිධානය මෙහි ප්‍රතිඵල වේ." },
+        { t: "එන්සයිම (විද්‍යාව)", c: "ජීවී සෛල තුළ සිදුවන රසායනික ප්‍රතික්‍රියා වේගවත් කරන ජෛව උත්ප්‍රේරක වේ. මේවා ප්‍රෝටීන වලින් සෑදී ඇත." },
+        { t: "ත්‍රිකෝණමිතිය", c: "Sin θ = සම්මුඛ / කර්ණය, Cos θ = බද්ධ / කර්ණය, Tan θ = සම්මුඛ / බද්ධ ලෙස අර්ථ දැක්වේ." },
+        { t: "පරිගණක මතකය", c: "RAM යනු තාවකාලික (Volatile) මතකයයි. ROM යනු ස්ථිර (Non-volatile) මතකයයි." }
+    ];
 
+    function loadNotes() {
+        const div = document.getElementById("notes-display");
+        notesData.forEach(note => {
+            div.innerHTML += `
+                <div class="note-box">
+                    <h3>${note.t}</h3>
+                    <p>${note.c}</p>
+                </div>
+            `;
+        });
+    }
+
+    loadNotes();
     loadQuestion();
 </script>
 
 </body>
-    </html>
+ </html>
