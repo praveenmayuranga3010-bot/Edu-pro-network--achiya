@@ -61,98 +61,93 @@
 
         .container { width: 100%; max-width: 850px; margin: 0 auto; padding: 20px; }
 
-        /* Premium Dashboard */
         .dashboard {
             background: var(--glass); border: 2px solid; border-radius: 25px; 
             padding: 20px; margin-bottom: 25px; text-align: center;
             backdrop-filter: blur(20px); animation: thoranaFlow 6s infinite alternate;
-            border-image-slice: 1;
         }
+
         .leader-name { 
             color: #fff; font-size: 1.6rem; font-weight: bold; 
-            text-shadow: 0 0 15px var(--neon-green), 0 0 30px var(--neon-green);
+            text-shadow: 0 0 15px var(--neon-green);
             margin: 10px 0;
         }
 
-        /* Countdown */
         .countdown-box { display: flex; justify-content: center; gap: 12px; margin: 25px 0; }
         .timer-unit { 
             background: rgba(0,0,0,0.6); padding: 12px; border: 1px solid rgba(255,255,255,0.2); 
             border-radius: 15px; min-width: 75px; text-align: center;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-            transition: 0.3s;
         }
         .timer-unit span { font-size: 1.8rem; font-weight: 800; display: block; color: var(--yellow); }
-        .timer-unit small { font-size: 0.75rem; text-transform: uppercase; color: #aaa; }
 
-        /* Quiz Card Enhanced */
+        /* QUIZ CARD THORAN ENHANCEMENT */
         .quiz-card {
-            background: var(--glass); border-radius: 30px; padding: 30px; 
-            margin: 30px 0; border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            backdrop-filter: blur(15px); position: relative;
-            overflow: hidden;
+            background: rgba(0,0,0,0.7); border-radius: 30px; padding: 35px; 
+            margin: 30px 0; border: 6px solid; 
+            animation: thoranaFlow 2s infinite linear; /* Fast moving colors like a real thorana */
+            box-shadow: 0 0 40px rgba(0,0,0,0.8);
+            position: relative; overflow: hidden;
         }
-        .quiz-card::before {
-            content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-            transition: 0.5s; pointer-events: none;
+
+        /* Bulb Effect Elements */
+        .bulb-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 999; display: none;
+            grid-template-columns: repeat(10, 1fr); grid-template-rows: repeat(10, 1fr);
         }
-        .quiz-card:hover::before { left: 100%; transition: 1s; }
+        .bulb {
+            width: 15px; height: 15px; border-radius: 50%; margin: auto;
+            filter: blur(2px); animation: bulbFlash 0.3s infinite alternate;
+        }
+        @keyframes bulbFlash {
+            0% { opacity: 0; transform: scale(0.5); }
+            100% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 15px currentColor; }
+        }
 
         .opt-btn {
             background: rgba(255,255,255,0.04); border: 1.5px solid rgba(0,212,255,0.4); 
             color: white; padding: 15px; border-radius: 15px; cursor: pointer; 
-            font-size: 1rem; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            font-weight: 500;
+            font-size: 1rem; transition: 0.3s; width: 100%; margin-bottom: 10px;
+            font-weight: 600;
         }
-        .opt-btn:hover { 
-            background: var(--blue); color: #000; transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0,212,255,0.3);
-        }
+        .opt-btn:hover { background: var(--blue); color: #000; }
+        
         .correct-opt { 
             background: var(--green) !important; color: #000 !important; 
-            font-weight: 700; transform: scale(1.02);
-            box-shadow: 0 0 25px var(--green) !important;
+            font-weight: 800; border: 2px solid white !important;
+            animation: successPulse 0.5s infinite alternate;
         }
+        @keyframes successPulse { from { transform: scale(1); } to { transform: scale(1.05); } }
 
-        /* Notes Display */
         .note-box {
             background: rgba(10, 10, 15, 0.8); border: 1px solid rgba(255,255,255,0.1);
-            border-left: 8px solid; padding: 25px; border-radius: 15px; 
-            margin-bottom: 25px; transition: 0.4s;
-            animation: thoranaFlow 8s infinite alternate;
+            border-left: 8px solid var(--blue); padding: 25px; border-radius: 15px; 
+            margin-bottom: 25px; animation: thoranaFlow 8s infinite alternate;
         }
-        .note-box:hover { transform: scale(1.01) translateX(5px); background: rgba(20, 20, 30, 0.9); }
-        .note-box h3 { margin-top: 0; color: var(--yellow); font-size: 1.3rem; letter-spacing: 1px; }
-        .note-box p { font-size: 1rem; color: #e0e0e0; }
 
         footer {
             margin-top: 60px; padding: 40px 20px; text-align: center; 
-            background: linear-gradient(to top, #000, transparent);
-            border-top: 1px solid rgba(57, 255, 20, 0.3);
+            border-top: 1px solid var(--neon-green);
         }
-        .creator-info { font-weight: 800; font-size: 1.4rem; letter-spacing: 2px; }
 
-        /* Error Shake */
-        body.error-bg { background-color: #200000; animation: shake 0.3s ease-in-out; }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-10px); } 60% { transform: translateX(10px); } }
-
-        #q-clock { font-size: 1.5rem; font-weight: 800; text-shadow: 0 0 10px var(--yellow); }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        @media (max-width: 600px) { .options-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body onload="initApp()">
 
+<div class="bulb-overlay" id="bulb-container"></div>
+
 <header>
     <div class="logo">Edu Pro Network</div>
-    <div style="color: var(--yellow); font-weight: 600; margin-top: 8px; font-size: 1.1rem;">✨ O/L සිහිනය සැබෑ කරන සුපිරි තේරීම! ✨</div>
+    <div style="color: var(--yellow); font-weight: 600; margin-top: 8px;">✨ O/L සිහිනය සැබෑ කරන සුපිරි තේරීම! ✨</div>
 </header>
 
 <div class="container">
     <div class="dashboard">
-        <div style="font-weight: 600; letter-spacing: 1px; color: #aaa;">TOP ACHIEVER</div>
+        <div style="color: #aaa;">TOP ACHIEVER</div>
         <div class="leader-name" id="top-user">ප්‍රතිඵල බලාපොරොත්තුවෙන්...</div>
-        <div id="user-stats" style="font-size: 1.1rem; margin-top: 10px; color: var(--blue); font-weight: bold;">ඔබේ ලකුණු: 0</div>
+        <div id="user-stats" style="color: var(--blue); font-weight: bold;">ඔබේ ලකුණු: 0</div>
     </div>
 
     <div class="countdown-box">
@@ -164,16 +159,16 @@
 
     <div class="quiz-card" id="quiz-container">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <span id="q-count" style="color: var(--pink); font-weight: bold; font-size: 1.1rem;">Question 1/26</span>
-            <div id="q-clock-box">⚡ <span id="q-clock">20</span>s</div>
+            <span id="q-count" style="color: var(--pink); font-weight: bold;">Question 1/26</span>
+            <div style="color: var(--yellow); font-weight: 800;">⚡ <span id="q-clock">20</span>s</div>
         </div>
-        <p id="question-text" style="font-size: 1.3rem; min-height: 60px; font-weight: 600;"></p>
+        <p id="question-text" style="font-size: 1.3rem; font-weight: 600; min-height: 60px;"></p>
         <div class="options-grid" id="options-container"></div>
-        <p id="feedback" style="margin-top: 20px; font-weight: 800; font-size: 1.2rem;"></p>
+        <p id="feedback" style="margin-top: 20px; font-weight: 800; font-size: 1.4rem; text-align: center;"></p>
     </div>
 
     <div class="notes-section">
-        <h2 style="color: #fff; text-align: center; font-size: 1.8rem; margin: 50px 0 30px; text-shadow: 0 0 15px var(--blue);">🚀 Exam Booster Short Notes</h2>
+        <h2 style="text-align: center; color: var(--blue); text-shadow: 0 0 10px var(--blue); margin: 40px 0;">🚀 Exam Booster Short Notes</h2>
         <div id="notes-display"></div>
     </div>
 </div>
@@ -181,26 +176,31 @@
 <footer>
     <div class="creator-info" style="color: var(--neon-green);">Achintha Nirmana</div>
     <p style="color: #888;">© 2026 Edu Pro Network - All Rights Reserved</p>
-    <div style="margin-top: 20px;">
-        <span style="color: #aaa;">Technical Support:</span><br>
-        <a href="https://wa.me/94729329290" style="color: var(--neon-green); text-decoration: none; font-size: 1.3rem; font-weight: 800;">072 932 9290</a>
-    </div>
+    <a href="https://wa.me/94729329290" style="color: var(--neon-green); text-decoration: none; font-weight: 800;">072 932 9290</a>
 </footer>
 
 <script>
-    let userName = "";
-    let score = 0;
-    let highPoints = 0;
+    let userName = ""; let score = 0; let highPoints = 0;
+    let currentQ = 0; let timeLeft = 20; let timer;
 
     function initApp() {
         userName = localStorage.getItem("ol_name") || prompt("ඔබේ නම ඇතුළත් කරන්න:") || "Student";
         localStorage.setItem("ol_name", userName);
         highPoints = parseInt(localStorage.getItem("ol_high")) || 0;
-        let topName = localStorage.getItem("ol_top_name") || "අභියෝගය භාරගන්න!";
-        document.getElementById("top-user").innerText = topName;
-        loadNotes();
-        loadQuestion();
-        startExamCountdown();
+        document.getElementById("top-user").innerText = localStorage.getItem("ol_top_name") || "අභියෝගය භාරගන්න!";
+        
+        // Create Bulbs for Animation
+        const bulbBox = document.getElementById("bulb-container");
+        const colors = ['#ff007f', '#00d4ff', '#f8ff00', '#00ff88', '#bc13fe'];
+        for(let i=0; i<100; i++) {
+            const bulb = document.createElement("div");
+            bulb.className = "bulb";
+            bulb.style.color = colors[Math.floor(Math.random() * colors.length)];
+            bulb.style.animationDelay = (Math.random() * 0.5) + "s";
+            bulbBox.appendChild(bulb);
+        }
+        
+        loadNotes(); loadQuestion(); startExamCountdown();
     }
 
     function startExamCountdown() {
@@ -215,7 +215,6 @@
         }, 1000);
     }
 
-    // Quiz Data (Same as provided)
     const quizData = [
         { q: "පරමාණුක ක්‍රමාංකය 11 වන මූලද්‍රව්‍ය කුමක්ද?", opts: ["මැග්නීසියම්", "සෝඩියම්", "ඇලුමිනියම්", "පොටෑසියම්"], a: 1 },
         { q: "වෘත්තයක වර්ගඵලය සෙවීමේ සූත්‍රය කුමක්ද?", opts: ["2πr", "πr²", "2πr²", "πd"], a: 1 },
@@ -245,15 +244,10 @@
         { q: "සූර්ය පද්ධතියේ ඇති විශාලම ග්‍රහලෝකය:", opts: ["සෙනසුරු", "බ්‍රහස්පති", "නෙප්චූන්", "පෘථිවිය"], a: 1 }
     ];
 
-    let currentQ = 0;
-    let timeLeft = 20;
-    let timer;
-
     function loadQuestion() {
         if(currentQ >= quizData.length) {
-            document.getElementById("quiz-container").innerHTML = `<h2 style="color:var(--green)">වැඩේ සුපිරි!</h2><h3>ලකුණු සංඛ්‍යාව: ${score}</h3><button onclick="location.reload()" class="opt-btn" style="width:100%">නැවත සෙල්ලම් කරන්න</button>`;
-            updateLeaderboard();
-            return;
+            document.getElementById("quiz-container").innerHTML = `<h2 style="color:var(--green)">වැඩේ සුපිරි!</h2><h3>ලකුණු සංඛ්‍යාව: ${score}</h3><button onclick="location.reload()" class="opt-btn">නැවත සෙල්ලම් කරන්න</button>`;
+            updateLeaderboard(); return;
         }
         const data = quizData[currentQ];
         document.getElementById("q-count").innerText = `Question ${currentQ + 1}/${quizData.length}`;
@@ -262,8 +256,7 @@
         container.innerHTML = "";
         data.opts.forEach((opt, i) => {
             const btn = document.createElement("button");
-            btn.className = "opt-btn";
-            btn.innerText = opt;
+            btn.className = "opt-btn"; btn.innerText = opt;
             btn.onclick = () => checkAnswer(i);
             container.appendChild(btn);
         });
@@ -271,14 +264,18 @@
     }
 
     function resetTimer() {
-        timeLeft = 20;
-        document.getElementById("q-clock").innerText = timeLeft;
+        timeLeft = 20; document.getElementById("q-clock").innerText = timeLeft;
         clearInterval(timer);
         timer = setInterval(() => {
-            timeLeft--;
-            document.getElementById("q-clock").innerText = timeLeft;
+            timeLeft--; document.getElementById("q-clock").innerText = timeLeft;
             if(timeLeft <= 0) checkAnswer(-1);
         }, 1000);
+    }
+
+    function triggerBulbs() {
+        const bulbBox = document.getElementById("bulb-container");
+        bulbBox.style.display = "grid";
+        setTimeout(() => { bulbBox.style.display = "none"; }, 1500);
     }
 
     function checkAnswer(idx) {
@@ -288,7 +285,8 @@
         if(idx === correct) {
             score++;
             document.getElementById("user-stats").innerText = `ඔබේ ලකුණු: ${score}`;
-            confetti({ particleCount: 70, spread: 70, origin: { y: 0.6 } });
+            triggerBulbs();
+            confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
             btns[idx].classList.add("correct-opt");
             document.getElementById("feedback").innerText = "✨ EXCELLENT! ✨";
             document.getElementById("feedback").style.color = "var(--green)";
@@ -302,9 +300,8 @@
         setTimeout(() => {
             document.body.classList.remove("error-bg");
             document.getElementById("feedback").innerText = "";
-            currentQ++;
-            loadQuestion();
-        }, 1200);
+            currentQ++; loadQuestion();
+        }, 1500);
     }
 
     function updateLeaderboard() {
@@ -321,7 +318,7 @@
         { t: "🍃 කෑරගලය වැජඹෙයි (හංස සන්දේශය)", c: "🍀 යුගය - කෝට්ටේ\n🍀 රචකයා - වීදාගම මෛත්‍රෙය හිමි\n🍀 දූතයා - හංසයා\n🍀 ප්‍රතිග්‍රාහකයා - කෑරගල වනරතන හිමි\n🍀 රජු - සවන පරාක්‍රමබාහු\n🍀 නිමිත්ත - රජුට සෙත පතා දෙවියන්ට පින් දීම." },
         { t: "🍃 නිව්ටන් නියම (Science)", c: "1. පළමු නියමය: අසමතුලිත බලයක් නැතිනම් වස්තුව පෙර පැවති තත්වයේම පවතී.\n2. දෙවන නියමය: F = ma (බලය = ස්කන්ධය x ත්වරණය)\n3. තුන්වන නියමය: සෑම ක්‍රියාවකටම සමාන හා ප්‍රතිවිරුද්ධ ප්‍රතික්‍රියාවක් ඇත." },
         { t: "🍃 බෞද්ධ සාහිත්‍යය", c: "🌀 කුරුණෑගල යුගය:\n- පන්සිය පනස් ජාතක පොත (කතා 547)\n- සිංහල බෝධි වංශය\n- ථූපවංශය (රුවන්වැලි සෑ විස්තරය)\n\n🌀 ගම්පල යුගය:\n- මයුර, තිසර සංදේශ\n- නිකාය සංග්‍රහය, සද්ධර්මාලංකාරය" },
-        { t: "🍃 මානව ප්‍රවේණික ආබාධ", c: "♣️ ලිංග ප්‍රතිබද්ධ: හිමොෆීලියාව, රතු කොළ වර්ණ අන්ධතාව\n♣️ ජාන විකෘති: ඇලි බව, තැලසීමියාව\n🔰 වර්ණදේහ වෙනස් වීම:\n- ටර්නර් (X)\n- ක්ලයින්ෆෙල්ටර් (XXY)\n- ඩවුන්ස් (21 වන වර්ණදේහය 3ක්)" },
+        { t: "🍃 මානව ප්‍රවේණික ආබාධ", c: "♣️ ලිංග ප්‍රතිබද්ධ: හිමොෆීලියාව, රතු කොළ වර්ණ අන්ධතාව\n♣️ ජาන විකෘති: ඇලි බව, තැලසීමියාව\n🔰 වර්ණදේහ වෙනස් වීම:\n- ටර්නර් (X)\n- ක්ලයින්ෆෙල්ටර් (XXY)\n- ඩවුන්ස් (21 වන වර්ණදේහය 3ක්)" },
         { t: "🍃 හෝමෝන සහ ග්‍රන්ථි", c: "🌀 පිටියුටරිය - වර්ධක හෝමෝනය\n🌀 තයිරොයිඩය - තයිරොක්සින්\n🌀 අග්න්‍යාශය - ඉන්සියුලින්, ග්ලූකගොන්\n🌀 අධිවෘක්ක - ඇඩ්‍රිනලින් (හදිසි අවස්ථා)\n🌀 වෘෂණ - ටෙස්ටස්ටරොන්\n🌀 ඩිම්බ කෝෂ - ඊස්ට්‍රජන්, ප්‍රෝජෙස්ටරොන්" },
         { t: "🍃 භෞතික විද්‍යාව (Physics)", c: "🧬 ගම්‍යතාව (M) = mv\n🧬 බර (W) = mg\n🧬 ප්‍රතිරෝධයේ ඒකකය - ඕම් (Ω)\n🧬 වෝල්ටීයතාව - වෝල්ට්මීටරය" }
     ];
@@ -329,7 +326,7 @@
     function loadNotes() {
         const div = document.getElementById("notes-display");
         shortNotesData.forEach(n => {
-            div.innerHTML += `<div class="note-box"><h3>${n.t}</h3><p>${n.c}</p></div>`;
+            div.innerHTML += `<div class="note-box"><h3>${n.t}</h3><p style="white-space: pre-line;">${n.c}</p></div>`;
         });
     }
 </script>
