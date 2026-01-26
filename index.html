@@ -20,51 +20,43 @@
             font-family: 'Poppins', 'Gemunu Libre', sans-serif;
             overflow-x: hidden; width: 100%;
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(255, 0, 127, 0.1) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(0, 212, 255, 0.1) 0%, transparent 40%);
+                radial-gradient(circle at 10% 20%, rgba(255, 0, 127, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(0, 212, 255, 0.15) 0%, transparent 40%);
             line-height: 1.6;
         }
 
-        /* Moving Background Blobs */
-        body::before {
-            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
-            opacity: 0.2; z-index: -1;
-        }
-
-        /* Thorana Border Animation */
+        /* Enhanced Thorana Animation for Borders */
         @keyframes thoranaFlow {
-            0% { border-color: var(--pink); box-shadow: 0 0 15px var(--pink), inset 0 0 5px var(--pink); }
-            20% { border-color: var(--blue); box-shadow: 0 0 20px var(--blue), inset 0 0 5px var(--blue); }
-            40% { border-color: var(--yellow); box-shadow: 0 0 15px var(--yellow), inset 0 0 5px var(--yellow); }
-            60% { border-color: var(--green); box-shadow: 0 0 20px var(--green), inset 0 0 5px var(--green); }
-            80% { border-color: var(--purple); box-shadow: 0 0 15px var(--purple), inset 0 0 5px var(--purple); }
-            100% { border-color: var(--pink); box-shadow: 0 0 15px var(--pink), inset 0 0 5px var(--pink); }
+            0% { border-color: var(--pink); box-shadow: 0 0 20px var(--pink), inset 0 0 10px var(--pink); }
+            25% { border-color: var(--blue); box-shadow: 0 0 25px var(--blue), inset 0 0 10px var(--blue); }
+            50% { border-color: var(--yellow); box-shadow: 0 0 20px var(--yellow), inset 0 0 10px var(--yellow); }
+            75% { border-color: var(--green); box-shadow: 0 0 25px var(--green), inset 0 0 10px var(--green); }
+            100% { border-color: var(--pink); box-shadow: 0 0 20px var(--pink), inset 0 0 10px var(--pink); }
         }
 
         header {
             padding: 30px 10px; text-align: center; 
-            border-bottom: 3px solid; animation: thoranaFlow 5s infinite linear;
-            background: rgba(0,0,0,0.5); backdrop-filter: blur(15px);
+            border-bottom: 5px solid; animation: thoranaFlow 3s infinite linear;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(15px);
             position: sticky; top: 0; z-index: 100;
         }
 
         .logo {
             font-size: clamp(1.8rem, 9vw, 3rem); font-weight: 800; letter-spacing: 5px; 
             text-transform: uppercase; margin: 0;
-            background: linear-gradient(90deg, #fff, var(--pink), var(--blue), var(--yellow), #fff);
-            background-size: 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            animation: moveGradient 4s linear infinite;
+            background: linear-gradient(90deg, #fff, var(--pink), var(--blue), var(--yellow), var(--green), #fff);
+            background-size: 300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: moveGradient 3s linear infinite;
         }
 
-        @keyframes moveGradient { 0% { background-position: 0%; } 100% { background-position: 200%; } }
+        @keyframes moveGradient { 0% { background-position: 0%; } 100% { background-position: 300%; } }
 
         .container { width: 100%; max-width: 850px; margin: 0 auto; padding: 20px; }
 
         .dashboard {
-            background: var(--glass); border: 2px solid; border-radius: 25px; 
+            background: var(--glass); border: 3px solid; border-radius: 25px; 
             padding: 20px; margin-bottom: 25px; text-align: center;
-            backdrop-filter: blur(20px); animation: thoranaFlow 6s infinite alternate;
+            backdrop-filter: blur(20px); animation: thoranaFlow 4s infinite alternate;
         }
 
         .leader-name { 
@@ -75,62 +67,67 @@
 
         .countdown-box { display: flex; justify-content: center; gap: 12px; margin: 25px 0; }
         .timer-unit { 
-            background: rgba(0,0,0,0.6); padding: 12px; border: 1px solid rgba(255,255,255,0.2); 
+            background: rgba(0,0,0,0.7); padding: 12px; border: 2px solid var(--blue); 
             border-radius: 15px; min-width: 75px; text-align: center;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
         }
         .timer-unit span { font-size: 1.8rem; font-weight: 800; display: block; color: var(--yellow); }
 
-        /* QUIZ CARD THORAN ENHANCEMENT */
+        /* Optimized Quiz Card Thorana */
         .quiz-card {
-            background: rgba(0,0,0,0.7); border-radius: 30px; padding: 35px; 
-            margin: 30px 0; border: 6px solid; 
-            animation: thoranaFlow 2s infinite linear; /* Fast moving colors like a real thorana */
-            box-shadow: 0 0 40px rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.85); border-radius: 30px; padding: 35px; 
+            margin: 30px 0; border: 8px solid; 
+            animation: thoranaFlow 1.5s infinite linear;
+            box-shadow: 0 0 50px rgba(0,0,0,0.9);
             position: relative; overflow: hidden;
+            will-change: transform, border-color; /* Prevents Lag */
         }
 
-        /* Bulb Effect Elements */
+        /* Smooth Bulb Overlay */
         .bulb-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 999; display: none;
             grid-template-columns: repeat(10, 1fr); grid-template-rows: repeat(10, 1fr);
+            will-change: opacity;
         }
         .bulb {
-            width: 15px; height: 15px; border-radius: 50%; margin: auto;
-            filter: blur(2px); animation: bulbFlash 0.3s infinite alternate;
+            width: 12px; height: 12px; border-radius: 50%; margin: auto;
+            filter: blur(1px); animation: bulbFlash 0.4s infinite alternate;
         }
         @keyframes bulbFlash {
-            0% { opacity: 0; transform: scale(0.5); }
-            100% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 15px currentColor; }
+            0% { opacity: 0.2; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.3); box-shadow: 0 0 15px currentColor; }
         }
 
         .opt-btn {
-            background: rgba(255,255,255,0.04); border: 1.5px solid rgba(0,212,255,0.4); 
+            background: rgba(255,255,255,0.05); border: 2px solid rgba(0,212,255,0.4); 
             color: white; padding: 15px; border-radius: 15px; cursor: pointer; 
-            font-size: 1rem; transition: 0.3s; width: 100%; margin-bottom: 10px;
-            font-weight: 600;
+            font-size: 1.1rem; transition: transform 0.2s, background 0.2s; width: 100%; margin-bottom: 12px;
+            font-weight: 600; position: relative;
         }
-        .opt-btn:hover { background: var(--blue); color: #000; }
+        .opt-btn:active { transform: scale(0.95); }
+        .opt-btn:hover { background: rgba(0,212,255,0.2); border-color: var(--blue); }
         
         .correct-opt { 
             background: var(--green) !important; color: #000 !important; 
-            font-weight: 800; border: 2px solid white !important;
-            animation: successPulse 0.5s infinite alternate;
+            font-weight: 800; border: 3px solid #fff !important;
+            animation: successPulse 0.4s infinite alternate;
         }
-        @keyframes successPulse { from { transform: scale(1); } to { transform: scale(1.05); } }
+        @keyframes successPulse { from { transform: scale(1); } to { transform: scale(1.03); } }
 
         .note-box {
-            background: rgba(10, 10, 15, 0.8); border: 1px solid rgba(255,255,255,0.1);
-            border-left: 8px solid var(--blue); padding: 25px; border-radius: 15px; 
-            margin-bottom: 25px; animation: thoranaFlow 8s infinite alternate;
+            background: rgba(15, 15, 25, 0.9); border: 2px solid var(--blue);
+            border-left: 10px solid var(--pink); padding: 25px; border-radius: 20px; 
+            margin-bottom: 25px; animation: thoranaFlow 10s infinite alternate;
         }
 
         footer {
             margin-top: 60px; padding: 40px 20px; text-align: center; 
-            border-top: 1px solid var(--neon-green);
+            border-top: 2px solid var(--neon-green);
+            background: rgba(0,0,0,0.5);
         }
 
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         @media (max-width: 600px) { .options-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -140,14 +137,14 @@
 
 <header>
     <div class="logo">Edu Pro Network</div>
-    <div style="color: var(--yellow); font-weight: 600; margin-top: 8px;">✨ O/L සිහිනය සැබෑ කරන සුපිරි තේරීම! ✨</div>
+    <div style="color: var(--yellow); font-weight: 700; margin-top: 8px; text-shadow: 0 0 5px #000;">✨ O/L සිහිනය සැබෑ කරන සුපිරි තේරීම! ✨</div>
 </header>
 
 <div class="container">
     <div class="dashboard">
-        <div style="color: #aaa;">TOP ACHIEVER</div>
+        <div style="color: #ccc; font-weight: bold; letter-spacing: 1px;">TOP ACHIEVER</div>
         <div class="leader-name" id="top-user">ප්‍රතිඵල බලාපොරොත්තුවෙන්...</div>
-        <div id="user-stats" style="color: var(--blue); font-weight: bold;">ඔබේ ලකුණු: 0</div>
+        <div id="user-stats" style="color: var(--blue); font-weight: 900; font-size: 1.2rem;">ඔබේ ලකුණු: 0</div>
     </div>
 
     <div class="countdown-box">
@@ -159,24 +156,24 @@
 
     <div class="quiz-card" id="quiz-container">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <span id="q-count" style="color: var(--pink); font-weight: bold;">Question 1/26</span>
-            <div style="color: var(--yellow); font-weight: 800;">⚡ <span id="q-clock">20</span>s</div>
+            <span id="q-count" style="color: var(--pink); font-weight: bold; background: rgba(0,0,0,0.5); padding: 5px 12px; border-radius: 10px;">Question 1/26</span>
+            <div style="color: var(--yellow); font-weight: 900; font-size: 1.3rem;">⚡ <span id="q-clock">20</span>s</div>
         </div>
-        <p id="question-text" style="font-size: 1.3rem; font-weight: 600; min-height: 60px;"></p>
+        <p id="question-text" style="font-size: 1.4rem; font-weight: 700; min-height: 60px; text-align: center; color: #fff;"></p>
         <div class="options-grid" id="options-container"></div>
-        <p id="feedback" style="margin-top: 20px; font-weight: 800; font-size: 1.4rem; text-align: center;"></p>
+        <p id="feedback" style="margin-top: 25px; font-weight: 900; font-size: 1.8rem; text-align: center; text-shadow: 0 0 10px currentColor;"></p>
     </div>
 
     <div class="notes-section">
-        <h2 style="text-align: center; color: var(--blue); text-shadow: 0 0 10px var(--blue); margin: 40px 0;">🚀 Exam Booster Short Notes</h2>
+        <h2 style="text-align: center; color: var(--blue); text-shadow: 0 0 15px var(--blue); margin: 50px 0; font-size: 2rem;">🚀 Exam Booster Short Notes</h2>
         <div id="notes-display"></div>
     </div>
 </div>
 
 <footer>
-    <div class="creator-info" style="color: var(--neon-green);">Achintha Nirmana</div>
-    <p style="color: #888;">© 2026 Edu Pro Network - All Rights Reserved</p>
-    <a href="https://wa.me/94729329290" style="color: var(--neon-green); text-decoration: none; font-weight: 800;">072 932 9290</a>
+    <div class="creator-info" style="color: var(--neon-green); font-size: 1.2rem; font-weight: bold;">Achintha Nirmana</div>
+    <p style="color: #aaa;">© 2026 Edu Pro Network - All Rights Reserved</p>
+    <a href="https://wa.me/94729329290" style="color: var(--blue); text-decoration: none; font-weight: 800; font-size: 1.1rem; border: 1px solid var(--blue); padding: 5px 15px; border-radius: 20px; display: inline-block; margin-top: 10px;">📞 072 932 9290</a>
 </footer>
 
 <script>
@@ -189,16 +186,18 @@
         highPoints = parseInt(localStorage.getItem("ol_high")) || 0;
         document.getElementById("top-user").innerText = localStorage.getItem("ol_top_name") || "අභියෝගය භාරගන්න!";
         
-        // Create Bulbs for Animation
+        // Optimize Bulb Creation
         const bulbBox = document.getElementById("bulb-container");
         const colors = ['#ff007f', '#00d4ff', '#f8ff00', '#00ff88', '#bc13fe'];
-        for(let i=0; i<100; i++) {
+        const fragment = document.createDocumentFragment();
+        for(let i=0; i<60; i++) { // Reduced count for better performance
             const bulb = document.createElement("div");
             bulb.className = "bulb";
             bulb.style.color = colors[Math.floor(Math.random() * colors.length)];
             bulb.style.animationDelay = (Math.random() * 0.5) + "s";
-            bulbBox.appendChild(bulb);
+            fragment.appendChild(bulb);
         }
+        bulbBox.appendChild(fragment);
         
         loadNotes(); loadQuestion(); startExamCountdown();
     }
@@ -208,6 +207,7 @@
         setInterval(() => {
             const now = new Date().getTime();
             const d = examDate - now;
+            if(d < 0) return;
             document.getElementById("days").innerText = Math.floor(d / (1000 * 60 * 60 * 24));
             document.getElementById("hours").innerText = String(Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
             document.getElementById("minutes").innerText = String(Math.floor((d % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
@@ -246,7 +246,7 @@
 
     function loadQuestion() {
         if(currentQ >= quizData.length) {
-            document.getElementById("quiz-container").innerHTML = `<h2 style="color:var(--green)">වැඩේ සුපිරි!</h2><h3>ලකුණු සංඛ්‍යාව: ${score}</h3><button onclick="location.reload()" class="opt-btn">නැවත සෙල්ලම් කරන්න</button>`;
+            document.getElementById("quiz-container").innerHTML = `<div style='text-align:center'><h2 style="color:var(--green); font-size:2rem;">වැඩේ සුපිරි! 🔥</h2><h3>ලකුණු සංඛ්‍යාව: ${score}</h3><button onclick="location.reload()" class="opt-btn" style="background:var(--pink)">නැවත සෙල්ලම් කරන්න</button></div>`;
             updateLeaderboard(); return;
         }
         const data = quizData[currentQ];
@@ -275,33 +275,36 @@
     function triggerBulbs() {
         const bulbBox = document.getElementById("bulb-container");
         bulbBox.style.display = "grid";
-        setTimeout(() => { bulbBox.style.display = "none"; }, 1500);
+        setTimeout(() => { bulbBox.style.display = "none"; }, 1000);
     }
 
     function checkAnswer(idx) {
         clearInterval(timer);
         const correct = quizData[currentQ].a;
         const btns = document.querySelectorAll(".opt-btn");
+        
+        // Disable all buttons to prevent double click lag
+        btns.forEach(b => b.style.pointerEvents = "none");
+
         if(idx === correct) {
             score++;
             document.getElementById("user-stats").innerText = `ඔබේ ලකුණු: ${score}`;
             triggerBulbs();
-            confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
+            confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#ff007f', '#00d4ff', '#f8ff00'] });
             btns[idx].classList.add("correct-opt");
             document.getElementById("feedback").innerText = "✨ EXCELLENT! ✨";
             document.getElementById("feedback").style.color = "var(--green)";
         } else {
-            document.body.classList.add("error-bg");
             if(idx !== -1) btns[idx].style.background = "var(--red)";
             if(btns[correct]) btns[correct].classList.add("correct-opt");
             document.getElementById("feedback").innerText = "Keep Trying! 💪";
             document.getElementById("feedback").style.color = "var(--pink)";
         }
+
         setTimeout(() => {
-            document.body.classList.remove("error-bg");
             document.getElementById("feedback").innerText = "";
             currentQ++; loadQuestion();
-        }, 1500);
+        }, 1200);
     }
 
     function updateLeaderboard() {
@@ -318,16 +321,18 @@
         { t: "🍃 කෑරගලය වැජඹෙයි (හංස සන්දේශය)", c: "🍀 යුගය - කෝට්ටේ\n🍀 රචකයා - වීදාගම මෛත්‍රෙය හිමි\n🍀 දූතයා - හංසයා\n🍀 ප්‍රතිග්‍රාහකයා - කෑරගල වනරතන හිමි\n🍀 රජු - සවන පරාක්‍රමබාහු\n🍀 නිමිත්ත - රජුට සෙත පතා දෙවියන්ට පින් දීම." },
         { t: "🍃 නිව්ටන් නියම (Science)", c: "1. පළමු නියමය: අසමතුලිත බලයක් නැතිනම් වස්තුව පෙර පැවති තත්වයේම පවතී.\n2. දෙවන නියමය: F = ma (බලය = ස්කන්ධය x ත්වරණය)\n3. තුන්වන නියමය: සෑම ක්‍රියාවකටම සමාන හා ප්‍රතිවිරුද්ධ ප්‍රතික්‍රියාවක් ඇත." },
         { t: "🍃 බෞද්ධ සාහිත්‍යය", c: "🌀 කුරුණෑගල යුගය:\n- පන්සිය පනස් ජාතක පොත (කතා 547)\n- සිංහල බෝධි වංශය\n- ථූපවංශය (රුවන්වැලි සෑ විස්තරය)\n\n🌀 ගම්පල යුගය:\n- මයුර, තිසර සංදේශ\n- නිකාය සංග්‍රහය, සද්ධර්මාලංකාරය" },
-        { t: "🍃 මානව ප්‍රවේණික ආබාධ", c: "♣️ ලිංග ප්‍රතිබද්ධ: හිමොෆීලියාව, රතු කොළ වර්ණ අන්ධතාව\n♣️ ජาන විකෘති: ඇලි බව, තැලසීමියාව\n🔰 වර්ණදේහ වෙනස් වීම:\n- ටර්නර් (X)\n- ක්ලයින්ෆෙල්ටර් (XXY)\n- ඩවුන්ස් (21 වන වර්ණදේහය 3ක්)" },
+        { t: "🍃 මානව ප්‍රවේණික ආබාධ", c: "♣️ ලිංග ප්‍රතිබද්ධ: හිමොෆීලියාව, රතු කොළ වර්ණ අන්ධතාව\n♣️ ජාන විකෘති: ඇලි බව, තැලසීමියාව\n🔰 වර්ණදේහ වෙනස් වීම:\n- ටර්නර් (X)\n- ක්ලයින්ෆෙල්ටර් (XXY)\n- ඩවුන්ස් (21 වන වර්ණදේහය 3ක්)" },
         { t: "🍃 හෝමෝන සහ ග්‍රන්ථි", c: "🌀 පිටියුටරිය - වර්ධක හෝමෝනය\n🌀 තයිරොයිඩය - තයිරොක්සින්\n🌀 අග්න්‍යාශය - ඉන්සියුලින්, ග්ලූකගොන්\n🌀 අධිවෘක්ක - ඇඩ්‍රිනලින් (හදිසි අවස්ථා)\n🌀 වෘෂණ - ටෙස්ටස්ටරොන්\n🌀 ඩිම්බ කෝෂ - ඊස්ට්‍රජන්, ප්‍රෝජෙස්ටරොන්" },
         { t: "🍃 භෞතික විද්‍යාව (Physics)", c: "🧬 ගම්‍යතාව (M) = mv\n🧬 බර (W) = mg\n🧬 ප්‍රතිරෝධයේ ඒකකය - ඕම් (Ω)\n🧬 වෝල්ටීයතාව - වෝල්ට්මීටරය" }
     ];
 
     function loadNotes() {
         const div = document.getElementById("notes-display");
+        let html = "";
         shortNotesData.forEach(n => {
-            div.innerHTML += `<div class="note-box"><h3>${n.t}</h3><p style="white-space: pre-line;">${n.c}</p></div>`;
+            html += `<div class="note-box"><h3>${n.t}</h3><p style="white-space: pre-line;">${n.c}</p></div>`;
         });
+        div.innerHTML = html;
     }
 </script>
 
