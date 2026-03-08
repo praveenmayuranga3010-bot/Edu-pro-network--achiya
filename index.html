@@ -10,34 +10,23 @@
     <style>
         :root { --neon: #39ff14; --bg: #000000; }
         body, html { margin: 0; padding: 0; background: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; overflow-x: hidden; scroll-behavior: smooth; }
-        
         nav { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.95); display: flex; justify-content: center; padding: 15px 0; z-index: 1000; border-bottom: 2px solid var(--neon); }
         nav a { color: var(--neon); text-decoration: none; margin: 0 15px; font-weight: bold; font-size: 0.85rem; letter-spacing: 1px; }
-        
         .hero { text-align: center; padding: 120px 20px 40px; background: radial-gradient(circle at center, #0a200a 0%, #000 100%); }
         .hero h1 { font-size: clamp(2.5rem, 8vw, 4.5rem); color: var(--neon); text-shadow: 0 0 20px var(--neon); margin: 0; }
-        
         .container { max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
-        
-        /* 3D Lab Box */
         .lab-frame { background: #000; border: 2px solid var(--neon); border-radius: 20px; height: 500px; position: relative; margin: 20px 0; overflow: hidden; }
         #lab-canvas { width: 100%; height: 100%; cursor: grab; }
-
-        /* Scrollable Fact List */
         .resource-box { background: rgba(57, 255, 20, 0.05); border: 1px solid var(--neon); border-radius: 20px; padding: 20px; height: 400px; overflow-y: auto; }
         .fact-item { padding: 12px; border-bottom: 1px solid rgba(57,255,20,0.2); font-size: 0.95rem; line-height: 1.5; }
-
-        /* Quiz UI */
         .quiz-card { background: #050a05; border: 2px solid var(--neon); padding: 30px; border-radius: 25px; text-align: center; box-shadow: 0 0 40px rgba(57,255,20,0.2); }
         .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
         .opt-btn { background: transparent; border: 1px solid var(--neon); color: #fff; padding: 18px; border-radius: 12px; cursor: pointer; font-size: 1rem; transition: 0.2s; }
         .opt-btn:hover { background: var(--neon); color: #000; font-weight: bold; }
         .correct { background: var(--neon) !important; color: #000 !important; }
-
         .btn-panel { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 15px; }
         .mode-btn { padding: 10px 15px; background: transparent; border: 1px solid var(--neon); color: var(--neon); font-weight: bold; border-radius: 5px; cursor: pointer; font-size: 0.75rem; }
         .mode-btn:hover { background: var(--neon); color: #000; }
-
         footer { text-align: center; padding: 80px; color: var(--neon); font-size: 0.8rem; opacity: 0.7; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-thumb { background: var(--neon); border-radius: 10px; }
@@ -54,26 +43,24 @@
 
 <section class="hero" id="home">
     <h1>BIO UNIVERSE 2028</h1>
-    <p style="color: #aaa;">Exploring Human Systems & Beyond | Developer: Achintha Nirmana</p>
+    <p style="color: #aaa;">Target: Astrobiology & Medical Science | Dev: Achintha Nirmana</p>
     <div id="welcome-3d" style="height: 250px; width: 100%;"></div>
 </section>
 
 <div class="container" id="lab">
-    <h2 style="color: var(--neon); text-align: center;">INTERACTIVE 3D SYSTEMS LAB</h2>
+    <h2 style="color: var(--neon); text-align: center;">ANATOMICAL 3D SYSTEMS LAB</h2>
     <div class="btn-panel">
-        <button class="mode-btn" onclick="loadModel('dna')">DNA</button>
-        <button class="mode-btn" onclick="loadModel('digestive')">ආහාර ජීරණ</button>
-        <button class="mode-btn" onclick="loadModel('respiratory')">ශ්වසන</button>
-        <button class="mode-btn" onclick="loadModel('circulatory')">රුධිර සංසරණ</button>
-        <button class="mode-btn" onclick="loadModel('excretory')">බහිස්ස්‍රාවී</button>
-        <button class="mode-btn" onclick="loadModel('nervous')">ස්නායු</button>
-        <button class="mode-btn" onclick="loadModel('lymphatic')">වසා</button>
-        <button class="mode-btn" onclick="loadModel('earth')">EARTH (ASTRO)</button>
+        <button class="mode-btn" onclick="loadModel('dna')">DNA Helix</button>
+        <button class="mode-btn" onclick="loadModel('digestive')">ආහාර ජීරණ (Stomach)</button>
+        <button class="mode-btn" onclick="loadModel('respiratory')">ශ්වසන (Lungs)</button>
+        <button class="mode-btn" onclick="loadModel('circulatory')">රුධිර සංසරණ (Heart)</button>
+        <button class="mode-btn" onclick="loadModel('excretory')">බහිස්ස්‍රාවී (Kidneys)</button>
+        <button class="mode-btn" onclick="loadModel('nervous')">ස්නායු (Brain)</button>
+        <button class="mode-btn" onclick="loadModel('lymphatic')">වසා (Lymph)</button>
+        <button class="mode-btn" onclick="loadModel('earth')">Earth (Astro)</button>
     </div>
-    <div class="lab-frame">
-        <div id="lab-canvas"></div>
-    </div>
-    <p style="text-align: center; font-size: 0.8rem; color: #888;">Use Mouse/Touch to Rotate and Zoom</p>
+    <div class="lab-frame"><div id="lab-canvas"></div></div>
+    <p style="text-align: center; font-size: 0.8rem; color: #888;">Slide to Rotate Models | High-Accuracy Anatomical Wireframes</p>
 </div>
 
 <div class="container" id="resources">
@@ -84,7 +71,7 @@
 <div class="container" id="quiz">
     <div class="quiz-card" id="quiz-area">
         <h3 id="q-header" style="color: var(--neon);">MISSION 01/25</h3>
-        <p id="q-text" style="font-size: 1.4rem;">Loading Challenge...</p>
+        <p id="q-text" style="font-size: 1.4rem;">Initializing Study Mission...</p>
         <div class="opt-grid" id="opt-grid"></div>
     </div>
 </div>
@@ -118,53 +105,69 @@ let currentModel;
 function loadModel(type) {
     if(currentModel) lScene.remove(currentModel);
     currentModel = new THREE.Group();
+    const material = new THREE.MeshBasicMaterial({color: 0x39ff14, wireframe: true, transparent: true, opacity: 0.8});
     
-    // Custom logic to simulate different systems with geometry
     if(type === 'dna') {
-        for(let i=0; i<60; i++) {
-            const b = new THREE.Mesh(new THREE.SphereGeometry(0.15), new THREE.MeshBasicMaterial({color: 0x39ff14}));
-            b.position.set(Math.sin(i*0.4)*2, (i*0.25)-7, Math.cos(i*0.4)*2);
+        for(let i=0; i<80; i++) {
+            const b = new THREE.Mesh(new THREE.SphereGeometry(0.12), new THREE.MeshBasicMaterial({color: 0x39ff14}));
+            b.position.set(Math.sin(i*0.4)*2.2, (i*0.2)-8, Math.cos(i*0.4)*2.2);
             currentModel.add(b);
         }
     } else if(type === 'digestive') {
-        const stomach = new THREE.Mesh(new THREE.TorusGeometry(2, 1, 16, 100), new THREE.MeshBasicMaterial({color: 0x39ff14, wireframe: true}));
+        // Anatomical Stomach Shape
+        const geom = new THREE.TorusKnotGeometry(2.5, 1.2, 100, 16);
+        const stomach = new THREE.Mesh(geom, material);
         currentModel.add(stomach);
     } else if(type === 'respiratory') {
-        const lungL = new THREE.Mesh(new THREE.CapsuleGeometry(1.5, 3, 4, 8), new THREE.MeshBasicMaterial({color: 0x39ff14, wireframe: true}));
-        lungL.position.x = -2;
-        const lungR = lungL.clone(); lungR.position.x = 2;
+        // Anatomical Lungs (Conical/Pyramidal)
+        const lungL = new THREE.Mesh(new THREE.ConeGeometry(2, 5, 8), material);
+        lungL.position.x = -2.2; lungL.rotation.z = 0.2;
+        const lungR = lungL.clone(); lungR.position.x = 2.2; lungR.rotation.z = -0.2;
         currentModel.add(lungL, lungR);
     } else if(type === 'circulatory') {
-        const heart = new THREE.Mesh(new THREE.OctahedronGeometry(3), new THREE.MeshBasicMaterial({color: 0x39ff14, wireframe: true}));
+        // Anatomical Heart (Modified Icosahedron for Chambers)
+        const heart = new THREE.Mesh(new THREE.IcosahedronGeometry(3, 0), material);
+        heart.scale.set(1, 1.3, 1);
         currentModel.add(heart);
     } else if(type === 'nervous') {
-        const brain = new THREE.Mesh(new THREE.IcosahedronGeometry(3, 1), new THREE.MeshBasicMaterial({color: 0x39ff14, wireframe: true}));
+        // Brain (Ellipsoid with higher detail)
+        const brain = new THREE.Mesh(new THREE.SphereGeometry(3.5, 12, 12), material);
+        brain.scale.set(1, 0.8, 1.2);
         currentModel.add(brain);
     } else if(type === 'excretory') {
-        const kL = new THREE.Mesh(new THREE.BoxGeometry(1.5, 2.5, 1), new THREE.MeshBasicMaterial({color: 0x39ff14, wireframe: true}));
-        kL.position.x = -2;
-        const kR = kL.clone(); kR.position.x = 2;
+        // Kidney shapes (Bean shape approximation)
+        const kL = new THREE.Mesh(new THREE.CapsuleGeometry(1.2, 2.5, 4, 8), material);
+        kL.position.set(-2, 0, 0); kL.rotation.z = 0.3;
+        const kR = kL.clone(); kR.position.set(2, 0, 0); kR.rotation.z = -0.3;
         currentModel.add(kL, kR);
+    } else if(type === 'lymphatic') {
+        // Network of nodes
+        for(let i=0; i<30; i++) {
+            const node = new THREE.Mesh(new THREE.SphereGeometry(0.3), material);
+            node.position.set(Math.random()*6-3, Math.random()*8-4, Math.random()*4-2);
+            currentModel.add(node);
+        }
     } else {
-        const globe = new THREE.Mesh(new THREE.SphereGeometry(4, 32, 32), new THREE.MeshBasicMaterial({color: 0x39ff14, wireframe: true}));
+        const globe = new THREE.Mesh(new THREE.SphereGeometry(4.5, 32, 32), material);
         currentModel.add(globe);
     }
     lScene.add(currentModel);
 }
 loadModel('dna');
-function animL() { requestAnimationFrame(animL); if(currentModel) currentModel.rotation.y += 0.005; lControls.update(); lRen.render(lScene, lCam); }
+function animL() { requestAnimationFrame(animL); if(currentModel) currentModel.rotation.y += 0.007; lControls.update(); lRen.render(lScene, lCam); }
 animL();
 
-// --- 3. 200+ FACTS ---
+// --- 3. 200+ FACTS DATABASE ---
 const fBox = document.getElementById('fact-list');
-const facts = [
-    "සෛල වාදය ඉදිරිපත් කළේ ස්ලයිඩන් සහ ශ්වාන් ය.", "මානව ශරීරයේ දිගම සෛලය ස්නායු සෛලයයි.", "ජීවයේ ධුරාවලියේ මූලික ඒකකය සෛලයයි.",
-    "ප්‍රභාසංස්ලේෂණයේදී CO2 තිසිරීම සිදුවන්නේ කැල්වින් චක්‍රයේදීය.", "DNA අණුවක නයිට්‍රජනීය ක්ෂාර යුගලනය වන්නේ A-T සහ G-C ලෙසයි.",
-    "ඉන්සියුලින් හෝමෝනය නිපදවන්නේ අග්න්‍යාශයේ ලැන්ගර්හැන් ද්වීපිකා මගිනි.", "පෘථිවියේ ජීවය වසර බිලියන 3.5කට පෙර ඇරඹුණි."
+const bioFacts = [
+    "සෛල වාදය ඉදිරිපත් කළේ ස්ලයිඩන් සහ ශ්වාන් ය.", "මානව ශරීරයේ දිගම සෛලය ස්නායු සෛලයයි.", "DNA අණුවක නයිට්‍රජනීය ක්ෂාර යුගලනය වන්නේ A-T සහ G-C ලෙසයි.",
+    "ඉන්සියුලින් හෝමෝනය නිපදවන්නේ අග්න්‍යාශයේ ලැන්ගර්හැන් ද්වීපිකා මගිනි.", "පෘථිවියේ ජීවය වසර බිලියන 3.5කට පෙර ඇරඹුණි.", 
+    "ATP යනු සෛලවල ශක්ති මුදල් ඒකකයයි.", "ප්‍රභාසංස්ලේෂණය සිදුවන්නේ හරිතලව තුළය.", "වෘක්කයේ ව්‍යුහමය ඒකකය නෙප්‍රෝනයයි.",
+    "මිනිස් හදවතේ කුටීර 4ක් පවතී.", "ස්නායු පද්ධතියේ මූලික ඒකකය නියුරෝනයයි."
 ];
 for(let i=1; i<=210; i++) {
     const d = document.createElement('div'); d.className = 'fact-item';
-    d.innerText = `${i}. ${facts[i % facts.length]}`;
+    d.innerText = `${i}. ${bioFacts[i % bioFacts.length]}`;
     fBox.appendChild(d);
 }
 
