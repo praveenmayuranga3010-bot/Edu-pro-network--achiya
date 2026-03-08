@@ -3,149 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AstroBio Portal | Achintha Nirmana</title>
+    <title>AstroBio Elite v3.0 | Achintha Nirmana</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         :root {
-            --neon-green: #39ff14;
-            --dark-bg: #020502;
-            --glass: rgba(57, 255, 20, 0.05);
-            --border: rgba(57, 255, 20, 0.3);
+            --neon: #39ff14;
+            --bg: #010801;
+            --card-bg: rgba(57, 255, 20, 0.08);
+            --border: rgba(57, 255, 20, 0.4);
         }
 
         body, html {
-            margin: 0;
-            padding: 0;
-            background-color: var(--dark-bg);
-            color: #e0e0e0;
-            font-family: 'Inter', 'Segoe UI', sans-serif;
+            margin: 0; padding: 0;
+            background-color: var(--bg);
+            color: #ffffff;
+            font-family: 'Segoe UI', Roboto, sans-serif;
             scroll-behavior: smooth;
             overflow-x: hidden;
         }
 
-        /* Canvas for 3D Background */
-        #canvas-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: -1;
-        }
+        #canvas-container { position: fixed; top: 0; left: 0; z-index: -1; }
 
-        /* 1. Welcome Screen */
-        #welcome-screen {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: radial-gradient(circle, rgba(10,30,10,0.8) 0%, rgba(2,5,2,1) 100%);
+        /* Navigation */
+        nav {
+            position: fixed; top: 0; width: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            display: flex; justify-content: center;
+            padding: 15px 0; z-index: 100;
+            border-bottom: 1px solid var(--border);
         }
+        nav a { color: var(--neon); text-decoration: none; margin: 0 20px; font-weight: bold; font-size: 0.9rem; }
 
-        .welcome-title {
-            font-size: 1.5rem;
-            letter-spacing: 5px;
-            color: white;
-            opacity: 0;
-            animation: fadeIn 2s forwards;
-        }
+        /* Sections */
+        .container { max-width: 1200px; margin: 0 auto; padding: 100px 20px; }
+        .section-header { text-align: center; color: var(--neon); margin-bottom: 50px; font-size: 2.5rem; text-shadow: 0 0 15px var(--neon); }
 
-        .neon-biology {
-            font-size: clamp(3rem, 10vw, 6rem);
-            font-weight: 900;
-            color: var(--neon-green);
-            text-shadow: 0 0 20px var(--neon-green);
-            margin: 10px 0;
-            opacity: 0;
-            animation: fadeIn 2s 1s forwards, glitch 3s infinite;
-        }
+        /* Notes Grid */
+        .notes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .note-card { background: var(--card-bg); border: 1px solid var(--border); padding: 25px; border-radius: 15px; backdrop-filter: blur(5px); }
+        .note-card h3 { color: var(--neon); margin-top: 0; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        .note-card ul { padding-left: 20px; font-size: 0.85rem; line-height: 1.6; }
 
-        /* 2. Main Content Layout */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 100px 20px;
+        /* 3D Model Viewer */
+        .viewer-box {
+            background: black; border: 2px solid var(--neon);
+            height: 400px; border-radius: 20px; margin: 20px 0;
+            display: flex; justify-content: center; align-items: center; position: relative;
         }
+        .viewer-controls { position: absolute; bottom: 10px; display: flex; gap: 10px; }
+        .v-btn { background: var(--neon); color: black; border: none; padding: 5px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
 
-        .section-title {
-            color: var(--neon-green);
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 50px;
-            text-transform: uppercase;
+        /* Quiz Styling */
+        .quiz-container { background: rgba(255,255,255,0.05); padding: 40px; border-radius: 20px; border: 1px dashed var(--neon); }
+        .question { font-size: 1.2rem; margin-bottom: 20px; color: var(--neon); }
+        .options { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .option-btn {
+            background: transparent; border: 1px solid var(--neon);
+            color: white; padding: 15px; border-radius: 10px;
+            cursor: pointer; transition: 0.3s;
         }
-
-        /* 3. Subject Grid */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .card {
-            background: var(--glass);
-            border: 1px solid var(--border);
-            padding: 30px;
-            border-radius: 20px;
-            backdrop-filter: blur(15px);
-            transition: 0.4s;
-            position: relative;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-            border-color: var(--neon-green);
-            box-shadow: 0 0 30px rgba(57, 255, 20, 0.2);
-        }
-
-        /* 4. Smart Resource Book Analyzer (25 Facts) */
-        .resource-box {
-            margin-top: 80px;
-            padding: 40px;
-            background: rgba(0, 15, 0, 0.6);
-            border-radius: 30px;
-            border: 1px solid var(--neon-green);
-        }
-
-        .fact-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            font-size: 0.9rem;
-        }
-
-        .fact-item {
-            background: rgba(255,255,255,0.05);
-            padding: 12px;
-            border-left: 3px solid var(--neon-green);
-            border-radius: 5px;
-        }
-
-        /* Animations */
-        @keyframes fadeIn { to { opacity: 1; } }
-        @keyframes glitch {
-            0% { transform: skew(0); }
-            2% { transform: skew(5deg); color: #fff; }
-            4% { transform: skew(0); }
-        }
-
-        .btn-enter {
-            margin-top: 30px;
-            padding: 12px 40px;
-            border: 2px solid var(--neon-green);
-            background: transparent;
-            color: var(--neon-green);
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-            transition: 0.3s;
-            border-radius: 50px;
-        }
-
-        .btn-enter:hover {
-            background: var(--neon-green);
-            color: black;
-            box-shadow: 0 0 20px var(--neon-green);
-        }
+        .option-btn:hover { background: var(--neon); color: black; box-shadow: 0 0 15px var(--neon); }
 
     </style>
 </head>
@@ -153,109 +72,121 @@
 
     <div id="canvas-container"></div>
 
-    <section id="welcome-screen">
-        <div class="welcome-title">WELCOME TO</div>
-        <div class="neon-biology">BIOLOGY</div>
-        <p style="color: #888;">Exploring Life: From Atoms to Astrobiology</p>
-        <a href="#explore" class="btn-enter">INITIALIZE SYSTEM</a>
-    </section>
+    <nav>
+        <a href="#home">HOME</a>
+        <a href="#notes">RESOURCES</a>
+        <a href="#3d">3D MODELS</a>
+        <a href="#quiz">QUIZ</a>
+    </nav>
 
-    <div id="explore" class="container">
-        
-        <h2 class="section-title">A/L Core Domains</h2>
-        <div class="grid">
-            <div class="card">
-                <h3 style="color:var(--neon-green)">BIOLOGY</h3>
-                <p>සෛල විද්‍යාව, ජාන විද්‍යාව සහ මානව දේහ ක්‍රියාකාරිත්වය පිළිබඳ ගැඹුරු විශ්ලේෂණය.</p>
-                <small>Resource Book Units: 1-10</small>
-            </div>
-            <div class="card">
-                <h3 style="color:var(--neon-green)">CHEMISTRY</h3>
-                <p>රසායනික බන්ධන, ශක්ති විද්‍යාව සහ කාබනික රසායනයේ අණුක ව්‍යුහයන් 3D වලින්.</p>
-                <small>Physical, Organic, Inorganic</small>
-            </div>
-            <div class="card">
-                <h3 style="color:var(--neon-green)">PHYSICS</h3>
-                <p>යාන්ත්‍ර විද්‍යාව සහ ක්වොන්ටම් භෞතික විද්‍යාව - අභ්‍යවකාශ ගවේෂණයේ පදනම.</p>
-                <small>Mechanics to Modern Physics</small>
-            </div>
-        </div>
-
-        <div class="resource-box">
-            <h2 style="color: var(--neon-green); text-align:center;">Smart Resource Analyzer v2.0</h2>
-            <p style="text-align:center; margin-bottom: 30px;">Resource Book එකෙන් තෝරාගත් වැදගත්ම කරුණු 25</p>
-            
-            <div class="fact-list">
-                <div class="fact-item">01. ජීවයේ ප්‍රධාන ලක්ෂණ 7කි.</div>
-                <div class="fact-item">02. පෘථිවියේ ජීවය වසර බිලියන 3.5කට පෙර ඇරඹුණි.</div>
-                <div class="fact-item">03. ජීවයේ ධුරාවලියේ මූලික ඒකකය සෛලයයි.</div>
-                <div class="fact-item">04. ජලයෙහි ඇති ප්‍රධානතම ලක්ෂණය ද්‍රැවීයතාවයයි.</div>
-                <div class="fact-item">05. කාබෝහයිඩ්‍රේට වල මූලික තැනුම් ඒකකය මොනොසැක්රයිඩ වේ.</div>
-                <div class="fact-item">06. ලිපිඩ ජලයේ අද්‍රාව්‍ය වේ.</div>
-                <div class="fact-item">07. එන්සයිම යනු ජෛව උත්ප්‍රේරක වේ.</div>
-                <div class="fact-item">08. ප්‍රෝටීන වල මූලික ඒකකය ඇමයිනෝ අම්ල වේ.</div>
-                <div class="fact-item">09. DNA අණුව ද්විත්ව හෙලික්සීය ව්‍යුහයකි.</div>
-                <div class="fact-item">10. ATP යනු සෛලයේ ශක්ති මුදල් ඒකකයයි.</div>
-                <div class="fact-item">11. ප්‍රෝකැරියෝටික සෛල වල න්‍යෂ්ටික පටලයක් නැත.</div>
-                <div class="fact-item">12. ප්ලාස්ම පටලය තරල විචිත්‍ර ආකෘතියක් ගනී.</div>
-                <div class="fact-item">13. රයිබොසෝම ප්‍රෝටීන සංස්ලේෂණය කරයි.</div>
-                <div class="fact-item">14. මයිටොකොන්ඩ්‍රියා සෛලයේ ශක්ති නිවසයි.</div>
-                <div class="fact-item">15. ගොල්ගි සංකීර්ණය ස්‍රාවී කාර්යයන් කරයි.</div>
-                <div class="fact-item">16. සෛල චක්‍රයේ දිගුම අවධිය අන්තර් අවධියයි.</div>
-                <div class="fact-item">17. අනූනන විභාජනයෙන් ජානමය වශයෙන් සමාන සෛල නිපදවයි.</div>
-                <div class="fact-item">18. ඌනන විභාජනයේදී වර්ණදේහ සංඛ්‍යාව අඩක් වේ.</div>
-                <div class="fact-item">19. ප්‍රභාසංස්ලේෂණය ප්‍රධාන අවධි 2කි (ආලෝක හා අඳුරු).</div>
-                <div class="fact-item">20. හරිතලව තුල තයිලකොයිඩ පටල පවතී.</div>
-                <div class="fact-item">21. රුධිරයේ pH අගය 7.4ක් ලෙස පවත්වා ගනී.</div>
-                <div class="fact-item">22. මානව දේහයේ විශාලතම ග්‍රන්ථිය අක්මාවයි.</div>
-                <div class="fact-item">23. නියුරෝනය ස්නායු පද්ධතියේ ව්‍යුහමය ඒකකයයි.</div>
-                <div class="fact-item">24. හෝමෝන රුධිරය හරහා පරිවහනය වේ.</div>
-                <div class="fact-item">25. පටක මට්ටම් 4කි: අපිච්ඡද, සම්බන්ධක, පේශි, ස්නායු.</div>
-            </div>
-        </div>
-
-        <footer style="margin-top: 100px; text-align: center; color: #444; padding-bottom: 50px;">
-            DEVELOPED BY ACHINTHA NIRMANA | FUTURE ASTROBIOLOGIST 🚀
-        </footer>
+    <div class="container" id="home">
+        <h1 class="section-header" style="font-size: 4rem; margin-top: 50px;">BIO ELITE v3.0</h1>
+        <p style="text-align: center;">Advanced Learning Platform for Future Astrobiologists</p>
     </div>
 
+    <div class="container" id="notes">
+        <h2 class="section-header">Expert Resource Notes</h2>
+        <div class="notes-grid">
+            <div class="note-card">
+                <h3>Unit 01 & 02: Life & Chemicals</h3>
+                <ul>
+                    <li>පෘථිවියේ ජීවය මීට වසර බිලියන 3.5කට පෙර ඇති විය.</li>
+                    <li>ජලයේ ඉහළ විශිෂ්ට තාප ධාරිතාව උෂ්ණත්ව නියාමනයට වැදගත් වේ.</li>
+                    <li>සීනි, පිෂ්ඨය සහ සෙලියුලෝස් ප්‍රධාන කාබෝහයිඩ්‍රේට වේ.</li>
+                    <li>DNA අණුවල තොරතුරු ගබඩා කරන්නේ නයිට්‍රජනීය ක්ෂාර අනුපිළිවෙල මගිනි.</li>
+                    <li>එන්සයිම ක්‍රියාකාරිත්වයට pH අගය සහ උෂ්ණත්වය සෘජුව බලපායි.</li>
+                </ul>
+            </div>
+            <div class="note-card">
+                <h3>Unit 03: Cellular Basis</h3>
+                <ul>
+                    <li>ප්ලාස්ම පටලය "තරල විචිත්‍ර ආකෘතිය" ලෙස හඳුන්වයි.</li>
+                    <li>මයිටොකොන්ඩ්‍රියා වල මව්න්‍යය තුළ ස්වායු ශ්වසනය සිදුවේ.</li>
+                    <li>රළු අන්ත:ප්ලාස්මීය ජාලය ප්‍රෝටීන පරිවහනය කරයි.</li>
+                    <li>සෛල විභාජනයේදී S අවධියේදී DNA ප්‍රතිවලිත වීම සිදුවේ.</li>
+                    <li>ඌනන විභාජනය මගින් ජානමය විවිධත්වය ඇති කරයි.</li>
+                </ul>
+            </div>
+            <div class="note-card">
+                <h3>Physics & Chemistry Tips</h3>
+                <ul>
+                    <li>භෞතික විද්‍යාවේදී මාන විශ්ලේෂණය වැදගත් වේ.</li>
+                    <li>කාබනික රසායනයේදී ක්‍රියාකාරී කාණ්ඩ හඳුනා ගැනීම අත්‍යවශ්‍යයි.</li>
+                    <li>සමතුලිතතා නියතය උෂ්ණත්වය මත පමණක් රඳා පවතී.</li>
+                    <li>නිව්ටන්ගේ නියමයන් Astrobiology හි රොකට් විද්‍යාවට පදනම වේ.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="3d">
+        <h2 class="section-header">Interactive 3D Anatomy</h2>
+        <div class="viewer-box" id="model-viewer">
+            <p id="viewer-status" style="color: var(--neon);">3D System Initializing...</p>
+            <div class="viewer-controls">
+                <button class="v-btn" onclick="changeModel('dna')">DNA Helix</button>
+                <button class="v-btn" onclick="changeModel('cell')">Cell Particle</button>
+                <button class="v-btn" onclick="changeModel('atom')">Atom Structure</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="quiz">
+        <h2 class="section-header">Daily Knowledge Challenge</h2>
+        <div class="quiz-container">
+            <div id="quiz-box">
+                <p class="question" id="q-text">සෛලයේ ශක්ති මුදල් ඒකකය ලෙස හඳුන්වන්නේ කුමක්ද?</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAns(true)">ATP</button>
+                    <button class="option-btn" onclick="checkAns(false)">DNA</button>
+                    <button class="option-btn" onclick="checkAns(false)">RNA</button>
+                    <button class="option-btn" onclick="checkAns(false)">Glucose</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer style="text-align: center; padding: 50px; color: #555;">
+        DESIGNED BY ACHINTHA NIRMANA | MISSION 2038 🚀
+    </footer>
+
     <script>
-        // --- THREE.JS BACKGROUND LOGIC ---
+        // Three.js Background
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({alpha:true});
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.getElementById('canvas-container').appendChild(renderer.domElement);
 
-        // Create a simple 3D DNA-like structure with particles
-        const geometry = new THREE.BufferGeometry();
-        const vertices = [];
-        for (let i = 0; i < 2000; i++) {
-            const x = (Math.random() - 0.5) * 20;
-            const y = (Math.random() - 0.5) * 20;
-            const z = (Math.random() - 0.5) * 20;
-            vertices.push(x, y, z);
-        }
-        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-        const material = new THREE.PointsMaterial({ color: 0x39ff14, size: 0.05 });
-        const points = new THREE.Points(geometry, material);
-        scene.add(points);
-
-        camera.position.z = 5;
+        const geo = new THREE.TorusGeometry(10, 3, 16, 100);
+        const mat = new THREE.PointsMaterial({color: 0x39ff14, size: 0.02});
+        const particles = new THREE.Points(geo, mat);
+        scene.add(particles);
+        camera.position.z = 20;
 
         function animate() {
             requestAnimationFrame(animate);
-            points.rotation.y += 0.002;
-            points.rotation.x += 0.001;
+            particles.rotation.y += 0.001;
             renderer.render(scene, camera);
         }
         animate();
 
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
+        // Quiz Logic
+        function checkAns(isCorrect) {
+            if(isCorrect) {
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#39ff14', '#ffffff'] });
+                alert("නියමයි! නිවැරදි පිළිතුර. 🏆");
+            } else {
+                alert("අයියෝ! වැරදියි. නැවත උත්සාහ කරන්න. ❌");
+            }
+        }
+
+        // Simple Model Changer Simulation
+        function changeModel(type) {
+            const status = document.getElementById('viewer-status');
+            status.innerText = "Loading " + type.toUpperCase() + " Model... (Interact via Mouse)";
+            particles.scale.set(Math.random()+0.5, Math.random()+0.5, Math.random()+0.5);
+        }
     </script>
 </body>
 </html>
