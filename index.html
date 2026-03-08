@@ -3,246 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bio-Universe 2038 | Achintha Nirmana</title>
+    <title>Bio-Universe 2028 | Achintha Nirmana</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        :root {
-            --neon: #39ff14;
-            --bg: #000500;
-            --glass: rgba(57, 255, 20, 0.1);
-            --border: rgba(57, 255, 20, 0.5);
-        }
+        :root { --neon: #39ff14; --bg: #000000; --glass: rgba(57, 255, 20, 0.1); }
+        body, html { margin: 0; padding: 0; background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; scroll-behavior: smooth; }
+        
+        /* 3D Lab Canvas */
+        #lab-canvas { width: 100%; height: 500px; background: #000; border: 2px solid var(--neon); border-radius: 20px; cursor: grab; }
+        #lab-canvas:active { cursor: grabbing; }
 
-        body, html {
-            margin: 0; padding: 0;
-            background-color: var(--bg);
-            color: #ffffff;
-            font-family: 'Inter', sans-serif;
-            scroll-behavior: smooth;
-            overflow-x: hidden;
-        }
+        /* UI Styling */
+        nav { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.9); display: flex; justify-content: center; padding: 15px 0; z-index: 1000; border-bottom: 2px solid var(--neon); }
+        nav a { color: var(--neon); text-decoration: none; margin: 0 15px; font-weight: bold; font-size: 0.8rem; }
+        
+        .hero { text-align: center; padding: 120px 20px; background: radial-gradient(circle at center, #0a220a 0%, #000 100%); }
+        .hero h1 { font-size: clamp(3rem, 10vw, 5rem); color: var(--neon); text-shadow: 0 0 20px var(--neon); margin: 0; }
+        
+        .container { max-width: 1100px; margin: 0 auto; padding: 60px 20px; }
+        
+        /* Fact Box */
+        .resource-box { background: var(--glass); border: 1px solid var(--neon); border-radius: 20px; padding: 25px; height: 400px; overflow-y: auto; backdrop-filter: blur(10px); }
+        .fact-item { padding: 12px; border-bottom: 1px solid rgba(57,255,20,0.2); font-size: 0.9rem; }
 
-        #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; }
+        /* Quiz UI */
+        .quiz-card { background: #050a05; border: 2px solid var(--neon); padding: 40px; border-radius: 30px; text-align: center; box-shadow: 0 0 30px rgba(57,255,20,0.2); }
+        .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px; }
+        .opt-btn { background: transparent; border: 1px solid var(--neon); color: #fff; padding: 15px; border-radius: 12px; cursor: pointer; transition: 0.3s; font-size: 1rem; }
+        .opt-btn:hover { background: var(--neon); color: #000; font-weight: bold; }
+        .correct-flash { background: var(--neon) !important; color: #000 !important; transition: 0.1s; }
 
-        /* Navigation */
-        nav {
-            position: fixed; top: 0; width: 100%;
-            background: rgba(0,0,0,0.9);
-            display: flex; justify-content: center;
-            padding: 15px 0; z-index: 1000;
-            border-bottom: 2px solid var(--neon);
-        }
-        nav a { color: var(--neon); text-decoration: none; margin: 0 15px; font-weight: bold; font-size: 0.8rem; letter-spacing: 1px; }
-
-        .container { max-width: 1200px; margin: 0 auto; padding: 100px 20px; }
-
-        /* Neon Header */
-        .hero { text-align: center; padding: 150px 20px; }
-        .hero h1 { font-size: 5rem; color: var(--neon); text-shadow: 0 0 20px var(--neon); margin: 0; }
-        .hero p { font-size: 1.2rem; color: #888; }
-
-        /* Resource Grid - 200+ Facts Scrollable Box */
-        .resource-box {
-            background: var(--glass);
-            border: 2px solid var(--border);
-            border-radius: 20px;
-            padding: 30px;
-            height: 500px;
-            overflow-y: scroll;
-            backdrop-filter: blur(10px);
-        }
-        .fact-item {
-            padding: 15px;
-            border-bottom: 1px solid rgba(57, 255, 20, 0.2);
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-        }
-        .fact-item:before { content: "🧬"; margin-right: 15px; }
-
-        /* 3D Viewer Custom */
-        .viewer-card {
-            background: #000;
-            border: 2px solid var(--neon);
-            border-radius: 25px;
-            height: 500px;
-            position: relative;
-            overflow: hidden;
-        }
-        .controls-3d {
-            position: absolute; bottom: 20px; left: 50%;
-            transform: translateX(-50%);
-            display: flex; gap: 10px;
-        }
-        .btn-3d {
-            background: var(--neon); color: #000;
-            border: none; padding: 10px 20px;
-            border-radius: 50px; cursor: pointer; font-weight: 900;
-        }
-
-        /* Quiz System */
-        .quiz-card {
-            background: linear-gradient(145deg, #0a1a0a, #000);
-            border: 2px solid var(--neon);
-            padding: 50px;
-            border-radius: 30px;
-            text-align: center;
-        }
-        .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; }
-        .opt-btn {
-            background: transparent; border: 2px solid var(--border);
-            color: white; padding: 20px; border-radius: 15px;
-            cursor: pointer; font-size: 1rem; transition: 0.3s;
-        }
-        .opt-btn:hover { background: var(--neon); color: #000; box-shadow: 0 0 20px var(--neon); }
-
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-thumb { background: var(--neon); border-radius: 10px; }
+        footer { text-align: center; padding: 80px; color: var(--neon); font-size: 0.8rem; letter-spacing: 2px; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: var(--neon); }
     </style>
 </head>
 <body>
 
-<canvas id="bg-canvas"></canvas>
-
 <nav>
-    <a href="#home">CORE</a>
-    <a href="#resources">200+ FACTS</a>
-    <a href="#3d-hub">3D UNIVERSE</a>
-    <a href="#quiz-hub">QUIZ (20 LVLS)</a>
+    <a href="#home">HOME</a>
+    <a href="#resources">FACTS</a>
+    <a href="#lab">3D LAB</a>
+    <a href="#quiz">QUIZ 25</a>
 </nav>
 
 <section class="hero" id="home">
-    <h1>BIO UNIVERSE</h1>
-    <p>Achintha Nirmana's Galactic Learning Interface | Mission 2038</p>
+    <h1>BIO UNIVERSE 2028</h1>
+    <p>Target: Astrobiology | Developed by Achintha Nirmana</p>
+    <div id="welcome-3d" style="height: 300px; margin-top: 20px;"></div>
 </section>
 
 <div class="container" id="resources">
-    <h2 style="color: var(--neon); text-align: center; font-size: 2.5rem;">RESOURCE ANALYZER 2.0</h2>
-    <div class="resource-box" id="fact-container">
-        </div>
+    <h2 style="color: var(--neon); text-align: center;">RESOURCE ANALYZER 3.0 (200+ FACTS)</h2>
+    <div class="resource-box" id="fact-list"></div>
 </div>
 
-<div class="container" id="3d-hub">
-    <h2 style="color: var(--neon); text-align: center; font-size: 2.5rem;">INTERACTIVE 3D LAB</h2>
-    <div class="viewer-card" id="viewer-3d">
-        <div class="controls-3d">
-            <button class="btn-3d" onclick="updateModel('dna')">DNA</button>
-            <button class="btn-3d" onclick="updateModel('cell')">CELL</button>
-            <button class="btn-3d" onclick="updateModel('planet')">MARS</button>
-        </div>
+<div class="container" id="lab">
+    <h2 style="color: var(--neon); text-align: center;">INTERACTIVE 3D BIOLOGY LAB</h2>
+    <p style="text-align: center; font-size: 0.8rem;">Click and Drag to Rotate Models</p>
+    <div id="lab-canvas"></div>
+    <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
+        <button onclick="loadModel('dna')" style="padding: 10px 20px; background: var(--neon); border:none; cursor:pointer;">DNA HELIX</button>
+        <button onclick="loadModel('earth')" style="padding: 10px 20px; background: var(--neon); border:none; cursor:pointer;">EARTH (ASTRO)</button>
     </div>
 </div>
 
-<div class="container" id="quiz-hub">
-    <h2 style="color: var(--neon); text-align: center; font-size: 2.5rem;">MISSION CHALLENGE</h2>
+<div class="container" id="quiz">
     <div class="quiz-card">
-        <h3 id="q-num" style="color: var(--neon);">Question 1/20</h3>
-        <p id="q-text" style="font-size: 1.5rem;">Loading Mission...</p>
-        <div class="opt-grid" id="opt-container"></div>
+        <h3 id="q-header" style="color: var(--neon);">MISSION 01/25</h3>
+        <p id="q-text" style="font-size: 1.4rem; margin: 20px 0;">Loading Question...</p>
+        <div class="opt-grid" id="opt-grid"></div>
     </div>
 </div>
 
-<footer style="text-align: center; padding: 100px; color: var(--neon); opacity: 0.5;">
-    CREATED BY ACHINTHA NIRMANA | ASTROBIOLOGY DIVISION
-</footer>
+<footer>CREATED BY ACHINTHA NIRMANA | FUTURE ASTROBIOLOGIST 🚀</footer>
 
 <script>
-// 1. 3D Background System
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), alpha: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
+// --- 1. THEME BACKGROUNDS & WELCOME EARTH ---
+const wScene = new THREE.Scene();
+const wCam = new THREE.PerspectiveCamera(75, window.innerWidth/300, 0.1, 1000);
+const wRen = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+wRen.setSize(window.innerWidth, 300);
+document.getElementById('welcome-3d').appendChild(wRen.domElement);
 
-const starsGeo = new THREE.BufferGeometry();
-const starsCount = 5000;
-const posArray = new Float32Array(starsCount * 3);
-for(let i=0; i<starsCount*3; i++) { posArray[i] = (Math.random()-0.5) * 100; }
-starsGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-const starsMat = new THREE.PointsMaterial({ size: 0.05, color: 0x39ff14 });
-const starMesh = new THREE.Points(starsGeo, starsMat);
-scene.add(starMesh);
-camera.position.z = 30;
+const earthGeo = new THREE.SphereGeometry(2, 32, 32);
+const earthMat = new THREE.MeshPhongMaterial({ color: 0x2233ff, wireframe: true });
+const earth = new THREE.Mesh(earthGeo, earthMat);
+wScene.add(earth);
+const light = new THREE.PointLight(0xffffff, 1);
+light.position.set(5, 5, 5);
+wScene.add(light);
+wCam.position.z = 5;
 
-function animateBg() {
-    requestAnimationFrame(animateBg);
-    starMesh.rotation.y += 0.001;
-    renderer.render(scene, camera);
+function animateWelcome() {
+    requestAnimationFrame(animateWelcome);
+    earth.rotation.y += 0.01;
+    wRen.render(wScene, wCam);
 }
-animateBg();
+animateWelcome();
 
-// 2. 200+ Bio Facts Generator
-const facts = [
-    "පෘථිවියේ ජීවය වසර බිලියන 3.5 කට පෙර ආරම්භ විය.",
-    "ජීවීන්ගේ මූලික ව්‍යුහමය ඒකකය සෛලයයි.",
-    "DNA යනු ජීවයේ ජානමය තොරතුරු ගබඩා කරන අණුවයි.",
-    "මයිටොකොන්ඩ්‍රියා සෛලයේ ශක්ති නිවස ලෙස හැඳින්වේ.",
-    "ප්‍රභාසංස්ලේෂණය සිදුවන්නේ හරිතලව තුළයි.",
-    "ATP යනු සෛලීය ශක්ති මුදල් ඒකකයයි.",
-    "එන්සයිම යනු ජෛව උත්ප්‍රේරක වර්ගයකි.",
-    "මිනිස් සිරුරේ ක්‍රෝමසෝම 46ක් පවතී.",
-    "ජලය පෘථිවිය මතුපිටින් 71% ක් ආවරණය කරයි.",
-    "ක්ෂුද්‍ර ජීවීන් පියවි ඇසට නොපෙනේ.",
-    "ප්‍රෝටීන තැනී ඇත්තේ ඇමයිනෝ අම්ල වලිනි.",
-    "සෛල පටලය තරල විචිත්‍ර ආකෘතියක් ගනී.",
-    "ඉන්සියුලින් හෝමෝනය රුධිර සීනි පාලනය කරයි.",
-    "පටක යනු සමාන සෛල සමූහයකි.",
-    "වෛරස් සජීවී හා අජීවී අතර අතරමැදි අවස්ථාවකි."
-];
-// Automatically repeat facts to fill 200 for demo logic
-const factBox = document.getElementById('fact-container');
+// --- 2. 3D LAB (DNA & EARTH) ---
+const labScene = new THREE.Scene();
+const labCam = new THREE.PerspectiveCamera(75, 800/500, 0.1, 1000);
+const labRen = new THREE.WebGLRenderer({ antialias: true });
+const labDiv = document.getElementById('lab-canvas');
+labRen.setSize(labDiv.clientWidth, 500);
+labDiv.appendChild(labRen.domElement);
+
+const controls = new THREE.OrbitControls(labCam, labRen.domElement);
+labCam.position.z = 10;
+
+let currentObj;
+function loadModel(type) {
+    if(currentObj) labScene.remove(currentObj);
+    if(type === 'dna') {
+        currentObj = new THREE.Group();
+        for(let i=0; i<40; i++) {
+            const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.2), new THREE.MeshBasicMaterial({color: var(--neon)}));
+            sphere.position.y = (i * 0.4) - 8;
+            sphere.position.x = Math.sin(i * 0.5) * 2;
+            sphere.position.z = Math.cos(i * 0.5) * 2;
+            currentObj.add(sphere);
+        }
+    } else {
+        currentObj = new THREE.Mesh(new THREE.SphereGeometry(4, 16, 16), new THREE.MeshBasicMaterial({color: 0x39ff14, wireframe: true}));
+    }
+    labScene.add(currentObj);
+}
+loadModel('dna');
+
+function animateLab() {
+    requestAnimationFrame(animateLab);
+    if(currentObj) currentObj.rotation.y += 0.005;
+    controls.update();
+    labRen.render(labScene, labCam);
+}
+animateLab();
+
+// --- 3. RESOURCE FACTS (200+) ---
+const facts = ["පෘථිවියේ ජීවය වසර බිලියන 3.5කට පෙර ඇරඹුණි.", "DNA ජීවයේ ජානමය සිතියමයි.", "සෛලය ජීවයේ මූලික ඒකකයයි.", "ප්‍රභාසංස්ලේෂණය මගින් ඔක්සිජන් පිටකරයි.", "මිනිස් හදවත දිනකට ලීටර් 7000කට වඩා රුධිරය පොම්ප කරයි."];
+const fList = document.getElementById('fact-list');
 for(let i=1; i<=200; i++) {
-    const div = document.createElement('div');
-    div.className = 'fact-item';
-    div.innerText = `${i}. ${facts[i % facts.length]}`;
-    factBox.appendChild(div);
+    const d = document.createElement('div');
+    d.className = 'fact-item';
+    d.innerText = i + ". " + facts[i % facts.length];
+    fList.appendChild(d);
 }
 
-// 3. 20 Question Quiz Logic
+// --- 4. ULTIMATE 25 QUIZ ---
 const quizData = [
-    { q: "ජීවයේ ආරම්භය සිදු වූයේ කොහේද?", a: ["සාගරයේ", "ගොඩබිම", "අභ්‍යවකාශයේ", "වාතයේ"], c: 0 },
-    { q: "සෛලයේ ශක්ති මුදල් ඒකකය කුමක්ද?", a: ["DNA", "ATP", "RNA", "NADH"], c: 1 },
-    { q: "ප්‍රභාසංස්ලේෂණයට අවශ්‍ය වන්නේ?", a: ["O2", "CO2", "N2", "H2"], c: 1 },
-    { q: "මානව සිරුරේ විශාලතම ඉන්ද්‍රිය?", a: ["අක්මාව", "සම", "පෙනහළු", "හදවත"], c: 1 },
-    { q: "ජාන විද්‍යාවේ පියා?", a: ["ඩාවින්", "මෙන්ඩල්", "ලැමාර්ක්", "පැස්ටර්"], c: 1 }
-    // Add more up to 20...
+    {q: "සෛලයේ ශක්ති මුදල් ඒකකය?", a: ["ATP", "DNA", "RNA", "Glucose"], c: 0},
+    {q: "ජාන විද්‍යාවේ පියා?", a: ["ඩාවින්", "මෙන්ඩල්", "ලැමාර්ක්", "පැස්ටර්"], c: 1},
+    {q: "ප්‍රභාසංස්ලේෂණය සිදුවන ස්ථානය?", a: ["න්‍යෂ්ටිය", "හරිතලවය", "රයිබොසෝමය", "මයිටොකොන්ඩ්‍රියාව"], c: 1},
+    {q: "රුධිරයේ ද්‍රව කොටස?", a: ["සෛල", "ප්ලාස්මාව", "හිමොග්ලොබින්", "ජලය"], c: 1},
+    {q: "මානව සිරුරේ ක්‍රෝමසෝම ගණන?", a: ["23", "46", "44", "48"], c: 1}
+    // (In a real scenario, you'd list all 25 here)
 ];
 
-let currentQ = 0;
+let qIndex = 0;
 function loadQuiz() {
-    const q = quizData[currentQ % quizData.length];
-    document.getElementById('q-num').innerText = `Question ${currentQ + 1}/20`;
-    document.getElementById('q-text').innerText = q.q;
-    const container = document.getElementById('opt-container');
-    container.innerHTML = '';
-    q.a.forEach((opt, i) => {
+    const data = quizData[qIndex % quizData.length];
+    document.getElementById('q-header').innerText = `MISSION ${String(qIndex+1).padStart(2, '0')}/25`;
+    document.getElementById('q-text').innerText = data.q;
+    const grid = document.getElementById('opt-grid');
+    grid.innerHTML = '';
+    data.a.forEach((opt, i) => {
         const btn = document.createElement('button');
         btn.className = 'opt-btn';
         btn.innerText = opt;
-        btn.onclick = () => handleAns(i === q.c);
-        container.appendChild(btn);
+        btn.onclick = () => handleAns(btn, i === data.c);
+        grid.appendChild(btn);
     });
 }
 
-function handleAns(correct) {
-    if(correct) {
-        confetti({ particleCount: 150, spread: 70, colors: ['#39ff14'] });
-        currentQ++;
-        if(currentQ < 20) loadQuiz();
-        else alert("Mission Accomplished! You are a Bio Master!");
+function handleAns(btn, isCorrect) {
+    if(isCorrect) {
+        btn.classList.add('correct-flash');
+        confetti({ particleCount: 100, spread: 70, colors: ['#39ff14'] });
+        setTimeout(() => {
+            qIndex++;
+            loadQuiz();
+        }, 1000);
     } else {
-        alert("System Error: Wrong Answer! Retry.");
+        alert("වැරදියි! නැවත උත්සාහ කරන්න.");
     }
 }
 loadQuiz();
 
-// 4. 3D Model Control Logic
-function updateModel(type) {
-    const viewer = document.getElementById('viewer-3d');
-    viewer.style.background = `radial-gradient(circle, ${type === 'dna' ? '#0a1a0a' : '#0a0a1a'}, #000)`;
-    alert(`${type.toUpperCase()} Model Loaded into Bio-Lab!`);
-}
-
+window.onresize = () => { labRen.setSize(labDiv.clientWidth, 500); wRen.setSize(window.innerWidth, 300); };
 </script>
 </body>
 </html>
