@@ -48,19 +48,20 @@
         /* AI TERMINAL */
         .ai-card { background: var(--panel-bg); border: 1px solid var(--neon); border-radius: 20px; padding: clamp(15px, 4vw, 35px); margin: 50px 0; position: relative; box-shadow: var(--neon-glow); }
         .ai-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0, 255, 204, 0.2); padding-bottom: 15px; margin-bottom: 20px;}
-        #ai-log { height: 350px; overflow-y: auto; background: #010605; border-radius: 15px; padding: 20px; border-left: 4px solid var(--neon); font-size: 1rem; line-height: 1.8; margin-bottom: 20px; color: #d1e8e2; }
+        #ai-log { height: 400px; overflow-y: auto; background: #010605; border-radius: 15px; padding: 20px; border-left: 4px solid var(--neon); font-size: 1rem; line-height: 1.8; margin-bottom: 20px; color: #d1e8e2; }
         .input-group { display: flex; flex-direction: column; gap: 10px; }
         @media (min-width: 768px) { .input-group { flex-direction: row; } }
         input { flex: 1; background: #020d0a; border: 1px solid rgba(0, 255, 204, 0.5); color: #fff; padding: 15px; border-radius: 10px; outline: none; font-size: 1rem; transition: 0.3s; }
         input:focus { border-color: var(--neon); box-shadow: 0 0 10px rgba(0,255,204,0.2); }
         .btn { background: var(--neon); color: #000; border: none; padding: 15px 30px; border-radius: 10px; font-weight: 900; cursor: pointer; transition: 0.3s; text-transform: uppercase; font-size: 1rem;}
         .btn:hover { background: #fff; box-shadow: 0 0 15px #fff; }
+        .ai-message { margin-top: 10px; padding: 15px; background: rgba(0, 255, 204, 0.05); border-left: 3px solid var(--neon); border-radius: 0 10px 10px 0;}
 
         /* 3D LAB */
         .lab-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 25px; }
         .lab-btn { padding: 10px 18px; background: rgba(0,0,0,0.5); border: 1px solid var(--neon); color: var(--neon); border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; font-size: 0.8rem; }
         .lab-btn.active, .lab-btn:hover { background: var(--neon); color: #000; box-shadow: var(--neon-glow); }
-        .canvas-box { height: 50vh; min-height: 400px; border: 1px solid var(--neon); border-radius: 20px; overflow: hidden; background: #000; position: relative; }
+        .canvas-box { height: 60vh; min-height: 400px; border: 1px solid var(--neon); border-radius: 20px; overflow: hidden; background: radial-gradient(circle, #0a1f18 0%, #000 100%); position: relative; }
 
         /* QUIZ ENGINE */
         .quiz-grid { display: grid; grid-template-columns: 1fr; gap: 30px; margin-top: 50px; }
@@ -112,20 +113,20 @@
     <div class="hero-text">
         <h1>BIO-NEXUS</h1>
         <p>THE ULTIMATE BIOLOGY TERMINAL</p>
-        <span class="badge">Engineered by Achintha Nirmana</span>
+        <span class="badge">Engineered by Achintha Nirmana | Target: 2028 A/L</span>
     </div>
 </div>
 
 <div class="container" id="ai">
     <div class="ai-card">
         <div class="ai-header">
-            <h2 style="color: var(--neon); margin: 0;">🧠 ACHI-CORE RAG ENGINE</h2>
-            <span style="font-size: 0.8rem; color: #888;">Live Web Fetcher v2.0</span>
+            <h2 style="color: var(--neon); margin: 0;">🧠 ACHI-CORE LIVE RAG ENGINE</h2>
+            <span style="font-size: 0.8rem; color: #888;">Live Web Fetcher v3.0</span>
         </div>
         <div id="ai-log">
             <span style="color:#00ffcc;">[SYSTEM BOOT]</span> Achi-Core AI සක්‍රියයි.<br>
-            <span style="color:#aaa;">Connecting to PubMed, Nature, and global biology databases...</span><br>
-            මම RAG (Retrieval-Augmented Generation) තාක්ෂණයෙන් බලගැන්වුණු AI සහායකයා. ඔයාට දැනගන්න ඕනෑ ජීව විද්‍යාත්මක ගැටලුව කුමක්ද?
+            <span style="color:#aaa;">Connecting to Global Biology Databases... Active!</span><br>
+            මම RAG තාක්ෂණයෙන් බලගැන්වුණු AI සහායකයා. අන්තර්ජාලයෙන් සජීවීව දත්ත ලබාගෙන මට පිළිතුරු දිය හැක. ඔබට දැනගන්න ඕනෑ ජීව විද්‍යාත්මක ගැටලුව කුමක්ද? (උදා: හෘදයේ ක්‍රියාකාරීත්වය, ප්‍රභාසංස්ලේෂණය)
         </div>
         <div class="input-group">
             <input type="text" id="bio-query" placeholder="Ask any advanced biology question here...">
@@ -135,15 +136,16 @@
 </div>
 
 <div class="container" id="lab">
-    <h2 style="text-align:center; color: var(--neon); letter-spacing: 2px;">🧬 3D INTERACTIVE LAB</h2>
+    <h2 style="text-align:center; color: var(--neon); letter-spacing: 2px;">🧬 3D INTERACTIVE LAB (PREMIUM)</h2>
     <div class="lab-nav">
         <button class="lab-btn active" onclick="loadModel('earth', this)">EARTH</button>
         <button class="lab-btn" onclick="loadModel('dna', this)">DNA HELIX</button>
         <button class="lab-btn" onclick="loadModel('virus', this)">BACTERIOPHAGE</button>
+        <button class="lab-btn" style="border-color:#ff3366; color:#ff3366;" onclick="loadModel('heart', this)">HUMAN HEART (LIVE)</button>
         <button class="lab-btn" onclick="loadModel('neuron', this)">NEURON</button>
-        <button class="lab-btn" onclick="loadModel('cell', this)">CELL MEMBRANE</button>
-        <button class="lab-btn" style="border-color:#ff3366; color:#ff3366;" onclick="loadModel('rbc', this)">RED BLOOD CELL</button>
+        <button class="lab-btn" style="border-color:#ff9900; color:#ff9900;" onclick="loadModel('mitochondria', this)">MITOCHONDRIA</button>
         <button class="lab-btn" style="border-color:#33ff33; color:#33ff33;" onclick="loadModel('chloroplast', this)">CHLOROPLAST</button>
+        <button class="lab-btn" style="border-color:#ff3366; color:#ff3366;" onclick="loadModel('rbc', this)">RED BLOOD CELL</button>
     </div>
     <div class="canvas-box" id="lab-viewer"></div>
 </div>
@@ -154,7 +156,7 @@
             
             <div id="quiz-login">
                 <h2>🏆 PRO EXAMINER</h2>
-                <p>තරගාවලියට සම්බන්ධ වීමට පෙර ඔබේ නම ඇතුළත් කරන්න.</p>
+                <p>සජීවී තරගාවලියට සම්බන්ධ වීමට ඔබේ නම ඇතුළත් කරන්න.</p>
                 <input type="text" id="player-name" placeholder="Enter Your Name..." required>
                 <button class="btn" onclick="registerAndStart()">START MISSION</button>
             </div>
@@ -169,7 +171,7 @@
 
         </div>
         <div class="leaderboard">
-            <h3 style="text-align: center; color: var(--neon); letter-spacing: 2px; margin-top:0;">🏆 GLOBAL TOP 20 LIVE</h3>
+            <h3 style="text-align: center; color: var(--neon); letter-spacing: 2px; margin-top:0;">🏆 REGISTERED PLAYERS LIVE</h3>
             <div id="lb-data"></div>
         </div>
     </div>
@@ -181,9 +183,11 @@
 </footer>
 
 <script>
-// --- 1. HERO & LAB 3D ENGINES ---
+// --- 1. HERO & LAB 3D ENGINES (UPGRADED) ---
 let heroScene, heroCamera, heroRenderer, heroEarth;
 let labScene, labCamera, labRenderer, labControls, labGroup;
+let isHeartBeating = false; // Flag for heart animation
+let pulseScale = 0;
 
 function initHero() {
     heroScene = new THREE.Scene();
@@ -192,7 +196,6 @@ function initHero() {
     heroRenderer.setSize(window.innerWidth, window.innerHeight*0.8);
     document.getElementById('hero-canvas').appendChild(heroRenderer.domElement);
     
-    // Add stars
     const starsGeo = new THREE.BufferGeometry();
     const starsArray = new Float32Array(3000);
     for(let i=0; i<3000; i++) starsArray[i] = (Math.random() - 0.5) * 200;
@@ -200,33 +203,18 @@ function initHero() {
     const starsMat = new THREE.PointsMaterial({color: 0xffffff, size: 0.1});
     heroScene.add(new THREE.Points(starsGeo, starsMat));
 
-    // Advanced Earth
     const earthGeo = new THREE.SphereGeometry(12, 64, 64);
     const earthMat = new THREE.MeshBasicMaterial({ color: 0x00ffcc, wireframe: true, transparent: true, opacity: 0.3 });
     heroEarth = new THREE.Mesh(earthGeo, earthMat);
     heroScene.add(heroEarth);
     
-    // Outer glow ring
-    const ringGeo = new THREE.RingGeometry(14, 14.2, 64);
-    const ringMat = new THREE.MeshBasicMaterial({ color: 0x00ffcc, side: THREE.DoubleSide, transparent: true, opacity: 0.5 });
-    const ring = new THREE.Mesh(ringGeo, ringMat);
-    ring.rotation.x = Math.PI / 2;
-    heroScene.add(ring);
-
     heroCamera.position.z = 30;
     
     (function animHero() {
         requestAnimationFrame(animHero);
         heroEarth.rotation.y += 0.001;
-        ring.rotation.z -= 0.002;
         heroRenderer.render(heroScene, heroCamera);
     })();
-
-    window.addEventListener('resize', () => {
-        heroCamera.aspect = window.innerWidth / (window.innerHeight*0.8);
-        heroCamera.updateProjectionMatrix();
-        heroRenderer.setSize(window.innerWidth, window.innerHeight*0.8);
-    });
 }
 
 function initLab() {
@@ -240,18 +228,27 @@ function initLab() {
     labControls.enableDamping = true;
     labCamera.position.z = 20;
 
+    // Added Lighting for realistic 3D Materials
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    labScene.add(ambientLight);
+    const pointLight = new THREE.PointLight(0xffffff, 1);
+    pointLight.position.set(10, 10, 10);
+    labScene.add(pointLight);
+
     (function animLab() {
         requestAnimationFrame(animLab);
-        if(labGroup) labGroup.rotation.y += 0.003;
+        if(labGroup && !isHeartBeating) {
+            labGroup.rotation.y += 0.005;
+        } else if (labGroup && isHeartBeating) {
+            labGroup.rotation.y += 0.01;
+            // Heart Beat Animation
+            pulseScale += 0.1;
+            let scaleObj = 1 + Math.sin(pulseScale) * 0.05;
+            labGroup.scale.set(scaleObj, scaleObj, scaleObj);
+        }
         labControls.update();
         labRenderer.render(labScene, labCamera);
     })();
-
-    window.addEventListener('resize', () => {
-        labCamera.aspect = viewer.clientWidth / viewer.clientHeight;
-        labCamera.updateProjectionMatrix();
-        labRenderer.setSize(viewer.clientWidth, viewer.clientHeight);
-    });
 }
 
 function loadModel(type, btn) {
@@ -259,15 +256,67 @@ function loadModel(type, btn) {
     if(btn) btn.classList.add('active');
     if(labGroup) labScene.remove(labGroup);
     labGroup = new THREE.Group();
+    isHeartBeating = false; // Reset animation flag
+    labGroup.scale.set(1,1,1);
     
-    let matColor = 0x00ffcc;
-    if(type === 'rbc') matColor = 0xff3366;
-    if(type === 'chloroplast') matColor = 0x33ff33;
-    const mat = new THREE.MeshBasicMaterial({ color: matColor, wireframe: true });
-
+    let baseColor = 0x00ffcc;
+    
     if(type === 'earth') {
+        const mat = new THREE.MeshStandardMaterial({ color: baseColor, wireframe: true });
         labGroup.add(new THREE.Mesh(new THREE.SphereGeometry(8, 32, 32), mat));
+    
+    } else if(type === 'dna') {
+        const mat = new THREE.MeshStandardMaterial({ color: 0x00ffcc, metalness: 0.8, roughness: 0.2 });
+        for(let i=0; i<40; i++) {
+            const s1 = new THREE.Mesh(new THREE.SphereGeometry(0.5, 16, 16), mat);
+            s1.position.set(Math.cos(i*0.4)*3, i*0.5-10, Math.sin(i*0.4)*3);
+            const s2 = new THREE.Mesh(new THREE.SphereGeometry(0.5, 16, 16), mat);
+            s2.position.set(Math.cos(i*0.4 + Math.PI)*3, i*0.5-10, Math.sin(i*0.4 + Math.PI)*3);
+            const link = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 6), mat);
+            link.position.set(0, i*0.5-10, 0);
+            link.rotation.y = -i*0.4; link.rotation.z = Math.PI/2;
+            labGroup.add(s1, s2, link);
+        }
+    
+    } else if(type === 'heart') {
+        isHeartBeating = true;
+        const heartMat = new THREE.MeshStandardMaterial({ color: 0xff1a1a, roughness: 0.3, metalness: 0.1 });
+        const veinMat = new THREE.MeshStandardMaterial({ color: 0x1a1aff });
+        
+        // Main Ventricles
+        const leftVen = new THREE.Mesh(new THREE.SphereGeometry(4, 32, 32), heartMat);
+        leftVen.position.set(-1.5, -1, 0);
+        leftVen.scale.set(1, 1.2, 1);
+        
+        const rightVen = new THREE.Mesh(new THREE.SphereGeometry(3.5, 32, 32), heartMat);
+        rightVen.position.set(1.5, -0.5, 0);
+        
+        // Atria & Aorta
+        const aorta = new THREE.Mesh(new THREE.CylinderGeometry(1, 1.5, 5), heartMat);
+        aorta.position.set(0, 4, 0);
+        aorta.rotation.z = -0.2;
+        
+        const vein = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.8, 4), veinMat);
+        vein.position.set(2, 3, -1);
+        
+        labGroup.add(leftVen, rightVen, aorta, vein);
+
+    } else if(type === 'mitochondria') {
+        const outerMat = new THREE.MeshStandardMaterial({ color: 0xff9900, transparent: true, opacity: 0.5 });
+        const innerMat = new THREE.MeshStandardMaterial({ color: 0xffcc00, wireframe: true });
+        
+        // Outer membrane
+        const outer = new THREE.Mesh(new THREE.CapsuleGeometry(3, 6, 16, 32), outerMat);
+        outer.rotation.z = Math.PI / 2;
+        
+        // Inner folded membrane (Cristae simulation)
+        const inner = new THREE.Mesh(new THREE.TorusKnotGeometry(2, 0.5, 100, 16), innerMat);
+        inner.scale.set(1.5, 1, 1);
+        
+        labGroup.add(outer, inner);
+
     } else if(type === 'virus') {
+        const mat = new THREE.MeshStandardMaterial({ color: 0x00ffcc, metalness: 0.5 });
         const head = new THREE.Mesh(new THREE.IcosahedronGeometry(3, 0), mat);
         head.position.y = 4; labGroup.add(head);
         const tail = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 6), mat);
@@ -278,18 +327,21 @@ function loadModel(type, btn) {
             leg.rotation.x = Math.PI/4;
             labGroup.add(leg);
         }
-    } else if(type === 'dna') {
-        for(let i=0; i<60; i++) {
-            const s1 = new THREE.Mesh(new THREE.SphereGeometry(0.4), mat);
-            s1.position.set(Math.cos(i*0.3)*4, i*0.4-12, Math.sin(i*0.3)*4);
-            const s2 = new THREE.Mesh(new THREE.SphereGeometry(0.4), mat);
-            s2.position.set(Math.cos(i*0.3 + Math.PI)*4, i*0.4-12, Math.sin(i*0.3 + Math.PI)*4);
-            const link = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 8), mat);
-            link.position.set(0, i*0.4-12, 0);
-            link.rotation.y = -i*0.3; link.rotation.z = Math.PI/2;
-            labGroup.add(s1, s2, link);
+    } else if(type === 'chloroplast') {
+        const mat = new THREE.MeshStandardMaterial({ color: 0x33ff33, roughness: 0.5 });
+        const chloroGeo = new THREE.SphereGeometry(6, 32, 32);
+        const chloro = new THREE.Mesh(chloroGeo, mat);
+        chloro.scale.set(1, 0.6, 0.6); 
+        labGroup.add(chloro);
+        for(let x=-3; x<=3; x+=3) {
+            for(let z=-1.5; z<=1.5; z+=3) {
+                const grana = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.2, 3, 16), new THREE.MeshStandardMaterial({color: 0x006600}));
+                grana.position.set(x, 0, z);
+                labGroup.add(grana);
+            }
         }
     } else if(type === 'neuron') {
+        const mat = new THREE.MeshStandardMaterial({ color: 0x00ffcc, wireframe: true });
         const body = new THREE.Mesh(new THREE.SphereGeometry(2, 16, 16), mat);
         labGroup.add(body);
         for(let i=0; i<15; i++) {
@@ -297,47 +349,41 @@ function loadModel(type, btn) {
             axon.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, 0);
             labGroup.add(axon);
         }
-    } else if(type === 'cell') {
-        for(let i=0; i<80; i++) {
-            const head1 = new THREE.Mesh(new THREE.SphereGeometry(0.5), mat);
-            head1.position.set(Math.random()*15-7.5, 2, Math.random()*15-7.5);
-            const head2 = new THREE.Mesh(new THREE.SphereGeometry(0.5), mat);
-            head2.position.set(head1.position.x, -2, head1.position.z);
-            labGroup.add(head1, head2);
-        }
     } else if(type === 'rbc') {
-        // Red Blood Cell - Biconcave disc using Torus
-        for(let i=0; i<10; i++) {
-            const rbcGeo = new THREE.TorusGeometry(2, 1.2, 16, 32);
-            const rbc = new THREE.Mesh(rbcGeo, mat);
+        const mat = new THREE.MeshStandardMaterial({ color: 0xff3366 });
+        for(let i=0; i<15; i++) {
+            const rbc = new THREE.Mesh(new THREE.TorusGeometry(2, 1.2, 16, 32), mat);
             rbc.position.set((Math.random()-0.5)*20, (Math.random()-0.5)*20, (Math.random()-0.5)*20);
             rbc.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, 0);
             labGroup.add(rbc);
-        }
-    } else if(type === 'chloroplast') {
-        // Chloroplast - Oval shape with internal grana stacks
-        const chloroGeo = new THREE.SphereGeometry(6, 32, 32);
-        const chloro = new THREE.Mesh(chloroGeo, mat);
-        chloro.scale.set(1, 0.6, 0.6); // Make it oval
-        labGroup.add(chloro);
-        
-        // Add Thylakoid Stacks (Grana)
-        for(let x=-3; x<=3; x+=3) {
-            for(let z=-1.5; z<=1.5; z+=3) {
-                const grana = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.2, 3, 16), mat);
-                grana.position.set(x, 0, z);
-                labGroup.add(grana);
-            }
         }
     }
     labScene.add(labGroup);
 }
 
 initHero(); initLab();
-loadModel('earth');
+loadModel('heart');
 
-// --- 2. RAG AI SIMULATION ---
-function thinkAI() {
+// --- 2. LIVE RAG AI SIMULATION (Using Wikipedia API for Live Data) ---
+async function fetchLiveData(query) {
+    try {
+        // Search Sinhala Wikipedia
+        const res = await fetch(`https://si.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&utf8=&format=json&origin=*`);
+        const data = await res.json();
+        
+        if (data.query.search.length > 0) {
+            // Strip HTML tags from wiki snippet
+            let snippet = data.query.search[0].snippet.replace(/<\/?[^>]+(>|$)/g, "");
+            return `<b>[LIVE DATA EXTRACTED]:</b> ${snippet}... <br><br><i>(මූලාශ්‍රය: අන්තර්ජාල විශ්වකෝෂ දත්ත සමුදාය)</i>`;
+        } else {
+            return `<b>[ACHI-CORE ANALYSIS]:</b> කණගාටුයි, "${query}" සඳහා සජීවී දත්ත සමුදායේ සෘජු ගැලපීමක් හමු නොවිණි. කරුණාකර වෙනත් වචනයකින් අසන්න. (උදා: රුධිරය, හදවත, ප්‍රභාසංස්ලේෂණය)`;
+        }
+    } catch (error) {
+        return "<b>[SYSTEM ERROR]:</b> අන්තර්ජාල දත්ත සමුදාය හා සම්බන්ධ වීමට නොහැක. කරුණාකර ඔබගේ Network එක පරීක්ෂා කරන්න.";
+    }
+}
+
+async function thinkAI() {
     const q = document.getElementById('bio-query').value.trim();
     const log = document.getElementById('ai-log');
     if(!q) return;
@@ -350,39 +396,28 @@ function thinkAI() {
 
     // RAG Searching Animation
     const searchMsg = document.createElement('div');
-    searchMsg.innerHTML = `<span style='color:var(--gold)'>[RAG Engine] Web Scraping... Analyzing Top Bio Articles...</span>`;
+    searchMsg.innerHTML = `<span style='color:var(--gold)'>[RAG Engine] Web Scraping... Searching Global Bio Databases...</span>`;
     log.appendChild(searchMsg);
     log.scrollTop = log.scrollHeight;
+    
+    // Fetch real data
+    const apiResponseText = await fetchLiveData(q);
     
     setTimeout(() => {
         searchMsg.innerHTML = `<span style='color:var(--neon)'>[RAG Engine] Data Extracted. Synthesizing response...</span>`;
         
         setTimeout(() => {
-            let answer = "";
-            let qLow = q.toLowerCase();
-            
-            if(qLow.includes("සෛල") || qLow.includes("cell")) {
-                answer = "<b>සෛලය (Cell):</b> සෛලය යනු ජීවයේ ව්‍යුහමය හා කෘත්‍යමය මූලික ඒකකයයි. නවතම Nature සඟරාවේ පර්යේෂණවලට අනුව, සෛල පටලය තුළ ඇති ප්‍රෝටීන සංකීර්ණ සෛලීය සංඥා සම්ප්‍රේෂණයේදී අතිශය වැදගත් කාර්යභාරයක් ඉටු කරයි.";
-            } else if(qLow.includes("dna") || qLow.includes("ජාන")) {
-                answer = "<b>DNA (Deoxyribonucleic Acid):</b> DNA යනු සියලුම සජීවීන්ගේ ජානමය තොරතුරු ගබඩා කර ඇති ද්විත්ව හෙලික්සීය අණුවයි. මෑතකදී CRISPR-Cas9 තාක්ෂණය හරහා මෙම DNA වල ඇති විකෘතිතා නිවැරදි කිරීම ලොව පුරා සිදුවේ.";
-            } else {
-                answer = "<b>Achi-Core Analysis:</b> මා විසින් ගෝලීය ජීව විද්‍යා දත්ත සමුදායන් පරීක්ෂා කළා. ඔබගේ ප්‍රශ්නයට අදාළව, ජීව පද්ධති තුළ සිදුවන ජෛව රසායනික ක්‍රියාවලීන් නිශ්චිත එන්සයිම මගින් පාලනය වන බව තහවුරු වී ඇත. තවත් විස්තර අවශ්‍ය නම් විශේෂිතව අසන්න.";
-            }
-            
             const responseDiv = document.createElement('div');
-            responseDiv.style.marginTop = "10px";
-            responseDiv.style.padding = "10px";
-            responseDiv.style.background = "rgba(0, 255, 204, 0.05)";
-            responseDiv.style.borderLeft = "3px solid var(--neon)";
-            responseDiv.innerHTML = `<b>Achi-Core AI:</b><br>${answer}`;
+            responseDiv.className = "ai-message";
+            responseDiv.innerHTML = `<b>Achi-Core AI:</b><br>${apiResponseText}`;
             
             log.appendChild(responseDiv);
             log.scrollTop = log.scrollHeight;
-        }, 1500);
-    }, 1000);
+        }, 1000);
+    }, 800);
 }
 
-// --- 3. MULTI-LEVEL QUIZ & LIVE LEADERBOARD ---
+// --- 3. PRO EXAMINER QUIZ & REAL LEADERBOARD ---
 const level1_bank = [
     {q: "සෛලයක 'බලශක්ති මධ්‍යස්ථානය'?", a: ["න්‍යෂ්ටිය", "රයිබොසෝම", "මයිටොකොන්ඩ්‍රියාව", "සෛල ප්ලාස්මය"], c: 2},
     {q: "ප්‍රෝටීන් සංස්ලේෂණය සිදුවන්නේ?", a: ["රයිබොසෝමය", "ලයිසොසෝමය", "සෛල බිත්තිය", "න්‍යෂ්ටික පටලය"], c: 0},
@@ -391,25 +426,18 @@ const level1_bank = [
     {q: "ප්‍රභාසංස්ලේෂණයට අත්‍යවශ්‍ය වායුව?", a: ["O2", "CO2", "N2", "H2"], c: 1}
 ];
 
-const level2_bank = [
-    {q: "මානව ඇසේ ආලෝකයට සංවේදී කොටස?", a: ["කාචය", "දෘෂ්ටි විතානය (Retina)", "තාරකාව", "ස්වච්ඡය"], c: 1},
-    {q: "ශාක පත්‍රවල හරිතප්‍රද අඩංගු ඉන්ද්‍රියිකාව?", a: ["හරිතලව", "රික්තකය", "න්‍යෂ්ටිය", "ගොල්ගි දේහ"], c: 0},
-    {q: "රතු රුධිර සෛලවල ආයු කාලය?", a: ["දින 30", "දින 60", "දින 120", "දින 365"], c: 2}
-];
-
-let allLevels = [level1_bank, level2_bank];
+let allLevels = [level1_bank];
 let currentLevelIdx = 0;
 let currentQ = 0;
 let timer;
+let activeUser = null; 
 
-// Dummy global players with varying scores to make competition realistic
-let players = Array.from({length: 15}, (_, i) => ({
-    name: ["Sarasi N.", "Kaveesha", "Pawan", "John D.", "Amaya", "Dinuka", "Senura", "Chamath", "Hasini", "Ravindu", "Kasun", "Nethmi", "Devin", "Pramod", "Malithi"][i],
-    score: Math.floor(Math.random() * 2000) + 100,
-    isUser: false
-}));
+// Load REAL players from LocalStorage instead of fake bots
+let registeredPlayers = JSON.parse(localStorage.getItem('bionexus_players')) || [];
 
-let activeUser = null; // Will be set after registration
+function savePlayers() {
+    localStorage.setItem('bionexus_players', JSON.stringify(registeredPlayers));
+}
 
 function registerAndStart() {
     const inputName = document.getElementById('player-name').value.trim();
@@ -418,47 +446,52 @@ function registerAndStart() {
         return;
     }
     
-    // Create new user object
-    activeUser = { name: inputName, score: 0, isUser: true };
-    players.push(activeUser); // Add to global pool
+    // Check if user already exists in local storage
+    let existingUser = registeredPlayers.find(p => p.name === inputName);
     
-    // UI Transitions
+    if(existingUser) {
+        activeUser = existingUser;
+    } else {
+        activeUser = { name: inputName, score: 0 };
+        registeredPlayers.push(activeUser);
+    }
+    
+    savePlayers();
+    
     document.getElementById('quiz-login').style.display = 'none';
     document.getElementById('quiz-ui').style.display = 'block';
     
-    updateLeaderboard(); // Show initial rank (0 pts)
-    startLevelCheck();   // Start Quiz
+    updateLeaderboard(); 
+    startLevelCheck();   
 }
 
 function updateLeaderboard() {
     const list = document.getElementById('lb-data');
     list.innerHTML = '';
     
-    // Sort all players descending by score
-    players.sort((a, b) => b.score - a.score);
-    const top20 = players.slice(0, 20);
+    // Sort REAL players
+    registeredPlayers.sort((a, b) => b.score - a.score);
     
-    top20.forEach((p, i) => {
+    if(registeredPlayers.length === 0) {
+        list.innerHTML = '<p style="text-align:center; color:#888;">තවමත් කිසිවෙකු ලියාපදිංචි වී නොමැත.</p>';
+        return;
+    }
+
+    registeredPlayers.forEach((p, i) => {
         const row = document.createElement('div');
         let classes = 'lb-row';
         
-        // Top 3 Kings Logic
         if(i === 0) classes += ' rank-1';
         else if(i === 1) classes += ' rank-2';
         else if(i === 2) classes += ' rank-3';
         
-        // Highlight active user
-        if(p.isUser) classes += ' user-highlight';
+        if(activeUser && p.name === activeUser.name) classes += ' user-highlight';
         
         row.className = classes;
-        
         let crown = i === 0 ? '👑 ' : i === 1 ? '🥈 ' : i === 2 ? '🥉 ' : '';
-        let youTag = p.isUser ? ' (You)' : '';
+        let youTag = (activeUser && p.name === activeUser.name) ? ' (You)' : '';
         
-        row.innerHTML = `
-            <span>${i + 1}. ${crown}${p.name}${youTag}</span>
-            <span>${p.score} pts</span>
-        `;
+        row.innerHTML = `<span>${i + 1}. ${crown}${p.name}${youTag}</span><span>${p.score} pts</span>`;
         list.appendChild(row);
     });
 }
@@ -466,44 +499,18 @@ function updateLeaderboard() {
 function startLevelCheck() {
     if(currentQ >= allLevels[currentLevelIdx].length) {
         clearInterval(timer);
-        currentLevelIdx++;
-        currentQ = 0;
         
         const uiContainer = document.getElementById('quiz-ui');
-        if(currentLevelIdx >= allLevels.length) {
-            uiContainer.innerHTML = `
-                <div style="text-align:center; padding: 40px 0;">
-                    <h1 style="color:var(--gold); font-size: 2.5rem; text-shadow: 0 0 20px var(--gold);">CHAMPION!</h1>
-                    <p style="font-size: 1.2rem;">ඔබ සියලුම Levels සාර්ථකව නිම කළා!</p>
-                    <h2 style="color:var(--neon);">Final Score: ${activeUser.score}</h2>
-                    <button class="btn" style="margin-top:20px;" onclick="location.reload()">RESTART SYSTEM</button>
-                </div>
-            `;
-            confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
-            return;
-        } else {
-            uiContainer.innerHTML = `
-                <div style="text-align:center; padding: 50px 0;">
-                    <h1 style="color:var(--neon);">LEVEL ${currentLevelIdx} COMPLETE!</h1>
-                    <p>Get ready for Level ${currentLevelIdx + 1}</p>
-                    <button class="btn" style="margin-top:20px;" onclick="restoreQuizUI()">START LEVEL ${currentLevelIdx + 1}</button>
-                </div>
-            `;
-            return;
-        }
+        uiContainer.innerHTML = `
+            <div style="text-align:center; padding: 40px 0;">
+                <h1 style="color:var(--gold); font-size: 2.5rem; text-shadow: 0 0 20px var(--gold);">MISSION COMPLETE!</h1>
+                <h2 style="color:var(--neon);">Final Score: ${activeUser.score}</h2>
+                <button class="btn" style="margin-top:20px;" onclick="location.reload()">RESTART SYSTEM</button>
+            </div>
+        `;
+        confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
+        return;
     }
-    runQuiz();
-}
-
-function restoreQuizUI() {
-    const uiContainer = document.getElementById('quiz-ui');
-    uiContainer.innerHTML = `
-        <div class="level-badge" id="level-badge">LEVEL ${currentLevelIdx + 1}</div>
-        <div class="timer-bg"><div class="timer-line" id="timer-bar"></div></div>
-        <h3 id="q-status" style="color: var(--neon); margin-top: 0;"></h3>
-        <p id="q-text" style="font-size: 1.2rem; min-height: 80px; font-weight: bold; line-height: 1.5;"></p>
-        <div id="options-grid"></div>
-    `;
     runQuiz();
 }
 
@@ -524,18 +531,10 @@ function runQuiz() {
     timer = setInterval(() => {
         t--;
         document.getElementById('timer-bar').style.width = (t/15)*100 + "%";
-        
-        // Add random score jumps to dummy players to make leaderboard feel alive!
-        if(t % 3 === 0) {
-            let randomPlayer = players[Math.floor(Math.random() * players.length)];
-            if(!randomPlayer.isUser) {
-                randomPlayer.score += Math.floor(Math.random() * 50);
-                updateLeaderboard();
-            }
-        }
 
         if(t <= 0) {
-            activeUser.score = Math.max(0, activeUser.score - 20); // Time out penalty
+            activeUser.score = Math.max(0, activeUser.score - 10);
+            savePlayers();
             updateLeaderboard();
             nextQ();
         }
@@ -549,16 +548,16 @@ function runQuiz() {
             Array.from(grid.children).forEach(b => b.disabled = true);
             
             if(i === data.c) {
-                activeUser.score += (100 + (t * 5)); // Base points + time bonus
+                activeUser.score += (100 + (t * 5)); 
                 btn.classList.add('correct'); 
-                if(currentLevelIdx >= 1) confetti({ particleCount: 30, spread: 40 });
             } else {
-                activeUser.score = Math.max(0, activeUser.score - 30); // Wrong penalty (min 0)
+                activeUser.score = Math.max(0, activeUser.score - 20); 
                 btn.classList.add('wrong');
                 grid.children[data.c].classList.add('correct');
             }
             
-            updateLeaderboard(); // Update instantly on click
+            savePlayers(); // Save to local storage
+            updateLeaderboard(); 
             setTimeout(nextQ, 1200);
         };
         grid.appendChild(btn);
@@ -570,7 +569,7 @@ function nextQ() {
     startLevelCheck(); 
 }
 
-// Initial dummy leaderboard display before user registers
+// Initial Real Leaderboard Load
 updateLeaderboard();
 
 </script>
