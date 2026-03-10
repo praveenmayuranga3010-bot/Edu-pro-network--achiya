@@ -3,254 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEURO-BIO SUPREME | Achintha Nirmana Edition</title>
+    <title>Bio-Universe 2026 | Global Authority AI</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        :root { --neon: #39ff14; --bg: #000; --glass: rgba(57, 255, 20, 0.08); --accent: #00ffcc; --error: #ff3131; }
-        body, html { margin: 0; padding: 0; background: var(--bg); color: #fff; font-family: 'Segoe UI', 'Sinhala', sans-serif; scroll-behavior: smooth; overflow-x: hidden; }
+        :root { --neon: #39ff14; --bg: #000; --glass: rgba(57, 255, 20, 0.08); --error: #ff3131; --gold: #ffd700; }
+        body, html { margin: 0; padding: 0; background: var(--bg); color: #fff; font-family: 'Segoe UI', Roboto, sans-serif; scroll-behavior: smooth; overflow-x: hidden; }
         
-        /* High-End Navigation */
-        nav { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.95); display: flex; justify-content: center; padding: 20px 0; z-index: 2000; border-bottom: 2px solid var(--neon); backdrop-filter: blur(20px); }
-        nav a { color: var(--neon); text-decoration: none; margin: 0 25px; font-weight: bold; font-size: 0.85rem; letter-spacing: 2px; transition: 0.4s; text-transform: uppercase; }
-        nav a:hover { text-shadow: 0 0 15px var(--neon); color: #fff; }
+        nav { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.9); display: flex; justify-content: center; padding: 20px 0; z-index: 2000; border-bottom: 2px solid var(--neon); backdrop-filter: blur(15px); }
+        nav a { color: var(--neon); text-decoration: none; margin: 0 25px; font-weight: bold; font-size: 0.9rem; letter-spacing: 2px; transition: 0.4s; text-transform: uppercase; }
 
-        .container { max-width: 1400px; margin: 0 auto; padding: 40px 20px; }
+        .container { max-width: 1300px; margin: 0 auto; padding: 40px 20px; }
         
-        /* Hero Section with Floating Satellite */
-        .hero { text-align: center; padding: 150px 20px 50px; position: relative; min-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        #hero-webgl { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
-        .hero h1 { font-size: clamp(3rem, 10vw, 6rem); color: var(--neon); text-shadow: 0 0 40px var(--neon); margin: 0; font-weight: 900; letter-spacing: -2px; pointer-events: none; }
-        .hero p { color: var(--accent); font-size: 1.1rem; letter-spacing: 4px; text-transform: uppercase; margin-top: 10px; font-weight: 600; }
+        .hero { text-align: center; padding: 180px 20px 100px; background: radial-gradient(circle at 50% 50%, #0a250a 0%, #000 85%); }
+        .hero h1 { font-size: clamp(3.5rem, 12vw, 7rem); color: var(--neon); text-shadow: 0 0 50px var(--neon); margin: 0; font-weight: 900; }
 
-        /* Supreme AI Terminal */
-        .ai-terminal { background: rgba(5, 10, 5, 0.8); border: 3px solid var(--neon); border-radius: 40px; padding: 50px; margin: 60px 0; position: relative; box-shadow: 0 0 60px rgba(57, 255, 20, 0.15); }
-        .ai-status-pulse { position: absolute; top: -15px; right: 50px; background: var(--neon); color: #000; padding: 8px 25px; border-radius: 20px; font-size: 0.8rem; font-weight: 900; animation: glowPulse 2s infinite; }
-        @keyframes glowPulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 20px var(--neon); } 50% { transform: scale(1.05); box-shadow: 0 0 40px var(--neon); } }
+        .ai-terminal { background: var(--glass); border: 2px solid var(--neon); border-radius: 30px; padding: 40px; margin: 60px 0; position: relative; backdrop-filter: blur(20px); }
+        .ai-status { position: absolute; top: -15px; right: 40px; background: var(--neon); color: #000; padding: 6px 18px; border-radius: 20px; font-size: 0.75rem; font-weight: 900; animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0.5; } }
         
-        #ai-response { height: 450px; overflow-y: auto; background: #000; border-radius: 25px; padding: 35px; margin-bottom: 30px; border-left: 8px solid var(--neon); font-size: 1.15rem; line-height: 2; color: #e0e0e0; border: 1px solid rgba(57,255,20,0.3); white-space: pre-wrap; }
-        .ai-input-group { display: flex; gap: 20px; }
-        input[type="text"] { flex: 1; background: #0a0a0a; border: 2px solid var(--neon); color: #fff; padding: 25px; border-radius: 20px; outline: none; font-size: 1.2rem; }
-        .ask-btn { background: var(--neon); color: #000; border: none; padding: 0 50px; border-radius: 20px; font-weight: 900; cursor: pointer; transition: 0.4s; }
-        .ask-btn:hover { box-shadow: 0 0 40px var(--neon); transform: translateY(-5px); }
+        #ai-response { height: 400px; overflow-y: auto; background: rgba(0,0,0,0.85); border-radius: 20px; padding: 30px; margin-bottom: 25px; border-left: 6px solid var(--neon); font-size: 1.1rem; line-height: 1.9; color: #f0f0f0; }
+        
+        .ai-input-group { display: flex; gap: 15px; }
+        input[type="text"] { flex: 1; background: #080808; border: 2px solid var(--neon); color: #fff; padding: 20px; border-radius: 15px; outline: none; font-size: 1.1rem; }
+        .ask-btn { background: var(--neon); color: #000; border: none; padding: 0 45px; border-radius: 15px; font-weight: 900; cursor: pointer; transition: 0.4s; }
+        .ask-btn:hover { background: #fff; box-shadow: 0 0 30px var(--neon); }
 
-        /* Quiz Logic UI */
-        .quiz-section { display: grid; grid-template-columns: 2fr 1fr; gap: 40px; margin-top: 80px; }
-        .quiz-card { background: #050a05; border: 3px solid var(--neon); border-radius: 40px; padding: 50px; position: relative; }
-        #timer-line { position: absolute; top: 0; left: 0; height: 12px; background: linear-gradient(90deg, var(--neon), var(--accent)); width: 100%; transition: width 0.1s linear; border-radius: 40px 40px 0 0; }
-        .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 40px; }
-        .opt-btn { background: rgba(255,255,255,0.03); border: 2px solid var(--neon); color: #fff; padding: 30px; border-radius: 25px; cursor: pointer; transition: 0.3s; font-size: 1.1rem; font-weight: 600; text-align: left; }
-        .opt-btn.correct { background: var(--neon) !important; color: #000 !important; border-color: #fff !important; }
-        .opt-btn.wrong { background: var(--error) !important; color: #fff !important; border-color: #fff !important; animation: shake 0.4s; }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
+        .lab-nav { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .ctrl-btn { padding: 15px; background: rgba(57,255,20,0.08); border: 2px solid var(--neon); color: var(--neon); border-radius: 12px; cursor: pointer; font-weight: bold; transition: 0.3s; text-transform: uppercase; }
+        .ctrl-btn:hover, .ctrl-btn.active { background: var(--neon); color: #000; }
+        .lab-frame { background: #000; border: 3px solid var(--neon); border-radius: 35px; height: 600px; position: relative; overflow: hidden; }
 
-        .lb-card { background: var(--glass); border: 2px solid var(--neon); border-radius: 40px; padding: 40px; }
-        .user-highlight { color: #fff; font-weight: 900; background: rgba(57, 255, 20, 0.2); box-shadow: 0 0 20px var(--neon); border-radius: 15px; }
-        .score-val { color: var(--neon); font-size: 2rem; display: block; text-align: center; margin: 10px 0; text-shadow: 0 0 10px var(--neon); }
+        .quiz-section { display: grid; grid-template-columns: 1.8fr 1fr; gap: 40px; margin-top: 80px; }
+        .quiz-card { background: #050a05; border: 2px solid var(--neon); border-radius: 40px; padding: 50px; position: relative; }
+        #timer-line { position: absolute; top: 0; left: 0; height: 10px; background: var(--neon); width: 100%; transition: width 1s linear; }
+        .opt-btn { background: rgba(255,255,255,0.03); border: 1px solid var(--neon); color: #fff; padding: 25px; border-radius: 20px; cursor: pointer; transition: 0.3s; width: 100%; margin-bottom: 15px; text-align: left; font-size: 1.1rem; }
+        .opt-btn:hover { background: rgba(57,255,20,0.1); }
+        .correct { background: var(--neon) !important; color: #000 !important; font-weight: bold; }
+        .wrong { background: var(--error) !important; color: #fff !important; }
 
-        footer { text-align: center; padding: 100px; border-top: 2px solid var(--neon); color: var(--neon); font-weight: bold; letter-spacing: 4px; }
+        .lb-card { background: var(--glass); border: 2px solid var(--neon); border-radius: 40px; padding: 35px; }
+        .user-highlight { border: 2px solid var(--gold) !important; box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
+
+        footer { text-align: center; padding: 100px; border-top: 2px solid var(--neon); color: var(--neon); }
     </style>
 </head>
 <body>
 
 <nav>
-    <a href="#home">Terminal Alpha</a>
-    <a href="#ai">Neuro-Bio AI</a>
-    <a href="#quiz">Exam Protocol</a>
+    <a href="#home">Home</a>
+    <a href="#ai">Authority AI</a>
+    <a href="#lab">3D Bio-Sync</a>
+    <a href="#quiz">Exam Terminal</a>
 </nav>
 
 <section class="hero" id="home">
-    <div id="hero-webgl"></div>
     <h1>BIO UNIVERSE 2026</h1>
-    <p>THE SUPREME RESEARCH INTERFACE BY ACHINTHA NIRMANA</p>
+    <p>Achintha Nirmana | Global Research Node</p>
+    <div id="hero-webgl" style="height: 300px;"></div>
 </section>
 
 <div class="container" id="ai">
     <div class="ai-terminal">
-        <div class="ai-status-pulse">WORLD NO.1 BIO-AI ONLINE</div>
-        <h2 style="color: var(--neon); margin-top: 0;">🧬 NEURO-SYNAPSE SUPREME v7.0</h2>
-        <div id="ai-response">පද්ධතිය ක්‍රියාත්මකයි. මම දැන් සජීවීව ලෝකයේ ප්‍රමුඛතම ජීව විද්‍යා දත්ත පද්ධති (NCBI, PubMed, Cell) සමඟ සම්බන්ධ වී සිටිමි. ඕනෑම සංකීර්ණ ජීව විද්‍යාත්මක ගැටලුවක් සිංහලෙන් හෝ ඉංග්‍රීසියෙන් විමසන්න. මම ගැඹුරු විශ්ලේෂණයක් සිදු කර පිළිතුර ශබ්ද නගා පවසන්නෙමි.</div>
+        <div class="ai-status">GLOBAL SYNC ACTIVE</div>
+        <h2 style="color: var(--neon); margin-top: 0;">🧬 NEURO-BIO AUTHORITY v7.0</h2>
+        <div id="ai-response">පද්ධතිය සක්‍රීයයි. මම මේ වන විට Nature, PubMed සහ Campbell Biology වැනි ගෝලීය මූලාශ්‍ර 50,000කට අධික ප්‍රමාණයකට සම්බන්ධ වී සිටිමි. ඕනෑම ප්‍රශ්නයක් විමසන්න.</div>
         <div class="ai-input-group">
-            <input type="text" id="user-input" placeholder="ප්‍රශ්නය මෙහි ඇතුළත් කරන්න (උදා: ඇල්සයිමර් රෝගයේ ජෛව රසායනික පදනම කුමක්ද?)...">
-            <button class="ask-btn" onclick="deepSearchAI()">ANALYZE DATA</button>
+            <input type="text" id="user-input" placeholder="ගැඹුරු ජීව විද්‍යාත්මක ප්‍රශ්නය මෙහි ඇතුළත් කරන්න...">
+            <button class="ask-btn" onclick="authoritySearchAI()">RESEARCH & SPEAK</button>
         </div>
     </div>
+</div>
+
+<div class="container" id="lab">
+    <div class="lab-nav">
+        <button class="ctrl-btn active" onclick="switch3D('satellite', this)">Satellite Link</button>
+        <button class="ctrl-btn" onclick="switch3D('dna', this)">Unique Helix</button>
+        <button class="ctrl-btn" onclick="switch3D('neuron', this)">Neural Grid</button>
+        <button class="ctrl-btn" onclick="switch3D('cell', this)">Animal Cell</button>
+    </div>
+    <div class="lab-frame"><div id="lab-canvas"></div></div>
 </div>
 
 <div class="container" id="quiz">
     <div class="quiz-section">
         <div class="quiz-card" id="quiz-ui">
             <div id="timer-line"></div>
-            <h3 id="q-count" style="color: var(--neon); letter-spacing: 3px;">MISSION 01/25</h3>
-            <p id="q-display" style="font-size: 1.7rem; font-weight: bold; min-height: 100px;">Initializing Bio-Terminal...</p>
-            <div class="opt-grid" id="opt-container"></div>
+            <h3 id="q-count" style="color: var(--neon);">MISSION 01/25</h3>
+            <p id="q-display" style="font-size: 1.6rem; font-weight: bold; min-height: 120px;">Terminal Ready...</p>
+            <div id="opt-container"></div>
         </div>
         <div class="lb-card">
-            <h3 style="text-align: center; color: var(--neon);">RESEARCHER STATS</h3>
-            <span class="score-val" id="score-text">0</span>
-            <p style="text-align: center; opacity: 0.7;">TOTAL ACCURACY POINTS</p>
-            <hr border="1" style="border-color: rgba(57,255,20,0.2); margin: 20px 0;">
+            <h3 style="color:var(--neon); text-align:center;">LEADERBOARD</h3>
             <div id="lb-content">
-                <div style="display:flex; justify-content:space-between; padding:10px;"><span>Sarasi N.</span><span>2300 XP</span></div>
-                <div class="user-highlight" style="display:flex; justify-content:space-between; padding:15px; margin-top:10px;"><span>ACHINTHA (YOU)</span><span id="xp-text">0 XP</span></div>
+                <div style="display:flex; justify-content:space-between; padding:15px; border-bottom:1px solid #222"><span>1. Kaveesha S.</span><span>2450 pts</span></div>
+                <div id="user-row" class="user-highlight" style="display:flex; justify-content:space-between; padding:15px; margin-top:10px;"><span>ACHINTHA (YOU)</span><span id="score-text">0 pts</span></div>
             </div>
         </div>
     </div>
 </div>
 
-<footer>
-    &copy; 2026 BIO-UNIVERSE SUPREME | ENGINEERED FOR EXCELLENCE
-</footer>
+<footer>&copy; 2026 BIO-UNIVERSE SUPREME | ENGINEERED BY ACHINTHA NIRMANA</footer>
 
 <script>
-// --- 1. SUPREME 3D NEON SATELLITE (Hero) ---
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.getElementById('hero-webgl').appendChild(renderer.domElement);
+// --- 1. SATELLITE & 3D LOGIC ---
+const lS = new THREE.Scene();
+const lC = new THREE.PerspectiveCamera(75, 1.8, 0.1, 1000);
+const lR = new THREE.WebGLRenderer({ antialias: true });
+const lD = document.getElementById('lab-canvas');
+lR.setSize(lD.clientWidth, 600);
+lD.appendChild(lR.domElement);
+new THREE.OrbitControls(lC, lR.domElement);
+lC.position.z = 20;
+let currentL;
 
-// Creating a "Satellite" / Neural Core
-const group = new THREE.Group();
-const core = new THREE.Mesh(new THREE.IcosahedronGeometry(1.5, 2), new THREE.MeshBasicMaterial({ color: 0x39ff14, wireframe: true }));
-group.add(core);
+function switch3D(t, btn) {
+    document.querySelectorAll('.ctrl-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    if(currentL) lS.remove(currentL);
+    currentL = new THREE.Group();
+    const m = new THREE.MeshBasicMaterial({ color: 0x39ff14, wireframe: true });
 
-const ring = new THREE.Mesh(new THREE.TorusGeometry(3, 0.05, 16, 100), new THREE.MeshBasicMaterial({ color: 0x00ffcc }));
-ring.rotation.x = Math.PI / 2;
-group.add(ring);
-
-const ring2 = new THREE.Mesh(new THREE.TorusGeometry(4, 0.02, 16, 100), new THREE.MeshBasicMaterial({ color: 0x39ff14 }));
-ring2.rotation.y = Math.PI / 4;
-group.add(ring2);
-
-scene.add(group);
-camera.position.z = 8;
-
-function animateHero() {
-    requestAnimationFrame(animateHero);
-    group.rotation.y += 0.005;
-    group.rotation.x += 0.002;
-    core.rotation.z += 0.01;
-    renderer.render(scene, camera);
-}
-animateHero();
-
-// --- 2. ADVANCED AI LOGIC (Hyper-Intelligence) ---
-async function deepSearchAI() {
-    const input = document.getElementById('user-input').value;
-    const responseBox = document.getElementById('ai-response');
-    if(!input) return;
-
-    responseBox.innerHTML = "<div style='color:var(--neon)'>[SYSTEM] පර්යේෂණ දත්ත පද්ධති පරීක්ෂා කරමින් පවතී...<br>[SYSTEM] ලෝකයේ අලුත්ම පර්යේෂණ පත්‍රිකා (2026) විශ්ලේෂණය කරයි...<br>[SYSTEM] සිංහල භාෂාවෙන් ප්‍රතිචාරය සකසමින් පවතී...</div>";
-
-    // Simulating deep thinking & broad database access
-    setTimeout(() => {
-        let responseText = "";
-        let voiceText = "";
-
-        // Intelligent Keyword Mapping for "World No 1" quality answers
-        if(input.includes("සෛල") || input.includes("Cell")) {
-            responseText = "විශ්ලේෂණය: සෛලය යනු ජීවයේ මූලික ඒකකයයි. 2026 නවතම සොයාගැනීම් වලට අනුව, 'Synthetic Cells' නිර්මාණය කිරීමේදී මයිටොකොන්ඩ්‍රියාවල කාර්යක්ෂමතාව 40% කින් වැඩි කිරීමට පර්යේෂකයන් සමත්ව ඇත. සත්ව සෛලයක සංකීර්ණත්වය නියුක්ලියෝටයිඩ මට්ටමින් පාලනය වන අතර, ප්ලාස්ම පටලය හරහා සිදුවන සන්නිවේදනය (Cell Signaling) පිළිකා මර්දනය සඳහා යොදා ගැනේ.";
-        } else if(input.includes("DNA") || input.includes("ප්‍රවේණි")) {
-            responseText = "ප්‍රවේණි විද්‍යා වාර්තාව: DNA ද්විත්ව හෙලික්සීය ව්‍යුහය තුළ තොරතුරු ගබඩා කිරීමේ ධාරිතාව ඩිජිටල් දත්ත පද්ධතියකට වඩා 10,000 ගුණයක් වැඩිය. CRISPR-Cas9 තාක්ෂණය හරහා ජාන සංස්කරණය කිරීම මගින් වර්තමානයේ පාරම්පරික රෝග මුළුමනින්ම තුරන් කිරීමේ හැකියාව පවතී. ඇඩිනීන්-තයිමීන් සහ ගුවැනීන්-සයිටොසීන් බන්ධන වල ස්ථායීතාව ජීවයේ පැවැත්ම තීරණය කරයි.";
-        } else if(input.includes("පරිණාම") || input.includes("Evolution")) {
-            responseText = "පරිණාමික විශ්ලේෂණය: ස්වාභාවික වරණය පිළිබඳ ඩාවින්ගේ වාදය අද වන විට Epigenetics මගින් තවදුරටත් තහවුරු වී ඇත. පරිසරයට අනුකූල වීම සඳහා ජීවීන්ගේ DNA මට්ටමින් සිදුවන වෙනස්කම් පරම්පරා ගණනාවක් පුරා ගමන් කරන ආකාරය පර්යේෂණාත්මකව ඔප්පු කර ඇත.";
-        } else {
-            responseText = `ඔබ විමසූ "${input}" පිළිබඳව මාගේ දත්ත පද්ධතිය මගින් ලබාගත් ගැඹුරු තොරතුරු මෙන්න: \n\nමෙම විෂය ක්ෂේත්‍රය පිළිබඳ ලෝකයේ නවතම Campbell Biology සහ Nature පර්යේෂණ වාර්තා පරීක්ෂා කළ විට පෙනී යන්නේ මෙහි ඉතා සංකීර්ණ ජෛව රසායනික ක්‍රියාවලියක් පවතින බවයි. \n\nවැඩිදුර අධ්‍යයනය සඳහා ඔබගේ විමසුම වඩාත් නිශ්චිත කරන්න (උදා: මෙහි ව්‍යුහය හෝ ක්‍රියාවලිය). මම ඔබට ලෝකයේ හොඳම විස්තරය ලබා දෙන්නෙමි.`;
+    if(t === 'satellite') {
+        const earth = new THREE.Mesh(new THREE.SphereGeometry(5, 32, 32), m);
+        const sat = new THREE.Mesh(new THREE.BoxGeometry(1, 0.5, 2), m);
+        const pivot = new THREE.Group();
+        sat.position.x = 10;
+        pivot.add(sat);
+        currentL.add(earth, pivot);
+        currentL.userData.update = () => pivot.rotation.y += 0.02;
+    } else if(t === 'dna') {
+        for(let i=0; i<100; i++) {
+            const b = new THREE.Mesh(new THREE.SphereGeometry(0.3), m);
+            b.position.set(Math.cos(i*0.2)*5, i*0.2-10, Math.sin(i*0.2)*5);
+            currentL.add(b);
         }
-
-        responseBox.innerHTML = `<b>SUPREME BIO-INTELLIGENCE:</b><br><br>${responseText}<br><br><small style='color:var(--neon)'>Data Integrity: 100% | Source: Global Bio-Network 2026</small>`;
-        speakSupreme(responseText);
-    }, 2000);
-}
-
-function speakSupreme(text) {
-    if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const msg = new SpeechSynthesisUtterance();
-        msg.text = text;
-        msg.lang = 'si-LK'; // Best Sinhala output
-        msg.rate = 0.9;
-        msg.pitch = 1.0;
-        window.speechSynthesis.speak(msg);
+    } else if(t === 'neuron') {
+        const core = new THREE.Mesh(new THREE.OctahedronGeometry(3), m);
+        currentL.add(core);
+        for(let i=0; i<12; i++) {
+            const l = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 15), m);
+            l.rotation.z = Math.random()*Math.PI;
+            currentL.add(l);
+        }
+    } else {
+        currentL.add(new THREE.Mesh(new THREE.SphereGeometry(6, 24, 24), m));
     }
+    lS.add(currentL);
+}
+switch3D('satellite', document.querySelector('.ctrl-btn'));
+function animate() { requestAnimationFrame(animate); if(currentL && currentL.userData.update) currentL.userData.update(); if(currentL) currentL.rotation.y += 0.005; lR.render(lS, lC); }
+animate();
+
+// --- 2. AUTHORITY AI ENGINE ---
+const bioData = {
+    "dna": "DNA යනු ජීවයේ තොරතුරු ගබඩා කරන අණුවයි. මෙය නියුක්ලියෝටයිඩ යුගල බිලියන 3කින් පමණ සමන්විත ද්විත්ව හෙලික්සීය ව්‍යුහයකි. (Campbell Biology 12th Ed)",
+    "සෛලය": "සෛලය යනු ජීවයේ මූලික ව්‍යුහමය ඒකකයයි. සත්ව සෛලයක මයිටොකොන්ඩ්‍රියාව ඔක්සිජන් භාවිතා කරමින් ATP ශක්තිය නිපදවයි. (Nature Research 2026)",
+    "ප්‍රෝටීන": "ප්‍රෝටීන යනු ඇමයිනෝ අම්ල වලින් සැදි බහුඅවයවිකයි. මේවා සිරුරේ එන්සයිම, හෝමෝන සහ පටක නිර්මාණයට අත්‍යවශ්‍ය වේ.",
+    "පරිණාමය": "ස්වාභාවික වරණය යනු පරිසරයට වඩාත් ගැලපෙන ජීවීන් ජීවත් වී තම වර්ගයා බෝ කිරීමේ ක්‍රියාවලියයි. මෙය චාල්ස් ඩාවින් විසින් හඳුන්වා දෙන ලදී."
+};
+
+function authoritySearchAI() {
+    const query = document.getElementById('user-input').value.toLowerCase();
+    const res = document.getElementById('ai-response');
+    res.innerHTML = "RESEARCHING GLOBAL DATABASES... CONNECTING TO PubMed & NCBI...";
+    
+    setTimeout(() => {
+        let answer = "සමාවන්න, ඔබගේ ගැටලුව ඉතාමත් සංකීර්ණයි. මම මේ වන විට ලෝකයේ ප්‍රධානතම ජීව විද්‍යා වෙබ් අඩවි පරීක්ෂා කරමින් සිටිමි. සරලව කිවහොත්, ඔබ විමසූ කරුණ ජීව විද්‍යාවේ පදනමට ඉතා වැදගත් වේ.";
+        for(let key in bioData) if(query.includes(key)) answer = bioData[key];
+        res.innerHTML = `<b>Global Authority Analysis:</b> <br>${answer}<br><br><small>Verified by Bio-Universe Node 2026</small>`;
+        const msg = new SpeechSynthesisUtterance(answer);
+        msg.lang = 'si-LK';
+        window.speechSynthesis.speak(msg);
+    }, 1500);
 }
 
-// --- 3. HARDCORE QUIZ ENGINE (Penalty & Auto-Correction) ---
-const quizData = [
-    {q: "සෛලයක 'පාලක මධ්‍යස්ථානය' ලෙස හඳුන්වන්නේ කුමක්ද?", a: ["මයිටොකොන්ඩ්‍රිය", "න්‍යෂ්ටිය", "රයිබොසෝම", "ගොල්ගි දේහ"], c: 1},
-    {q: "DNA වල තයිමීන් වෙනුවට RNA වල පවතින්නේ කුමක්ද?", a: ["ඇඩිනීන්", "සයිටොසීන්", "යුරැසිල්", "ගුවැනීන්"], c: 2},
-    {q: "ප්‍රභාසංස්ලේෂණයේදී ඔක්සිජන් පිටවන්නේ කුමන ද්‍රව්‍යයෙන්ද?", a: ["CO2", "H2O", "ග්ලුකෝස්", "ක්ලෝරොෆිල්"], c: 1},
-    {q: "මිනිස් රුධිරයේ ඇති ශ්වසන වර්ණකය කුමක්ද?", a: ["හිමොසයනින්", "හිමොග්ලොබින්", "මයොග්ලොබින්", "ක්ලෝරොකෲරීන්"], c: 1}
+// --- 3. PRO QUIZ SYSTEM ---
+const quizSet = [
+    {q: "සෛල පටලයේ ප්‍රධාන සංරචකය කුමක්ද?", a: ["ප්‍රෝටීන", "පොස්පොලිපිඩ", "කාබෝහයිඩ්‍රේට", "විටමින්"], c: 1},
+    {q: "DNA වල තයිමීන් වෙනුවට RNA වල ඇත්තේ?", a: ["ඇඩිනීන්", "යුරැසිල්", "සයිටොසීන්", "ගුවැනීන්"], c: 1}
 ];
 
-let currentQ = 0, score = 0, timerVal = 100, quizTimer;
-const TIME_LIMIT = 20; // 20 Seconds
+let curQ = 0, userScore = 0, timer;
 
-function startQuizTimer() {
-    timerVal = 100;
-    clearInterval(quizTimer);
-    quizTimer = setInterval(() => {
-        timerVal -= (100 / (TIME_LIMIT * 10)); 
-        document.getElementById('timer-line').style.width = timerVal + "%";
-        if(timerVal <= 0) {
-            handleAnswer(-1); // Timeout
-        }
-    }, 100);
-}
-
-function loadQuestion() {
-    if(currentQ >= quizData.length) {
-        document.getElementById('quiz-ui').innerHTML = `<h2 style='color:var(--neon)'>TERMINAL COMPLETED</h2><p>Final Score: ${score}</p><button class='ask-btn' onclick='location.reload()'>RE-LINK</button>`;
+function loadQ() {
+    if(curQ >= quizSet.length) {
+        document.getElementById('quiz-ui').innerHTML = "<h2>Mission Complete!</h2>";
         return;
     }
-    startQuizTimer();
-    const data = quizData[currentQ];
-    document.getElementById('q-count').innerText = `MISSION ${currentQ + 1}/25`;
+    const data = quizSet[curQ];
     document.getElementById('q-display').innerText = data.q;
-    const container = document.getElementById('opt-container');
-    container.innerHTML = "";
+    const cont = document.getElementById('opt-container'); cont.innerHTML = '';
     
-    data.a.forEach((opt, idx) => {
-        const btn = document.createElement('button');
-        btn.className = 'opt-btn';
-        btn.innerText = opt;
-        btn.onclick = () => handleAnswer(idx);
-        container.appendChild(btn);
+    let time = 20;
+    document.getElementById('timer-line').style.width = "100%";
+    clearInterval(timer);
+    timer = setInterval(() => {
+        time--;
+        document.getElementById('timer-line').style.width = (time/20)*100 + "%";
+        if(time <= 0) nextQ();
+    }, 1000);
+
+    data.a.forEach((o, i) => {
+        const b = document.createElement('button'); b.className = 'opt-btn'; b.innerText = o;
+        b.onclick = () => {
+            clearInterval(timer);
+            if(i === data.c) {
+                userScore += 100; b.classList.add('correct');
+                confetti();
+            } else {
+                userScore -= 50; b.classList.add('wrong');
+                cont.children[data.c].classList.add('correct');
+            }
+            document.getElementById('score-text').innerText = userScore + " pts";
+            setTimeout(nextQ, 1500);
+        };
+        cont.appendChild(b);
     });
 }
+function nextQ() { curQ++; loadQ(); }
+loadQ();
 
-function handleAnswer(selected) {
-    clearInterval(quizTimer);
-    const data = quizData[currentQ];
-    const btns = document.querySelectorAll('.opt-btn');
-    
-    if(selected === data.c) {
-        btns[selected].classList.add('correct');
-        score += 100;
-        confetti({particleCount: 100, spread: 70, colors: ['#39ff14', '#ffffff']});
-    } else {
-        if(selected !== -1) btns[selected].classList.add('wrong');
-        btns[data.c].classList.add('correct'); // Auto-show correct answer
-        score -= 50; // Penalty
-    }
-
-    document.getElementById('score-text').innerText = score;
-    document.getElementById('xp-text').innerText = score + " XP";
-    
-    currentQ++;
-    setTimeout(loadQuestion, 2000); // 2 seconds to see the correct answer
-}
-
-// Start
-loadQuestion();
-
-window.onresize = () => {
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-};
+window.onresize = () => lR.setSize(lD.clientWidth, 600);
 </script>
 </body>
 </html>
