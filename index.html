@@ -15,6 +15,8 @@
             --neon-glow: 0 0 15px rgba(0, 255, 204, 0.6);
             --bg: #030a08; 
             --gold: #ffd700; 
+            --silver: #c0c0c0;
+            --bronze: #cd7f32;
             --red: #ff3366; 
             --glass: rgba(0, 255, 204, 0.05); 
             --panel-bg: #05120f;
@@ -63,7 +65,13 @@
         /* QUIZ ENGINE */
         .quiz-grid { display: grid; grid-template-columns: 1fr; gap: 30px; margin-top: 50px; }
         @media (min-width: 950px) { .quiz-grid { grid-template-columns: 1.5fr 1fr; } }
-        .quiz-terminal { background: var(--panel-bg); border: 1px solid var(--neon); border-radius: 20px; padding: clamp(20px, 4vw, 40px); position: relative; }
+        .quiz-terminal { background: var(--panel-bg); border: 1px solid var(--neon); border-radius: 20px; padding: clamp(20px, 4vw, 40px); position: relative; min-height: 400px;}
+        
+        /* LOGIN SCREEN */
+        #quiz-login { text-align: center; padding: 40px 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
+        #quiz-login h2 { color: var(--neon); text-shadow: var(--neon-glow); font-size: 2rem; margin-bottom: 10px;}
+        #quiz-login input { max-width: 400px; text-align: center; font-size: 1.2rem; margin-top: 20px; margin-bottom: 30px; }
+
         .level-badge { position: absolute; top: -15px; right: 20px; background: var(--neon); color: #000; padding: 5px 15px; font-weight: 900; border-radius: 10px; }
         .timer-bg { width: 100%; height: 8px; background: #111; border-radius: 4px; overflow: hidden; margin-bottom: 20px;}
         .timer-line { height: 100%; background: var(--neon); width: 100%; transition: width 1s linear; }
@@ -73,10 +81,15 @@
         .wrong { background: var(--red) !important; color: #fff !important; border-color: var(--red) !important; }
 
         /* LEADERBOARD */
-        .leaderboard { background: var(--panel-bg); border: 1px solid var(--neon); border-radius: 20px; padding: 25px; border-top: 5px solid var(--gold); max-height: 600px; overflow-y: auto; }
-        .lb-row { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid rgba(0,255,204,0.1); font-size: 0.95rem; align-items: center;}
-        .rank-highlight { color: #000; font-weight: 900; background: var(--gold); border-radius: 8px; padding: 12px; margin-top: 5px; box-shadow: 0 0 10px rgba(255,215,0,0.5);}
-        .user-highlight { color: var(--neon); font-weight: bold; background: rgba(0, 255, 204, 0.1); border-radius: 8px;}
+        .leaderboard { background: var(--panel-bg); border: 1px solid var(--neon); border-radius: 20px; padding: 25px; border-top: 5px solid var(--neon); max-height: 600px; overflow-y: auto; }
+        .lb-row { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid rgba(0,255,204,0.1); font-size: 0.95rem; align-items: center; border-radius: 8px; margin-bottom: 5px; transition: 0.3s;}
+        
+        /* TOP 3 KINGS HIGHLIGHTS */
+        .rank-1 { background: linear-gradient(90deg, rgba(255,215,0,0.15) 0%, transparent 100%); border-left: 5px solid var(--gold); color: #fff; font-weight: 900; font-size: 1.1rem; box-shadow: 0 0 10px rgba(255,215,0,0.2);}
+        .rank-2 { background: linear-gradient(90deg, rgba(192,192,192,0.15) 0%, transparent 100%); border-left: 5px solid var(--silver); color: #fff; font-weight: bold; }
+        .rank-3 { background: linear-gradient(90deg, rgba(205,127,50,0.15) 0%, transparent 100%); border-left: 5px solid var(--bronze); color: #fff; font-weight: bold; }
+        
+        .user-highlight { border: 1px solid var(--neon); background: rgba(0, 255, 204, 0.1) !important; color: var(--neon) !important; }
 
         footer { text-align: center; padding: 40px 20px; color: #a0c4ba; border-top: 1px solid rgba(0, 255, 204, 0.2); font-size: 0.8rem; margin-top: 50px; }
         
@@ -124,11 +137,13 @@
 <div class="container" id="lab">
     <h2 style="text-align:center; color: var(--neon); letter-spacing: 2px;">🧬 3D INTERACTIVE LAB</h2>
     <div class="lab-nav">
-        <button class="lab-btn active" onclick="loadModel('earth', this)">ROTATING EARTH</button>
+        <button class="lab-btn active" onclick="loadModel('earth', this)">EARTH</button>
         <button class="lab-btn" onclick="loadModel('dna', this)">DNA HELIX</button>
         <button class="lab-btn" onclick="loadModel('virus', this)">BACTERIOPHAGE</button>
-        <button class="lab-btn" onclick="loadModel('neuron', this)">NEURON NETWORK</button>
+        <button class="lab-btn" onclick="loadModel('neuron', this)">NEURON</button>
         <button class="lab-btn" onclick="loadModel('cell', this)">CELL MEMBRANE</button>
+        <button class="lab-btn" style="border-color:#ff3366; color:#ff3366;" onclick="loadModel('rbc', this)">RED BLOOD CELL</button>
+        <button class="lab-btn" style="border-color:#33ff33; color:#33ff33;" onclick="loadModel('chloroplast', this)">CHLOROPLAST</button>
     </div>
     <div class="canvas-box" id="lab-viewer"></div>
 </div>
@@ -136,14 +151,25 @@
 <div class="container" id="quiz">
     <div class="quiz-grid">
         <div class="quiz-terminal">
-            <div class="level-badge" id="level-badge">LEVEL 1</div>
-            <div class="timer-bg"><div class="timer-line" id="timer-bar"></div></div>
-            <h3 id="q-status" style="color: var(--neon); margin-top: 0;">SYSTEM READY</h3>
-            <p id="q-text" style="font-size: 1.2rem; min-height: 80px; font-weight: bold; line-height: 1.5;">Syncing biological data...</p>
-            <div id="options-grid"></div>
+            
+            <div id="quiz-login">
+                <h2>🏆 PRO EXAMINER</h2>
+                <p>තරගාවලියට සම්බන්ධ වීමට පෙර ඔබේ නම ඇතුළත් කරන්න.</p>
+                <input type="text" id="player-name" placeholder="Enter Your Name..." required>
+                <button class="btn" onclick="registerAndStart()">START MISSION</button>
+            </div>
+
+            <div id="quiz-ui" style="display: none;">
+                <div class="level-badge" id="level-badge">LEVEL 1</div>
+                <div class="timer-bg"><div class="timer-line" id="timer-bar"></div></div>
+                <h3 id="q-status" style="color: var(--neon); margin-top: 0;">SYSTEM READY</h3>
+                <p id="q-text" style="font-size: 1.2rem; min-height: 80px; font-weight: bold; line-height: 1.5;">Syncing biological data...</p>
+                <div id="options-grid"></div>
+            </div>
+
         </div>
         <div class="leaderboard">
-            <h3 style="text-align: center; color: var(--gold); letter-spacing: 2px; margin-top:0;">🏆 TOP 20 GLOBAL</h3>
+            <h3 style="text-align: center; color: var(--neon); letter-spacing: 2px; margin-top:0;">🏆 GLOBAL TOP 20 LIVE</h3>
             <div id="lb-data"></div>
         </div>
     </div>
@@ -233,12 +259,15 @@ function loadModel(type, btn) {
     if(btn) btn.classList.add('active');
     if(labGroup) labScene.remove(labGroup);
     labGroup = new THREE.Group();
-    const mat = new THREE.MeshBasicMaterial({ color: 0x00ffcc, wireframe: true });
+    
+    let matColor = 0x00ffcc;
+    if(type === 'rbc') matColor = 0xff3366;
+    if(type === 'chloroplast') matColor = 0x33ff33;
+    const mat = new THREE.MeshBasicMaterial({ color: matColor, wireframe: true });
 
     if(type === 'earth') {
         labGroup.add(new THREE.Mesh(new THREE.SphereGeometry(8, 32, 32), mat));
     } else if(type === 'virus') {
-        // Bacteriophage structure
         const head = new THREE.Mesh(new THREE.IcosahedronGeometry(3, 0), mat);
         head.position.y = 4; labGroup.add(head);
         const tail = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 6), mat);
@@ -269,13 +298,36 @@ function loadModel(type, btn) {
             labGroup.add(axon);
         }
     } else if(type === 'cell') {
-        // Phospholipid bilayer simulation
         for(let i=0; i<80; i++) {
             const head1 = new THREE.Mesh(new THREE.SphereGeometry(0.5), mat);
             head1.position.set(Math.random()*15-7.5, 2, Math.random()*15-7.5);
             const head2 = new THREE.Mesh(new THREE.SphereGeometry(0.5), mat);
             head2.position.set(head1.position.x, -2, head1.position.z);
             labGroup.add(head1, head2);
+        }
+    } else if(type === 'rbc') {
+        // Red Blood Cell - Biconcave disc using Torus
+        for(let i=0; i<10; i++) {
+            const rbcGeo = new THREE.TorusGeometry(2, 1.2, 16, 32);
+            const rbc = new THREE.Mesh(rbcGeo, mat);
+            rbc.position.set((Math.random()-0.5)*20, (Math.random()-0.5)*20, (Math.random()-0.5)*20);
+            rbc.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, 0);
+            labGroup.add(rbc);
+        }
+    } else if(type === 'chloroplast') {
+        // Chloroplast - Oval shape with internal grana stacks
+        const chloroGeo = new THREE.SphereGeometry(6, 32, 32);
+        const chloro = new THREE.Mesh(chloroGeo, mat);
+        chloro.scale.set(1, 0.6, 0.6); // Make it oval
+        labGroup.add(chloro);
+        
+        // Add Thylakoid Stacks (Grana)
+        for(let x=-3; x<=3; x+=3) {
+            for(let z=-1.5; z<=1.5; z+=3) {
+                const grana = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.2, 3, 16), mat);
+                grana.position.set(x, 0, z);
+                labGroup.add(grana);
+            }
         }
     }
     labScene.add(labGroup);
@@ -310,11 +362,9 @@ function thinkAI() {
             let qLow = q.toLowerCase();
             
             if(qLow.includes("සෛල") || qLow.includes("cell")) {
-                answer = "<b>සෛලය (Cell):</b> සෛලය යනු ජීවයේ ව්‍යුහමය හා කෘත්‍යමය මූලික ඒකකයයි. නවතම Nature සඟරාවේ පර්යේෂණවලට අනුව, සෛල පටලය තුළ ඇති ප්‍රෝටීන සංකීර්ණ සෛලීය සංඥා සම්ප්‍රේෂණයේදී අතිශය වැදගත් කාර්යභාරයක් ඉටු කරයි. ප්‍රධාන ඉන්ද්‍රියිකා ලෙස මයිටොකොන්ඩ්‍රියා (ශක්තිය නිපදවීම), රයිබොසෝම (ප්‍රෝටීන් සංස්ලේෂණය) හැඳින්විය හැක.";
+                answer = "<b>සෛලය (Cell):</b> සෛලය යනු ජීවයේ ව්‍යුහමය හා කෘත්‍යමය මූලික ඒකකයයි. නවතම Nature සඟරාවේ පර්යේෂණවලට අනුව, සෛල පටලය තුළ ඇති ප්‍රෝටීන සංකීර්ණ සෛලීය සංඥා සම්ප්‍රේෂණයේදී අතිශය වැදගත් කාර්යභාරයක් ඉටු කරයි.";
             } else if(qLow.includes("dna") || qLow.includes("ජාන")) {
-                answer = "<b>DNA (Deoxyribonucleic Acid):</b> DNA යනු සියලුම සජීවීන්ගේ ජානමය තොරතුරු ගබඩා කර ඇති ද්විත්ව හෙලික්සීය අණුවයි. NCBI දත්ත ගබඩාවට අනුව, මෑතකදී CRISPR-Cas9 තාක්ෂණය හරහා මෙම DNA වල ඇති විකෘතිතා නිවැරදි කිරීමේ පර්යේෂණ ලොව පුරා සාර්ථකව ක්‍රියාත්මක වේ.";
-            } else if(qLow.includes("ශ්වසනය") || qLow.includes("respiration")) {
-                answer = "<b>සෛලීය ශ්වසනය:</b> ග්ලූකෝස් ඔක්සිකරණය වී ATP ලෙස ශක්තිය නිදහස් කිරීමේ ක්‍රියාවලියයි. මෙය ග්ලයිකොලිසිය, ක්‍රෙබ්ස් චක්‍රය හා ඉලෙක්ට්‍රෝන පරිවහන දාමය ලෙස ප්‍රධාන පියවර 3කින් සිදුවේ.";
+                answer = "<b>DNA (Deoxyribonucleic Acid):</b> DNA යනු සියලුම සජීවීන්ගේ ජානමය තොරතුරු ගබඩා කර ඇති ද්විත්ව හෙලික්සීය අණුවයි. මෑතකදී CRISPR-Cas9 තාක්ෂණය හරහා මෙම DNA වල ඇති විකෘතිතා නිවැරදි කිරීම ලොව පුරා සිදුවේ.";
             } else {
                 answer = "<b>Achi-Core Analysis:</b> මා විසින් ගෝලීය ජීව විද්‍යා දත්ත සමුදායන් පරීක්ෂා කළා. ඔබගේ ප්‍රශ්නයට අදාළව, ජීව පද්ධති තුළ සිදුවන ජෛව රසායනික ක්‍රියාවලීන් නිශ්චිත එන්සයිම මගින් පාලනය වන බව තහවුරු වී ඇත. තවත් විස්තර අවශ්‍ය නම් විශේෂිතව අසන්න.";
             }
@@ -338,79 +388,76 @@ const level1_bank = [
     {q: "ප්‍රෝටීන් සංස්ලේෂණය සිදුවන්නේ?", a: ["රයිබොසෝමය", "ලයිසොසෝමය", "සෛල බිත්තිය", "න්‍යෂ්ටික පටලය"], c: 0},
     {q: "DNA හි අඩංගු නොවන ක්ෂාරය?", a: ["ඇඩිනීන්", "යුරැසිල්", "සයිටොසීන්", "තයිමීන්"], c: 1},
     {q: "මානව සෛලයක ඇති වර්ණදේහ ගණන?", a: ["23", "44", "46", "48"], c: 2},
-    {q: "ප්‍රභාසංස්ලේෂණයට අත්‍යවශ්‍ය වායුව?", a: ["O2", "CO2", "N2", "H2"], c: 1},
-    {q: "සජීවී සෛලයක් ප්‍රථමයෙන් නිරීක්ෂණය කළේ?", a: ["රොබට් හුක්", "ලීවන්හුක්", "ඩාර්වින්", "මෙන්ඩල්"], c: 1},
-    {q: "රුධිරයේ ද්‍රව කොටස?", a: ["සීරම්", "ප්ලාස්මාව", "හිමොග්ලොබින්", "ප්ලේට්ලට්"], c: 1},
-    {q: "එන්සයිම යනු රසායනිකව කුමක්ද?", a: ["ලිපිඩ", "කාබෝහයිඩ්‍රේට", "ප්‍රෝටීන", "විටමින්"], c: 2},
-    {q: "ශ්වසන පද්ධතියේ වායු හුවමාරුව සිදුවන ස්ථානය?", a: ["නාස් කුහරය", "ශ්වාස නාලය", "වායු කෝෂ", "ගර්භාෂය"], c: 2},
-    {q: "ජාන විද්‍යාවේ පියා?", a: ["ග්‍රෙගර් මෙන්ඩල්", "ලැමාර්ක්", "වොට්සන්", "ඇරිස්ටෝටල්"], c: 0},
-    {q: "ශාක සෛල බිත්තියේ ප්‍රධාන ද්‍රව්‍යය?", a: ["කයිටින්", "සෙලියුලෝස්", "ග්ලයිකොජන්", "පෙක්ටින්"], c: 1},
-    {q: "මානව හදවතේ කුටීර ගණන?", a: ["2", "3", "4", "5"], c: 2},
-    {q: "විටමින් C ඌනතාවයෙන් ඇතිවන රෝගය?", a: ["බෙරිබෙරි", "ස්කර්වි", "රාකිටීසය", "පෝලියෝ"], c: 1},
-    {q: "අග්න්‍යාශයෙන් ශ්‍රාවය වන ප්‍රධාන හෝමෝනය?", a: ["තයිරොක්සින්", "ඉන්සියුලින්", "ඇඩ්‍රිනලින්", "ඊස්ට්‍රජන්"], c: 1},
-    {q: "ප්‍රාථමික පරිභෝජකයින් වන්නේ?", a: ["මාංශ භක්ෂකයින්", "ශාක භක්ෂකයින්", "සර්ව භක්ෂකයින්", "වියෝජකයින්"], c: 1},
-    {q: "මානව ශරීරයේ විශාලතම ඉන්ද්‍රිය?", a: ["අක්මාව", "සම", "පෙනහළු", "මොළය"], c: 1},
-    {q: "ජලය පරිවහනය කරන ශාක පටකය?", a: ["සෛලම", "ෆ්ලෝයම", "මෘදුස්තරය", "ස්ථිර පටක"], c: 0},
-    {q: "ATP අණුවේ සම්පූර්ණ නම?", a: ["Adenosine Tri-Phosphate", "Adenine Total Power", "Alpha Tri Protein", "Amine Part"], c: 0},
-    {q: "මානව මොළයේ විශාලතම කොටස?", a: ["අනුමොළය", "මධ්‍යමොළය", "මස්තිෂ්කය", "සුෂුම්නාව"], c: 2},
-    {q: "පරිසර විද්‍යාවේ 'නිෂ්පාදකයින්' වන්නේ?", a: ["සතුන්", "දිලීර", "බැක්ටීරියා", "හරිත ශාක"], c: 3}
+    {q: "ප්‍රභාසංස්ලේෂණයට අත්‍යවශ්‍ය වායුව?", a: ["O2", "CO2", "N2", "H2"], c: 1}
 ];
 
 const level2_bank = [
     {q: "මානව ඇසේ ආලෝකයට සංවේදී කොටස?", a: ["කාචය", "දෘෂ්ටි විතානය (Retina)", "තාරකාව", "ස්වච්ඡය"], c: 1},
     {q: "ශාක පත්‍රවල හරිතප්‍රද අඩංගු ඉන්ද්‍රියිකාව?", a: ["හරිතලව", "රික්තකය", "න්‍යෂ්ටිය", "ගොල්ගි දේහ"], c: 0},
-    {q: "රතු රුධිර සෛලවල ආයු කාලය?", a: ["දින 30", "දින 60", "දින 120", "දින 365"], c: 2},
-    {q: "ඉන්සියුලින් නිපදවන සෛල?", a: ["අක්මා සෛල", "ඇල්ෆා සෛල", "බීටා සෛල", "ස්නායු සෛල"], c: 2},
-    {q: "DNA වල ද්විත්ව හෙලික්සීය ව්‍යුහය සොයාගත්තේ?", a: ["වොට්සන් සහ ක්‍රික්", "මෙන්ඩල්", "රොබට් හුක්", "ඩාර්වින්"], c: 0},
-    {q: "බැක්ටීරියා සෛල බිත්තියේ ප්‍රධාන සංඝටකය?", a: ["සෙලියුලෝස්", "කයිටින්", "පෙප්ටිඩොග්ලයිකෑන්", "ලිග්නින්"], c: 2},
-    {q: "මධ්‍යම ස්නායු පද්ධතියට අයත් වන්නේ?", a: ["මොළය සහ සුෂුම්නාව", "කපාල ස්නායු", "ස්වයංසාධක පද්ධතිය", "අන්තරාසර්ග පද්ධතිය"], c: 0},
-    {q: "ජලද්‍රාවී විටමිනයක් වන්නේ?", a: ["විටමින් A", "විටමින් D", "විටමින් C", "විටමින් K"], c: 2},
-    {q: "සිරුරේ සමබරතාව පවත්වා ගන්නේ මොළයේ කුමන කොටසින්ද?", a: ["මස්තිෂ්කය", "අනුමොළය", "සුෂුම්නාව", "පොන්සය"], c: 1},
-    {q: "රුධිර කැටිගැසීමට දායක වන සෛල?", a: ["සුදු රුධිරාණු", "රතු රුධිරාණු", "රුධිර පට්ටිකා", "ප්ලාස්මාව"], c: 2}
+    {q: "රතු රුධිර සෛලවල ආයු කාලය?", a: ["දින 30", "දින 60", "දින 120", "දින 365"], c: 2}
 ];
 
-const level3_bank = [
-    {q: "ශ්වසන දාමයේ අවසාන ඉලෙක්ට්‍රෝන ප්‍රතිග්‍රාහකයා?", a: ["කාබන් ඩයොක්සයිඩ්", "ඔක්සිජන්", "නයිට්‍රජන්", "හයිඩ්‍රජන්"], c: 1},
-    {q: "ක්‍රෙබ්ස් චක්‍රය සිදුවන්නේ මයිටොකොන්ඩ්‍රියාවේ කොහේද?", a: ["බාහිර පටලයේ", "අභ්‍යන්තර පටලයේ", "පූරකයේ (Matrix)", "ක්‍රිස්ටාවල"], c: 2},
-    {q: "මයෝසින් සහ ඇක්ටින් යනු?", a: ["එන්සයිම", "හෝමෝන", "සංකෝචක ප්‍රෝටීන", "ලිපිඩ"], c: 2},
-    {q: "මිනිසාගේ කපාල ස්නායු යුගල ගණන?", a: ["10", "12", "31", "43"], c: 1},
-    {q: "ප්‍රතිදේහ නිපදවන රුධිර සෛල වර්ගය?", a: ["T ලිම්පොසයිට", "B ලිම්පොසයිට", "මොනොසයිට", "නියුට්‍රොෆිල"], c: 1}
-];
-
-let allLevels = [level1_bank, level2_bank, level3_bank];
+let allLevels = [level1_bank, level2_bank];
 let currentLevelIdx = 0;
 let currentQ = 0;
 let timer;
 
-// Generate 19 dummy players for top 20 list
-let players = Array.from({length: 19}, (_, i) => ({
-    name: ["Sarasi N.", "Kaveesha S.", "Pawan K.", "John D.", "Amaya F.", "Dinuka M.", "Senura R.", "Chamath", "Hasini", "Ravindu", "Kasun", "Nethmi", "Devin", "Pramod", "Malithi", "Vihanga", "Sanduni", "Oshada", "Tiran"][i],
-    score: Math.floor(Math.random() * 4000) + 500,
+// Dummy global players with varying scores to make competition realistic
+let players = Array.from({length: 15}, (_, i) => ({
+    name: ["Sarasi N.", "Kaveesha", "Pawan", "John D.", "Amaya", "Dinuka", "Senura", "Chamath", "Hasini", "Ravindu", "Kasun", "Nethmi", "Devin", "Pramod", "Malithi"][i],
+    score: Math.floor(Math.random() * 2000) + 100,
     isUser: false
 }));
 
-// Add User
-let user = { name: "ACHINTHA NIRMANA", score: 0, isUser: true };
-players.push(user);
+let activeUser = null; // Will be set after registration
+
+function registerAndStart() {
+    const inputName = document.getElementById('player-name').value.trim();
+    if(inputName === "") {
+        alert("කරුණාකර තරගයට ඇතුළත් වීමට ඔබගේ නම ලබා දෙන්න!");
+        return;
+    }
+    
+    // Create new user object
+    activeUser = { name: inputName, score: 0, isUser: true };
+    players.push(activeUser); // Add to global pool
+    
+    // UI Transitions
+    document.getElementById('quiz-login').style.display = 'none';
+    document.getElementById('quiz-ui').style.display = 'block';
+    
+    updateLeaderboard(); // Show initial rank (0 pts)
+    startLevelCheck();   // Start Quiz
+}
 
 function updateLeaderboard() {
     const list = document.getElementById('lb-data');
     list.innerHTML = '';
     
-    // Sort and get top 20
+    // Sort all players descending by score
     players.sort((a, b) => b.score - a.score);
     const top20 = players.slice(0, 20);
     
     top20.forEach((p, i) => {
         const row = document.createElement('div');
         let classes = 'lb-row';
-        if(i === 0) classes += ' rank-highlight';
+        
+        // Top 3 Kings Logic
+        if(i === 0) classes += ' rank-1';
+        else if(i === 1) classes += ' rank-2';
+        else if(i === 2) classes += ' rank-3';
+        
+        // Highlight active user
         if(p.isUser) classes += ' user-highlight';
         
         row.className = classes;
+        
+        let crown = i === 0 ? '👑 ' : i === 1 ? '🥈 ' : i === 2 ? '🥉 ' : '';
+        let youTag = p.isUser ? ' (You)' : '';
+        
         row.innerHTML = `
-            <span>${i + 1}. ${i === 0 ? '👑 ' : ''}${p.name} ${p.isUser ? '(You)' : ''}</span>
-            <span style="font-weight:bold;">${p.score} pts</span>
+            <span>${i + 1}. ${crown}${p.name}${youTag}</span>
+            <span>${p.score} pts</span>
         `;
         list.appendChild(row);
     });
@@ -422,20 +469,20 @@ function startLevelCheck() {
         currentLevelIdx++;
         currentQ = 0;
         
-        const terminal = document.getElementById('quiz-terminal');
+        const uiContainer = document.getElementById('quiz-ui');
         if(currentLevelIdx >= allLevels.length) {
-            terminal.innerHTML = `
+            uiContainer.innerHTML = `
                 <div style="text-align:center; padding: 40px 0;">
                     <h1 style="color:var(--gold); font-size: 2.5rem; text-shadow: 0 0 20px var(--gold);">CHAMPION!</h1>
                     <p style="font-size: 1.2rem;">ඔබ සියලුම Levels සාර්ථකව නිම කළා!</p>
-                    <h2 style="color:var(--neon);">Final Score: ${user.score}</h2>
+                    <h2 style="color:var(--neon);">Final Score: ${activeUser.score}</h2>
                     <button class="btn" style="margin-top:20px;" onclick="location.reload()">RESTART SYSTEM</button>
                 </div>
             `;
             confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
             return;
         } else {
-            terminal.innerHTML = `
+            uiContainer.innerHTML = `
                 <div style="text-align:center; padding: 50px 0;">
                     <h1 style="color:var(--neon);">LEVEL ${currentLevelIdx} COMPLETE!</h1>
                     <p>Get ready for Level ${currentLevelIdx + 1}</p>
@@ -449,8 +496,8 @@ function startLevelCheck() {
 }
 
 function restoreQuizUI() {
-    const terminal = document.getElementById('quiz-terminal');
-    terminal.innerHTML = `
+    const uiContainer = document.getElementById('quiz-ui');
+    uiContainer.innerHTML = `
         <div class="level-badge" id="level-badge">LEVEL ${currentLevelIdx + 1}</div>
         <div class="timer-bg"><div class="timer-line" id="timer-bar"></div></div>
         <h3 id="q-status" style="color: var(--neon); margin-top: 0;"></h3>
@@ -470,14 +517,25 @@ function runQuiz() {
     const grid = document.getElementById('options-grid');
     grid.innerHTML = '';
     
-    let t = 15; // Faster timer for pro feel
+    let t = 15; 
     document.getElementById('timer-bar').style.width = "100%";
     clearInterval(timer);
+    
     timer = setInterval(() => {
         t--;
         document.getElementById('timer-bar').style.width = (t/15)*100 + "%";
+        
+        // Add random score jumps to dummy players to make leaderboard feel alive!
+        if(t % 3 === 0) {
+            let randomPlayer = players[Math.floor(Math.random() * players.length)];
+            if(!randomPlayer.isUser) {
+                randomPlayer.score += Math.floor(Math.random() * 50);
+                updateLeaderboard();
+            }
+        }
+
         if(t <= 0) {
-            user.score -= 20; // Time out penalty
+            activeUser.score = Math.max(0, activeUser.score - 20); // Time out penalty
             updateLeaderboard();
             nextQ();
         }
@@ -491,16 +549,16 @@ function runQuiz() {
             Array.from(grid.children).forEach(b => b.disabled = true);
             
             if(i === data.c) {
-                // Base points + time bonus
-                user.score += (100 + (t * 2)); 
+                activeUser.score += (100 + (t * 5)); // Base points + time bonus
                 btn.classList.add('correct'); 
-                if(currentLevelIdx === 2) confetti({ particleCount: 50, spread: 50 });
+                if(currentLevelIdx >= 1) confetti({ particleCount: 30, spread: 40 });
             } else {
-                user.score -= 30; // Wrong penalty
+                activeUser.score = Math.max(0, activeUser.score - 30); // Wrong penalty (min 0)
                 btn.classList.add('wrong');
                 grid.children[data.c].classList.add('correct');
             }
-            updateLeaderboard();
+            
+            updateLeaderboard(); // Update instantly on click
             setTimeout(nextQ, 1200);
         };
         grid.appendChild(btn);
@@ -512,8 +570,8 @@ function nextQ() {
     startLevelCheck(); 
 }
 
+// Initial dummy leaderboard display before user registers
 updateLeaderboard();
-setTimeout(startLevelCheck, 2000);
 
 </script>
 </body>
