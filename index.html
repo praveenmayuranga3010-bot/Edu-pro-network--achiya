@@ -3,231 +3,267 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BIOGENESIS-X | Advanced Biology Hub</title>
+    <title>BIOGENESIS-X | World-Class Biology Terminal</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        :root { --neon: #39ff14; --bg: #000; --gold: #ffd700; --red: #ff3131; }
-        body, html { margin: 0; padding: 0; background: #000; color: #fff; font-family: 'Segoe UI', Roboto, sans-serif; overflow-x: hidden; scroll-behavior: smooth; }
+        :root { --neon: #39ff14; --bg: #000; --gold: #ffd700; --red: #ff3131; --glass: rgba(57, 255, 20, 0.1); }
+        body, html { margin: 0; padding: 0; background: #000; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; scroll-behavior: smooth; }
         
         /* Navigation */
-        nav { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.9); padding: 15px 0; z-index: 2000; border-bottom: 2px solid var(--neon); display: flex; justify-content: center; gap: 20px; backdrop-filter: blur(10px); }
-        nav a { color: var(--neon); text-decoration: none; font-weight: bold; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; }
+        nav { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.95); padding: 15px 0; z-index: 5000; border-bottom: 2px solid var(--neon); display: flex; justify-content: center; gap: 20px; backdrop-filter: blur(15px); }
+        nav a { color: var(--neon); text-decoration: none; font-weight: bold; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* Hero 3D Earth Section */
+        #hero-canvas { height: 75vh; width: 100%; position: relative; background: radial-gradient(circle, #0a250a 0%, #000 100%); margin-top: 50px; }
+        .hero-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none; z-index: 10; }
+        .hero-text h1 { font-size: clamp(2.5rem, 10vw, 6rem); color: var(--neon); text-shadow: 0 0 30px var(--neon); margin: 0; font-weight: 900; }
+        .hero-text p { color: #fff; letter-spacing: 5px; font-weight: 300; margin-top: 10px; }
 
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .hero { height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: radial-gradient(circle, #0a250a 0%, #000 100%); margin-top: 50px; }
-        .hero h1 { font-size: clamp(2.5rem, 8vw, 5rem); color: var(--neon); text-shadow: 0 0 30px var(--neon); margin-bottom: 10px; }
 
-        /* AI TERMINAL - BIOGENESIS-X */
-        .ai-section { background: rgba(57, 255, 20, 0.05); border: 2px solid var(--neon); border-radius: 25px; padding: 30px; margin: 40px 0; box-shadow: 0 0 20px rgba(57,255,20,0.1); }
-        #ai-status { color: var(--neon); font-size: 0.8rem; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 2px; }
-        #ai-log { height: 350px; overflow-y: auto; background: rgba(0,0,0,0.8); border-radius: 15px; padding: 20px; border-left: 5px solid var(--neon); font-size: 1.05rem; line-height: 1.8; margin-bottom: 20px; }
-        .input-group { display: flex; gap: 10px; }
-        input { flex: 1; background: #080808; border: 1px solid var(--neon); color: #fff; padding: 15px; border-radius: 12px; outline: none; font-size: 1rem; }
-        .ask-btn { background: var(--neon); color: #000; border: none; padding: 0 30px; border-radius: 12px; font-weight: 900; cursor: pointer; transition: 0.3s; }
-        .ask-btn:hover { background: #fff; transform: translateY(-2px); }
+        /* AI TERMINAL */
+        .ai-card { background: var(--glass); border: 2px solid var(--neon); border-radius: 30px; padding: 35px; margin: 50px 0; position: relative; box-shadow: 0 0 30px rgba(57, 255, 20, 0.1); }
+        #ai-log { height: 320px; overflow-y: auto; background: rgba(0,0,0,0.85); border-radius: 20px; padding: 25px; border-left: 6px solid var(--neon); font-size: 1.1rem; line-height: 1.8; margin-bottom: 20px; color: #e0e0e0; }
+        .input-group { display: flex; gap: 12px; }
+        input { flex: 1; background: #0a0a0a; border: 1px solid var(--neon); color: #fff; padding: 18px; border-radius: 15px; outline: none; font-size: 1rem; }
+        .btn { background: var(--neon); color: #000; border: none; padding: 0 35px; border-radius: 15px; font-weight: 900; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
 
         /* 3D LAB */
-        .lab-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 20px; }
-        .lab-btn { padding: 10px 20px; background: transparent; border: 1.5px solid var(--neon); color: var(--neon); border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 0.75rem; transition: 0.3s; }
-        .lab-btn.active, .lab-btn:hover { background: var(--neon); color: #000; box-shadow: 0 0 15px var(--neon); }
-        .canvas-frame { height: 550px; border: 2px solid var(--neon); border-radius: 30px; overflow: hidden; background: #000; position: relative; }
+        .lab-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-bottom: 30px; }
+        .lab-btn { padding: 12px 22px; background: transparent; border: 1.5px solid var(--neon); color: var(--neon); border-radius: 12px; cursor: pointer; font-weight: bold; transition: 0.3s; font-size: 0.8rem; }
+        .lab-btn.active { background: var(--neon); color: #000; box-shadow: 0 0 20px var(--neon); }
+        .canvas-box { height: 600px; border: 2px solid var(--neon); border-radius: 40px; overflow: hidden; background: #000; position: relative; }
 
-        /* QUIZ SYSTEM */
-        .quiz-container { display: grid; grid-template-columns: 1.7fr 1fr; gap: 30px; margin-top: 50px; }
-        @media (max-width: 900px) { .quiz-container { grid-template-columns: 1fr; } }
-        .quiz-card { background: #050505; border: 2px solid var(--neon); border-radius: 30px; padding: 40px; position: relative; overflow: hidden; }
-        .progress-bar { position: absolute; top: 0; left: 0; height: 8px; background: var(--neon); width: 100%; transition: width 1s linear; }
-        .option-btn { width: 100%; padding: 20px; margin: 10px 0; background: rgba(255,255,255,0.03); border: 1px solid var(--neon); color: #fff; border-radius: 15px; cursor: pointer; text-align: left; font-size: 1.1rem; transition: 0.2s; }
-        .option-btn:hover { background: rgba(57,255,20,0.15); }
+        /* QUIZ ENGINE */
+        .quiz-grid { display: grid; grid-template-columns: 1.8fr 1fr; gap: 40px; margin-top: 60px; }
+        @media (max-width: 950px) { .quiz-grid { grid-template-columns: 1fr; } }
+        .quiz-terminal { background: #050505; border: 2px solid var(--neon); border-radius: 35px; padding: 45px; position: relative; box-shadow: 0 0 25px rgba(57, 255, 20, 0.15); }
+        .timer-line { position: absolute; top: 0; left: 0; height: 8px; background: var(--neon); width: 100%; transition: width 1s linear; }
+        .opt-btn { width: 100%; padding: 20px; margin: 12px 0; background: rgba(255,255,255,0.03); border: 1.5px solid var(--neon); color: #fff; border-radius: 18px; cursor: pointer; text-align: left; font-size: 1.1rem; transition: 0.3s; }
         .correct { background: var(--neon) !important; color: #000 !important; font-weight: bold; }
         .wrong { background: var(--red) !important; color: #fff !important; }
 
-        .leaderboard { background: rgba(57,255,20,0.05); border: 2px solid var(--neon); border-radius: 30px; padding: 30px; border-top: 6px solid var(--gold); }
-        .lb-row { display: flex; justify-content: space-between; padding: 15px; border-bottom: 1px solid rgba(57,255,20,0.1); font-size: 1.1rem; }
-        .winner { color: var(--gold); font-weight: 900; text-shadow: 0 0 10px var(--gold); }
+        /* LEADERBOARD */
+        .leaderboard { background: var(--glass); border: 2px solid var(--neon); border-radius: 35px; padding: 35px; border-top: 8px solid var(--gold); }
+        .lb-row { display: flex; justify-content: space-between; padding: 18px; border-bottom: 1px solid rgba(57,255,20,0.1); font-size: 1.1rem; transition: 0.5s; }
+        .rank-highlight { color: var(--gold); font-weight: 900; text-shadow: 0 0 10px var(--gold); background: rgba(255, 215, 0, 0.05); }
 
-        footer { text-align: center; padding: 60px; border-top: 1px solid var(--neon); color: var(--neon); letter-spacing: 2px; }
+        footer { text-align: center; padding: 80px; color: var(--neon); border-top: 1px solid var(--neon); opacity: 0.7; font-size: 0.9rem; letter-spacing: 3px; }
     </style>
 </head>
 <body>
 
 <nav>
-    <a href="#ai">BIOGENESIS AI</a>
-    <a href="#lab">3D LAB</a>
-    <a href="#quiz">EXAM TERMINAL</a>
+    <a href="#hero-canvas">Live Terminal</a>
+    <a href="#ai">Bio AI</a>
+    <a href="#lab">3D Lab</a>
+    <a href="#quiz">Examiner</a>
 </nav>
 
-<section class="hero">
-    <h1>BIO UNIVERSE 2026</h1>
-    <p>SUPERIOR BIOLOGY INTERFACE | ACHINTHA NIRMANA</p>
-</section>
-
-<div class="container" id="ai">
-    <div class="ai-section">
-        <div id="ai-status">● SYSTEM LIVE: CONNECTED TO GLOBAL BIO-SERVERS</div>
-        <div id="ai-log">මම BIOGENESIS-X AI. ලෝකයේ නවතම ජීව විද්‍යාත්මක පර්යේෂණ (Nature, Science, PubMed) ඇසුරින් සජීවීව පිළිතුරු දීමට මම සූදානම්. ඔබගේ ගැටලුව විමසන්න...</div>
-        <div class="input-group">
-            <input type="text" id="user-query" placeholder="ගැඹුරු ජීව විද්‍යාත්මක ගැටලුවක් මෙතැන ලියන්න...">
-            <button class="ask-btn" onclick="askBiogenesis()">ANALYZE</button>
-        </div>
+<div id="hero-canvas">
+    <div class="hero-text">
+        <h1>BIOGENESIS-X</h1>
+        <p>ACHINTHA NIRMANA | WORLD NO.1 BIO HUB</p>
     </div>
 </div>
 
-
+<div class="container" id="ai">
+    <div class="ai-card">
+        <h2 style="color: var(--neon); margin-top: 0;">🧠 OMNI-LINK BIOLOGY AI</h2>
+        <div id="ai-log">සජීවීව පද්ධති සම්බන්ධ කරමින්... මම BIOGENESIS-X AI. ලෝකයේ විශ්වාසදායකම ජීව විද්‍යා දත්ත පද්ධති (Google, NCBI, Nature) හරහා සජීවීව පිළිතුරු දීමට මම දැන් සූදානම්. ඕනෑම ප්‍රශ්නයක් විමසන්න...</div>
+        <div class="input-group">
+            <input type="text" id="bio-query" placeholder="Analyze biology or ask specific questions...">
+            <button class="btn" onclick="thinkAI()">ANALYZE</button>
+        </div>
+    </div>
+</div>
 
 <div class="container" id="lab">
     <div class="lab-nav">
-        <button class="lab-btn active" onclick="switchModel('earth', this)">3D EARTH</button>
-        <button class="lab-btn" onclick="switchModel('solar', this)">SOLAR SYSTEM</button>
-        <button class="lab-btn" onclick="switchModel('milkyway', this)">MILKY WAY</button>
-        <button class="lab-btn" onclick="switchModel('dna', this)">DNA HELIX</button>
-        <button class="lab-btn" onclick="switchModel('neuron', this)">NEURAL GRID</button>
-        <button class="lab-btn" onclick="switchModel('cell', this)">ANIMAL CELL</button>
+        <button class="lab-btn active" onclick="loadModel('earth', this)">3D EARTH</button>
+        <button class="lab-btn" onclick="loadModel('virus', this)">VIRUS STRUCTURE</button>
+        <button class="lab-btn" onclick="loadModel('dna', this)">DNA COMPLEX</button>
+        <button class="lab-btn" onclick="loadModel('neuron', this)">NEURON GRID</button>
+        <button class="lab-btn" onclick="loadModel('protein', this)">PROTEIN CHAIN</button>
     </div>
-    <div class="canvas-frame" id="model-viewer"></div>
+    <div class="canvas-box" id="lab-viewer"></div>
 </div>
-
-[attachment_0](attachment)
 
 <div class="container" id="quiz">
-    <div class="quiz-container">
-        <div class="quiz-card" id="quiz-ui">
-            <div class="progress-bar" id="timer-bar"></div>
-            <h3 id="q-count" style="color: var(--neon);">MISSION 01/20</h3>
-            <p id="q-text" style="font-size: 1.4rem; font-weight: bold; min-height: 80px;">Terminal Synchronizing...</p>
-            <div id="options-box"></div>
+    <div class="quiz-grid">
+        <div class="quiz-terminal">
+            <div class="timer-line" id="timer-bar"></div>
+            <h3 id="q-status" style="color: var(--neon);">SYSTEM READY</h3>
+            <p id="q-text" style="font-size: 1.5rem; min-height: 100px; font-weight: bold;">Syncing missions...</p>
+            <div id="options-grid"></div>
         </div>
         <div class="leaderboard">
-            <h3 style="text-align: center; color: var(--gold);">🏆 LEADERBOARD</h3>
-            <div id="lb-content">
-                <div class="lb-row winner"><span>👑 ACHINTHA (YOU)</span><span id="score-val">0 pts</span></div>
-                <div class="lb-row"><span>2. Sarasi N.</span><span>1850 pts</span></div>
-                <div class="lb-row"><span>3. Kaveesha S.</span><span>1600 pts</span></div>
-            </div>
+            <h3 style="text-align: center; color: var(--gold); letter-spacing: 2px;">🏆 GLOBAL LEADERBOARD</h3>
+            <div id="lb-data">
+                </div>
         </div>
     </div>
 </div>
 
-<footer>&copy; 2026 BIO-UNIVERSE SUPREME | ENGINEERED BY ACHINTHA NIRMANA</footer>
+<footer>&copy; 2026 BIOGENESIS-X SUPREME | ENGINEERED BY ACHINTHA NIRMANA</footer>
 
 <script>
-// --- 1. SUPREME 3D ENGINE (Multi-Model) ---
-let scene, camera, renderer, controls, currentObj;
-const viewer = document.getElementById('model-viewer');
+// --- 1. HERO & LAB 3D ENGINES ---
+let heroScene, heroCamera, heroRenderer, heroEarth;
+let labScene, labCamera, labRenderer, labControls, labGroup;
 
-function init3D() {
-    scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(75, viewer.clientWidth/550, 0.1, 1000);
-    renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(viewer.clientWidth, 550);
-    viewer.appendChild(renderer.domElement);
-    controls = new THREE.OrbitControls(camera, renderer.domElement);
-    camera.position.z = 15;
-    animate();
+function initHero() {
+    heroScene = new THREE.Scene();
+    heroCamera = new THREE.PerspectiveCamera(75, window.innerWidth / (window.innerHeight*0.75), 0.1, 1000);
+    heroRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    heroRenderer.setSize(window.innerWidth, window.innerHeight*0.75);
+    document.getElementById('hero-canvas').appendChild(heroRenderer.domElement);
+    
+    heroEarth = new THREE.Mesh(new THREE.SphereGeometry(15, 64, 64), new THREE.MeshBasicMaterial({ color: 0x39ff14, wireframe: true }));
+    heroScene.add(heroEarth);
+    heroCamera.position.z = 40;
+    
+    (function animHero() {
+        requestAnimationFrame(animHero);
+        heroEarth.rotation.y += 0.002;
+        heroRenderer.render(heroScene, heroCamera);
+    })();
 }
 
-function switchModel(type, btn) {
+function initLab() {
+    const viewer = document.getElementById('lab-viewer');
+    labScene = new THREE.Scene();
+    labCamera = new THREE.PerspectiveCamera(75, viewer.clientWidth / 600, 0.1, 1000);
+    labRenderer = new THREE.WebGLRenderer({ antialias: true });
+    labRenderer.setSize(viewer.clientWidth, 600);
+    viewer.appendChild(labRenderer.domElement);
+    labControls = new THREE.OrbitControls(labCamera, labRenderer.domElement);
+    labCamera.position.z = 18;
+    (function animLab() {
+        requestAnimationFrame(animLab);
+        if(labGroup) labGroup.rotation.y += 0.005;
+        labRenderer.render(labScene, labCamera);
+    })();
+}
+
+function loadModel(type, btn) {
     document.querySelectorAll('.lab-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    if(currentObj) scene.remove(currentObj);
-    currentObj = new THREE.Group();
-    const neonMat = new THREE.MeshBasicMaterial({ color: 0x39ff14, wireframe: true });
+    if(labGroup) labScene.remove(labGroup);
+    labGroup = new THREE.Group();
+    const mat = new THREE.MeshBasicMaterial({ color: 0x39ff14, wireframe: true });
 
     if(type === 'earth') {
-        const earth = new THREE.Mesh(new THREE.SphereGeometry(5, 32, 32), neonMat);
-        const satPivot = new THREE.Group();
-        const sat = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.3, 0.3), new THREE.MeshBasicMaterial({color: 0xffffff}));
-        sat.position.x = 8;
-        satPivot.add(sat);
-        currentObj.add(earth, satPivot);
-        currentObj.userData.update = () => { satPivot.rotation.y += 0.04; earth.rotation.y += 0.005; };
-    } else if(type === 'solar') {
-        const sun = new THREE.Mesh(new THREE.SphereGeometry(2, 16, 16), new THREE.MeshBasicMaterial({color: 0xffcc00}));
-        currentObj.add(sun);
-        for(let i=1; i<6; i++) {
-            const orbit = new THREE.Mesh(new THREE.TorusGeometry(i*3, 0.02, 16, 100), neonMat);
-            orbit.rotation.x = Math.PI/2; currentObj.add(orbit);
+        labGroup.add(new THREE.Mesh(new THREE.SphereGeometry(6, 32, 32), mat));
+    } else if(type === 'virus') {
+        labGroup.add(new THREE.Mesh(new THREE.IcosahedronGeometry(4, 1), mat));
+        for(let i=0; i<12; i++) {
+            const spike = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 8), mat);
+            spike.rotation.z = i; labGroup.add(spike);
         }
     } else if(type === 'dna') {
-        for(let i=0; i<60; i++) {
-            const ball = new THREE.Mesh(new THREE.SphereGeometry(0.25), neonMat);
-            ball.position.set(Math.cos(i*0.3)*3, i*0.3-9, Math.sin(i*0.3)*3);
-            currentObj.add(ball);
+        for(let i=0; i<50; i++) {
+            const s = new THREE.Mesh(new THREE.SphereGeometry(0.3), mat);
+            s.position.set(Math.cos(i*0.4)*3, i*0.4-10, Math.sin(i*0.4)*3);
+            labGroup.add(s);
         }
     } else if(type === 'neuron') {
-        const core = new THREE.Mesh(new THREE.OctahedronGeometry(2), neonMat);
-        currentObj.add(core);
-        for(let i=0; i<15; i++) {
-            const l = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 12), neonMat);
-            l.rotation.set(Math.random()*6, Math.random()*6, Math.random()*6);
-            currentObj.add(l);
+        labGroup.add(new THREE.Mesh(new THREE.OctahedronGeometry(2), mat));
+        for(let i=0; i<12; i++) {
+            const l = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 15), mat);
+            l.rotation.set(Math.random()*5, Math.random()*5, Math.random()*5);
+            labGroup.add(l);
         }
-    } else if(type === 'milkyway') {
-        const points = [];
-        for(let i=0; i<4000; i++) points.push(Math.random()*40-20, Math.random()*3-1.5, Math.random()*40-20);
-        const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.Float32BufferAttribute(points, 3));
-        currentObj.add(new THREE.Points(geo, new THREE.PointsMaterial({color: 0x39ff14, size: 0.05})));
-    } else if(type === 'cell') {
-        const nucleus = new THREE.Mesh(new THREE.SphereGeometry(1.5, 16, 16), neonMat);
-        const outer = new THREE.Mesh(new THREE.SphereGeometry(5, 24, 24), new THREE.MeshBasicMaterial({color: 0x39ff14, wireframe: true, transparent: true, opacity: 0.2}));
-        currentObj.add(nucleus, outer);
+    } else if(type === 'protein') {
+        for(let i=0; i<20; i++) {
+            const m = new THREE.Mesh(new THREE.SphereGeometry(0.8), mat);
+            m.position.set(Math.sin(i)*5, i-10, Math.cos(i)*2);
+            labGroup.add(m);
+        }
     }
-    scene.add(currentObj);
+    labScene.add(labGroup);
 }
 
-function animate() {
-    requestAnimationFrame(animate);
-    if(currentObj) { currentObj.rotation.y += 0.005; if(currentObj.userData.update) currentObj.userData.update(); }
-    renderer.render(scene, camera);
-}
+initHero(); initLab();
+loadModel('earth', document.querySelector('.lab-btn'));
 
-init3D();
-switchModel('earth', document.querySelector('.lab-btn'));
-
-// --- 2. BIOGENESIS-X LIVE AI ENGINE ---
-function askBiogenesis() {
-    const query = document.getElementById('user-query').value.toLowerCase();
+// --- 2. LIVE AI SIMULATION ---
+function thinkAI() {
+    const q = document.getElementById('bio-query').value.toLowerCase();
     const log = document.getElementById('ai-log');
-    if(!query) return;
-
-    log.innerHTML = "<span style='color:var(--neon)'>[ANALYZING LIVE DATA STREAMS...]</span><br>Connecting to NCBI, Nature, and MIT Bio-database...";
+    if(!q) return;
+    log.innerHTML = "<span style='color:var(--neon)'>[SYNCING WITH GLOBAL BIO-REPOSITORIES...]</span><br>Connecting to PubMed, Nature, and Open Bio-Data...";
     
     setTimeout(() => {
-        let response = "ඔබ විමසූ කරුණ පිළිබඳ ලෝකයේ නවතම පර්යේෂණ දත්ත මා සතුයි. (Source: Bio-Universe 2026 Core). ";
-        if(query.includes("dna")) response += "DNA යනු ජීවයේ ජානමය කේතයයි. මෙය ඇඩිනීන් (A), තයිමීන් (T), ගුවැනීන් (G), සහ සයිටොසීන් (C) යන නයිට්‍රජනීය ක්ෂාර වලින් සමන්විත ද්විත්ව හෙලික්සයකි. මෙහි අනුපිළිවෙල අනුව ජීවියෙකුගේ ලක්ෂණ තීරණය වේ.";
-        else if(query.includes("cell") || query.includes("සෛලය")) response += "සෛලය යනු ජීවයේ මූලික ඒකකයයි. සත්ව සෛලවල ප්‍රධාන වශයෙන් න්‍යෂ්ටිය, මයිටොකොන්ඩ්‍රියාව (බලශක්ති මධ්‍යස්ථානය), සහ රයිබොසෝම වැනි ඉන්ද්‍රියිකා අඩංගු වේ.";
-        else response += "ඔබගේ ප්‍රශ්නය ගැඹුරු විද්‍යාත්මක පර්යේෂණයකට අදාළයි. මෙයට අදාළව ලෝකයේ පවතින නවතම විද්‍යාත්මක මතයන්ට අනුව සෛලීය ක්‍රියාවලීන් සහ ජානමය බලපෑම මෙහිදී වැදගත් වේ.";
-
-        log.innerHTML = `<b>BIOGENESIS-X PRO:</b><br>${response}`;
-        const speech = new SpeechSynthesisUtterance(response);
-        speech.lang = 'si-LK';
-        window.speechSynthesis.speak(speech);
+        let res = "BIOGENESIS-X Live පද්ධතිය ඔබගේ ප්‍රශ්නය සාර්ථකව විශ්ලේෂණය කළා. ";
+        if(q.includes("cell") || q.includes("සෛලය")) res += "සෛලය යනු ජීවයේ මූලික ඒකකයයි. සෛල පටලය මගින් සෛලය තුළට සහ පිටතට ද්‍රව්‍ය ගමන් කිරීම තෝරා ගෙන පාලනය කරයි.";
+        else if(q.includes("dna")) res += "DNA යනු ජානමය තොරතුරු ගබඩා කර පවත්වාගෙන යන ද්විත්ව හෙලික්සීය අණුවයි. මෙය ඇඩිනීන්, තයිමීන්, ගුවැනීන් සහ සයිටොසීන් වලින් සමන්විතයි.";
+        else res += "ඔබ විමසූ කරුණට අදාළව ලෝකයේ නවතම විද්‍යාත්මක පර්යේෂණ පත්‍රිකාවලට අනුව, මෙම ක්‍රියාවලිය ජීව විද්‍යාත්මකව අතිශයින් වැදගත් වන බව තහවුරු වී ඇත.";
+        
+        log.innerHTML = `<b>BIOGENESIS-X OMNI-LINK:</b><br>${res}`;
+        const speech = new SpeechSynthesisUtterance(res);
+        speech.lang = 'si-LK'; window.speechSynthesis.speak(speech);
     }, 1500);
 }
 
-// --- 3. ADVANCED QUIZ TERMINAL (20 QUESTIONS) ---
-const questions = [
-    {q: "සෛල පටලයේ මූලික ව්‍යුහය කුමක්ද?", a: ["ප්‍රෝටීන පටලය", "පොස්පොලිපිඩ ද්විස්තරය", "කාබෝහයිඩ්‍රේට", "න්‍යෂ්ටික පටලය"], c: 1},
-    {q: "ශක්තිය (ATP) නිපදවන සෛලීය ඉන්ද්‍රියිකාව?", a: ["රයිබොසෝමය", "ගොල්ගි දේහය", "මයිටොකොන්ඩ්‍රියාව", "සෛල ප්ලාස්මය"], c: 2},
-    {q: "DNA අණුවේ අඩංගු නයිට්‍රජනීය ක්ෂාර ගණන?", a: ["2", "4", "6", "8"], c: 1},
-    {q: "ප්‍රභාසංස්ලේෂණය සිදුවන්නේ කුමන ඉන්ද්‍රියිකාවේදීද?", a: ["ක්ලෝරොප්ලාස්ටය", "න්‍යෂ්ටිය", "සෛල බිත්තිය", "මයිටොකොන්ඩ්‍රියාව"], c: 0},
-    // මෙතන තව ප්‍රශ්න 16ක් ඇතුළත් කළ හැකියි...
+// --- 3. PRO QUIZ & AUTO-SORT LEADERBOARD ---
+const bank = [
+    {q: "සෛලයක 'බලශක්ති මධ්‍යස්ථානය' ලෙස හඳුන්වන්නේ කුමක්ද?", a: ["න්‍යෂ්ටිය", "රයිබොසෝම", "මයිටොකොන්ඩ්‍රියාව", "සෛල ප්ලාස්මය"], c: 2},
+    {q: "ප්‍රෝටීන් සංස්ලේෂණය සිදුවන්නේ කුමන ස්ථානයකද?", a: ["රයිබොසෝමය", "ලයිසොසෝමය", "සෛල බිත්තිය", "න්‍යෂ්ටික පටලය"], c: 0},
+    {q: "DNA හි අඩංගු නොවන ක්ෂාරය කුමක්ද?", a: ["ඇඩිනීන්", "යුරැසිල්", "සයිටොසීන්", "තයිමීන්"], c: 1},
+    {q: "මානව සෛලයක ඇති වර්ණදේහ ගණන කීයද?", a: ["23", "44", "46", "48"], c: 2},
+    {q: "ප්‍රභාසංස්ලේෂණය සඳහා අත්‍යවශ්‍ය වායුව කුමක්ද?", a: ["O2", "CO2", "N2", "H2"], c: 1},
+    {q: "සජීවී සෛලයක් ප්‍රථමයෙන් නිරීක්ෂණය කළේ කවුද?", a: ["රොබට් හුක්", "ලීවන්හුක්", "ඩාර්වින්", "මෙන්ඩල්"], c: 1},
+    {q: "රුධිරයේ ද්‍රව කොටස හඳුන්වන්නේ කුමන නමින්ද?", a: ["සීරම්", "ප්ලාස්මාව", "හිමොග්ලොබින්", "ප්ලේට්ලට්"], c: 1},
+    {q: "එන්සයිම යනු රසායනිකව කුමක්ද?", a: ["ලිපිඩ", "කාබෝහයිඩ්‍රේට", "ප්‍රෝටීන", "විටමින්"], c: 2},
+    {q: "ශ්වසන පද්ධතියේ වායු හුවමාරුව සිදුවන ස්ථානය?", a: ["නාස් කුහරය", "ශ්වාස නාලය", "ගර්භාෂය", "වායු කෝෂ"], c: 3},
+    {q: "ජාන විද්‍යාවේ පියා ලෙස හඳුන්වන්නේ කවුද?", a: ["ග්‍රෙගර් මෙන්ඩල්", "ලැමාර්ක්", "වොට්සන්", "ඇරිස්ටෝටල්"], c: 0},
+    {q: "ශාක සෛල බිත්තිය සෑදී ඇත්තේ කුමන ද්‍රව්‍යයෙන්ද?", a: ["කයිටින්", "සෙලියුලෝස්", "ග්ලයිකොජන්", "පෙක්ටින්"], c: 1},
+    {q: "මානව හදවතේ කුටීර ගණන කීයද?", a: ["2", "3", "4", "5"], c: 2},
+    {q: "විටමින් C ඌනතාවයෙන් ඇතිවන රෝගය?", a: ["බෙරිබෙරි", "ස්කර්වි", "රාකිටීසය", "පෝලියෝ"], c: 1},
+    {q: "අග්න්‍යාශයෙන් ශ්‍රාවය වන හෝමෝනය කුමක්ද?", a: ["තයිරොක්සින්", "ඉන්සියුලින්", "ඇඩ්‍රිනලින්", "ඊස්ට්‍රජන්"], c: 1},
+    {q: "ප්‍රාථමික පරිභෝජකයින් ලෙස හඳුන්වන්නේ?", a: ["මාංශ භක්ෂකයින්", "ශාක භක්ෂකයින්", "සර්ව භක්ෂකයින්", "වියෝජකයින්"], c: 1},
+    {q: "මානව ශරීරයේ විශාලතම ඉන්ද්‍රිය කුමක්ද?", a: ["අක්මාව", "සම", "පෙනහළු", "මොළය"], c: 1},
+    {q: "ජලය පරිවහනය කරන ශාක පටකය කුමක්ද?", a: ["සෛලම", "ෆ්ලෝයම", "මෘදුස්තරය", "ස්ථිර පටක"], c: 0},
+    {q: "ATP අණුවක සම්පූර්ණ නම කුමක්ද?", a: ["Adenosine Tri-Phosphate", "Adenine Total Power", "Alpha Tri Protein", "Amine Total Part"], c: 0},
+    {q: "මානව මොළයේ විශාලතම කොටස?", a: ["අනුමොළය", "මධ්‍යමොළය", "මස්තිෂ්කය", "සුෂුම්නාව"], c: 2},
+    {q: "පරිසර විද්‍යාවේ 'නිෂ්පාදකයින්' වන්නේ?", a: ["සතුන්", "දිලීර", "බැක්ටීරියා", "හරිත ශාක"], c: 3}
 ];
 
-let currentIdx = 0, score = 0, timer;
+let players = [
+    { name: "👑 ACHINTHA NIRMANA", score: 0, isUser: true },
+    { name: "Sarasi N.", score: 1850, isUser: false },
+    { name: "Kaveesha S.", score: 1600, isUser: false },
+    { name: "Pawan K.", score: 1200, isUser: false }
+];
 
-function loadQuiz() {
-    if(currentIdx >= questions.length) { 
-        document.getElementById('quiz-ui').innerHTML = "<h2 style='color:var(--gold)'>MISSION COMPLETE!</h2><p>Your Final Score: " + score + "</p>"; 
+let currentQ = 0, timer;
+
+function updateLeaderboard() {
+    const list = document.getElementById('lb-data');
+    list.innerHTML = '';
+    players.sort((a, b) => b.score - a.score);
+    
+    players.forEach((p, i) => {
+        const row = document.createElement('div');
+        row.className = `lb-row ${i === 0 ? 'rank-highlight' : ''}`;
+        row.innerHTML = `<span>${i + 1}. ${i === 0 && !p.name.includes('👑') ? '👑 ' + p.name : p.name}</span><span>${p.score} pts</span>`;
+        list.appendChild(row);
+    });
+}
+
+function runQuiz() {
+    if(currentQ >= bank.length) { 
+        document.getElementById('quiz-terminal').innerHTML = "<h1 style='color:var(--gold)'>MISSION COMPLETE!</h1><button class='btn' onclick='location.reload()'>RESTART SYSTEM</button>"; 
         return; 
     }
-    const data = questions[currentIdx];
-    document.getElementById('q-count').innerText = `MISSION ${String(currentIdx+1).padStart(2, '0')}/20`;
+    const data = bank[currentQ];
+    document.getElementById('q-status').innerText = `MISSION ${currentQ+1}/20`;
     document.getElementById('q-text').innerText = data.q;
-    const box = document.getElementById('options-box');
-    box.innerHTML = '';
+    const grid = document.getElementById('options-grid');
+    grid.innerHTML = '';
     
     let t = 20;
     document.getElementById('timer-bar').style.width = "100%";
@@ -235,33 +271,33 @@ function loadQuiz() {
     timer = setInterval(() => {
         t--;
         document.getElementById('timer-bar').style.width = (t/20)*100 + "%";
-        if(t <= 0) nextQuestion();
+        if(t <= 0) nextQ();
     }, 1000);
 
     data.a.forEach((opt, i) => {
         const btn = document.createElement('button');
-        btn.className = 'option-btn';
-        btn.innerText = opt;
+        btn.className = 'opt-btn'; btn.innerText = opt;
         btn.onclick = () => {
             clearInterval(timer);
+            let user = players.find(p => p.isUser);
             if(i === data.c) {
-                score += 100;
-                btn.classList.add('correct');
-                confetti();
+                user.score += 100;
+                btn.classList.add('correct'); confetti();
             } else {
-                score -= 50;
+                user.score -= 50;
                 btn.classList.add('wrong');
-                box.children[data.c].classList.add('correct');
+                grid.children[data.c].classList.add('correct');
             }
-            document.getElementById('score-val').innerText = score + " pts";
-            setTimeout(nextQuestion, 1500);
+            updateLeaderboard();
+            setTimeout(nextQ, 1500);
         };
-        box.appendChild(btn);
+        grid.appendChild(btn);
     });
 }
 
-function nextQuestion() { currentIdx++; loadQuiz(); }
-loadQuiz();
+function nextQ() { currentQ++; runQuiz(); }
+updateLeaderboard();
+setTimeout(runQuiz, 3000);
 </script>
 </body>
 </html>
